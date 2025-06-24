@@ -296,6 +296,9 @@ Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\
 
 ![image](https://github.com/user-attachments/assets/1979f3c3-bcce-4478-983b-611ef8dd9985)
 
+![image](https://github.com/user-attachments/assets/3a4c4361-5a63-4e5c-9095-daec85edbe08)
+
+
 Get-ChildItem
 
 
