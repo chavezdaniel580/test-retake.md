@@ -295,3 +295,384 @@ This cmdlet is used to return all the properties of an item. On file objects, th
 Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\
 
 ![image](https://github.com/user-attachments/assets/1979f3c3-bcce-4478-983b-611ef8dd9985)
+
+Get-ChildItem
+
+
+This cmdlet is similar to the Windows command-line command dir, in that it retrieves a directory listing if the object of the command is a file system directory object. It is also used to retrieve all the registry values if the object of the command is a registry key.
+
+
+This is used to retrieve all the items in a specified directory using the following syntax:
+
+Get-ChildItem -Path "C:\"
+
+![image](https://github.com/user-attachments/assets/ede4ffd7-fdbe-4d9f-8285-d2c776618d0a)
+
+
+
+When a complete directory listing including not only child items but all subfolders, their children, and further descendant objects is required, Get-ChildItem is called with the -Recurse parameter switch. Setting the -Recurse parameter instructs the cmdlet to perform subdirectory recursion. 
+
+
+In some cases, an analyst only wants to retrieve certain types of files or filenames. In this use case, the -Include parameter is used to only return entries matching a specific pattern. For example, to only find executable files in the Program Files directory and subdirectories, the following command is used:
+
+PS C:\Program Files> Get-ChildItem -Recurse -Include *.exe
+
+
+![image](https://github.com/user-attachments/assets/61714965-26fa-469d-9d30-0b399d387d2f)
+
+
+Get-Content
+
+
+This cmdlet is used to retrieve the data in a file as an array of strings. If this data is in American Standard Code for Information Interchange (ASCII) characters, then the output prints cleanly to the terminal. If not, the output causes garbage data to print to the screen. For reading non-ASCII binary data from a file, it is more useful to employ PowerShell’s underlying .NET framework by calling the following function:
+
+[System.IO.File]::ReadAllBytes.
+
+
+
+To read the ASCII content of a file, use the following syntax:
+Get-Content -Path "C:\path\to\file"
+
+
+
+Notably, since it is common in some Windows malware to hide data, such as executable scripts, inside Alternate Data Streams (ADS), the Get-Content cmdlet is used to read those streams with the syntax:
+Get-Content -Path "C:\path\to\file" -Stream MaliciousStreamName
+
+
+
+The names of the alternative streams are not intuitive. They need to be identified by printing the properties of file items to find anomalous data streams.
+
+
+Get-Process
+
+
+This cmdlet is used to retrieve a list of all running process objects. Its output is similar to the output of the tasklist command in the Windows command line. The alias for this cmdlet is gps.
+
+Get-Process
+
+![image](https://github.com/user-attachments/assets/67964367-8969-4b98-9f25-dd19df6ed978)
+
+To expand all the properties each process object contains, pipe the output of a single object, such as the explorer process, into a formatted list (described later in this lesson):
+Get-Process -ProcessName "explorer" | Format-List *
+
+![image](https://github.com/user-attachments/assets/f2e1b4ef-27f2-4c01-be5a-2569d670371e)
+
+Get-CimInstance 
+
+
+This cmdlet is the updated version of the deprecated cmdlet Get-WMIObject and returns objects queried from a Common Information Model (CIM) server on the device. 
+
+
+This cmdlet is used for the following purposes: 
+Find installed software by querying for members of the Win32_Product class. Other methods of finding installed software include enumerating children of the HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Uninstall registry key and folders in the Program Files and Program Files (x86) directories.
+List running processes by querying for members of the Win32_Process class.
+Retrieve metadata for a system by returning the values of the Win32_ComputerSytem class. The properties of this object include model, manufacturer, name, hostname, domain, and administrator password status. 
+
+The syntax for this command is:
+Get-CimInstance -ClassName <Win32_Class>
+
+Or
+Get-CimInstance -Query "<SELECT x FROM win32_class WHERE y LIKE z>"
+
+Or 
+Get-CimInstance -ClassName <win32_class> -Filter @{"property"=VALUE} -Property Name
+
+
+
+Get-Service
+
+
+This cmdlet returns a list of object details for all services installed on the local machine. This includes not only running services but also stopped and suspended services. 
+Get-Service
+
+![image](https://github.com/user-attachments/assets/4b0ef38a-b3ef-4c81-a93b-e3d0ac753fec)
+
+
+
+As with the process list, to expand the properties of a single service object, pipe one specified by name to a formatted table:
+
+Get-Service -DisplayName "DNS Client" | Format-List *
+
+![image](https://github.com/user-attachments/assets/9740ecaa-2438-49ac-9064-9904c0e6a5d8)
+
+Get-NetTCPConnection
+
+
+This cmdlet finds and returns all active TCP connection objects. Each object includes properties such as local and remote address, local and remote port, and the connections' state. This cmdlet is useful for determining which ports are opened and comparing that list to the expected network state. This is a useful technique for identifying suspicious processes which are listening or connecting out to malicious addresses.
+
+Get-NetTCPConnection
+
+![image](https://github.com/user-attachments/assets/7b884c95-b695-4352-8706-38049887a601)
+
+To see which properties each NetTCPConnection object contains, run the following command:
+Get-NetTCPConnection -LocalPort 139 | Format-List *
+
+![image](https://github.com/user-attachments/assets/29f480ff-8ccc-48ef-a068-72aea0f4674c)
+
+As seen in Figure 11.1-15, if a particular connection is suspicious, details such as CreationTime and OwningProcess are useful in further investigation of the host activity related to the network activity that raised a red flag.
+
+
+Get-ScheduledTask
+
+
+This cmdlet is used to retrieve a list of all scheduled tasks in the system. These are often a vector for adversary persistence or may be disabled by adversaries when the task runs scripts or programs to search for malicious activity. 
+
+Get-ScheduledTask 
+
+![image](https://github.com/user-attachments/assets/7968786b-12c9-4543-a4b6-4e014482bf27)
+
+Get-ScheduledTask -TaskName Proxy | Format-List *
+
+![image](https://github.com/user-attachments/assets/fac0299e-f4ed-407b-9144-d9c99151e32b)
+
+In this data structure, the Triggers and Actions properties are PowerShell objects with more detail about which action is executed and when. During investigations in which scheduled tasks are Indicators of Compromise (IOC), expanding and scrutinizing these structures is warranted.
+
+PowerShell Data Manipulation Cmdlets
+After retrieving an initial set of objects and output from a cmdlet, additional processing and formatting are often required to limit the results to the data and presentation necessary for human parsing for further analysis. The following cmdlets are used for these purposes.
+
+﻿
+
+Select-Object
+﻿
+
+This cmdlet is useful for selecting a subset of a cmdlet's output. This can be either a subset of the objects themselves or a subset of the properties of all objects piped to this cmdlet.
+
+﻿
+
+This cmdlet is called with the select alias. 
+
+﻿
+
+The syntax for employing this cmdlet follows the format:
+
+Cmdlet | Select-Object PropertyName1, PropertyName2
+
+
+
+To select the Name, Process ID, and Description of all active processes, the syntax is as follows:
+Get-Process | Select-Object Name, ID, Description
+
+
+
+PowerShell Data Manipulation Cmdlets
+After retrieving an initial set of objects and output from a cmdlet, additional processing and formatting are often required to limit the results to the data and presentation necessary for human parsing for further analysis. The following cmdlets are used for these purposes.
+
+﻿
+
+Select-Object
+﻿
+
+This cmdlet is useful for selecting a subset of a cmdlet's output. This can be either a subset of the objects themselves or a subset of the properties of all objects piped to this cmdlet.
+
+﻿
+
+This cmdlet is called with the select alias. 
+
+﻿
+
+The syntax for employing this cmdlet follows the format:
+
+Cmdlet | Select-Object PropertyName1, PropertyName2
+﻿
+
+To select the Name, Process ID, and Description of all active processes, the syntax is as follows:
+
+Get-Process | Select-Object Name, ID, Description
+
+![image](https://github.com/user-attachments/assets/75a450d3-ba40-4ff8-8c87-d6c42393050a)
+
+Another powerful function of Select-Object is to expand PowerShell objects that are the values of a parent object's properties. For example, all Dynamic-Linked Libraries (DLL) loaded by an active process are listed in a collection object, which is stored in the process object property Modules. By using the -ExpandProperty parameter with Select-Object, it is possible to view those loaded libraries. 
+
+Get-Process | Where-Object Name -eq explorer | Select-Object -ExpandProperty Modules
+
+
+![image](https://github.com/user-attachments/assets/82d7c109-4496-4275-9d5f-5828c45085cd)
+
+
+Where-Object
+
+
+This cmdlet is used to select a subset of objects by applying a condition or filter to one or more of an object's properties. A user applies either a straightforward conditional comparison or a more complex FilterString script block with containment, matching, or equality operators.
+
+
+Containment Operators
+
+
+These operators are used to filter for objects in a collection that do or do not contain a specific property or a specific value for a property. 
+-contains: Filters a collection containing a property value.
+-notcontains: Filters a collection that does not contain a property value.
+-in: Value is in a collection; returns property value if a match is found.
+-notin: Value is not in a collection; null/$false if there is no property value.
+
+Matching Operators
+
+
+These operators are similar to containment operators, but specifically for strings.
+-like: String matches a wildcard pattern (e.g., "foofoo" -like "*foo*" is True; "foofoo" -like "foo" is False). 
+-notlike: String does not match a wildcard pattern.
+-match: String matches regular expression pattern (e.g., "foofoo" -match "foo" is True). 
+-notmatch: String does not match regular expression pattern.
+
+Equality Operators
+
+
+These operators are most ideal for numerical values, but equality may be assessed between any two objects of the same type.
+-eq: Value equal to the specified value.
+-ne: Value not equal to the specified value.
+-gt: Value greater than the specified value.
+-ge: Value greater than or equal to the specified value.
+-lt: Value less than the specified value.
+-le: Value less than or equal to the specified value.
+
+FilterScript Format
+
+
+Any of the above operators may be combined in more complex statements in a FilterScript block utilizing the following syntax:
+{($_.property1 -operator value1) AND (($_.property2 -operator value2) OR ($_.property3 -operator value3))}
+
+
+
+An example statement that filters all active processes with host in the process name and consuming less than 5 Central Processing Unit (CPU) units and more than 0.01 CPU units, reads as follows:
+
+Get-Process | Where-Object {($_.ProcessName -like "*host*") -and ($_.CPU -lt 5) -and ($_.CPU -gt 0.01)}
+
+![image](https://github.com/user-attachments/assets/0512a3f5-7a9d-453c-9fbf-4416410c4687)
+
+
+Select-String
+
+
+This cmdlet is used to find string patterns in data. The use cases include finding sensitive data in text files, parsing out suspicious entries in Windows logs, or identifying files with malicious IOCs in file listings. 
+
+
+The syntax of this cmdlet when used in a standalone fashion to parse a file is:
+Select-String -Path "C:\path\to\file" -Pattern "pattern"
+
+
+
+When data is piped to the cmdlet, the syntax takes the following format:
+<Data-Object> | Select-String -Pattern "pattern" 
+
+
+
+Or when the message to be parsed is in a property of the object, the syntax is as follows:
+<Data-Object> | Select-String -InputObject ($_.Property) -Pattern "pattern"
+
+
+
+Format-List
+
+
+By default, PowerShell displays the output of a command as a shortened table of object data. Format-List is an alternative to the default that displays selected properties of the output objects in a list where the properties are each printed on their own line. The alias for this cmdlet is fl. If a user wants to display all properties of an object rather than individually naming a subset, the wildcard character * is used to indicate all properties. 
+
+
+The syntax for displaying data with this cmdlet uses the following format:
+
+<Data> | Format-List -Property Property1, Property2
+
+
+
+An example of formatting the properties of the explorer process in a list looks like the following:
+
+Get-Process | Where-Object -Property Name -match "explorer" | Format-List Name, Description, Path, ID
+
+![image](https://github.com/user-attachments/assets/0c9804db-76ac-459c-a733-bce4fefc4ea5)
+
+Format-Table
+
+
+Alternatively, the table format may be maintained, but if the properties displayed need to be changed, Format-Table is employed with similar syntax and parameters. Its alias is ft.
+
+
+This cmdlet may also take the parameter -Autosize to minimize truncation of the columns or -Wrap to wrap off-screen columns to a new line, though the latter option may leave data garbled on screen. 
+
+
+The syntax for this cmdlet uses the following format:
+<data> | Format-Table -Property Property1, Property2
+
+
+
+An example of formatting the properties of the explorer process in a table looks like the following:
+Get-Process | Where-Object -Property Name -match "explorer" | Format-Table Name, Description, Path, ID
+
+![image](https://github.com/user-attachments/assets/1d011cf0-ad6a-4d3c-97be-0287bd68d5dc)
+
+
+Sort-Object
+
+
+This cmdlet is used to sort a collection of objects based on a particular property's value. This may be useful for sorting events by most recent, files by size, or processes by memory usage. 
+
+
+The important parameters for this cmdlet are -Property, -Ascending, -Descending, and -Unique.
+
+
+An example of sorting processes by memory usage looks like the following:
+Get-Process | Sort-Object -Property WS -Descending
+
+![image](https://github.com/user-attachments/assets/16cd19fa-b3ad-44e1-acd3-a5b978b7fbde)
+
+Foreach-Object
+
+
+When performing in-line processing of each object in a collection, the Foreach-Object cmdlet is used to iterate over each object and perform the transformation on it. The alias for this cmdlet is foreach when data is piped to it. However, when used at the beginning of a PowerShell statement, foreach is instead a keyword initializing a loop. Functionally, both methods of iteration achieve the same results when acting on the same object. The distinguishing design consideration is that the Foreach-Object cmdlet expects data to be streamed to it over a pipeline, which maximizes memory conservation at the cost of performance, while the foreach statement loads an entire collection of objects into memory prior to an operation, which maximizes performance at the cost of higher memory usage.
+
+
+Like functions constructed to handle a series of data objects from a pipeline, Foreach-Object is designed to perform beginning and ending operations around the processing of a collection if the user desires. A script block supplied to the cmdlet without a label is executed on every object, but if a distinction is necessary, separate script blocks may be designated with the -Begin, -Process, and -End parameters.
+
+
+When data is streamed to the cmdlet, the syntax is as follows:
+<Data-Object> | Foreach-Object -Begin {commands} -Process {command1; command2} -End {commands}
+
+
+
+When the foreach keyword is used to initiate a PowerShell loop, the syntax is as follows:
+Foreach ($object in $collection) {
+	Example-Cmdlet -Input $object
+}
+
+
+
+As an example, to write a subset of events from a previous command to a particular file, the following command is executed:
+$events | ForEach-Object -Begin {Get-Date} -Process {Out-File -FilePath Events.txt -Append -InputObject $_.Message} -End {Get-Date}
+
+
+Invoke-Command
+
+
+To supply PowerShell commands for a remote computer to run, the Invoke-Command cmdlet is used for input. Executing this cmdlet successfully requires remote PowerShell administration to be enabled on the target device. 
+
+
+The syntax for this cmdlet is as follows:
+Invoke-Command -ComputerName TEST001 -Credential Domain\User -ScriptBlock {Command1; Command2}
+
+
+
+If an active PowerShell session was previously established with the New-PSSession cmdlet, then commands may be run through that session with the syntax:
+Invoke-Command -Session $sessionName -ScriptBlock {Command1; Command2}
+
+Write-Output
+
+
+This cmdlet is used to print text to the terminal. It is useful for returning feedback to the person executing a script or to provide a prompt when input is required during runtime. 
+
+Write-Output "The time and date is $(Get-Date)"
+![image](https://github.com/user-attachments/assets/cfdd238a-89df-49d7-a6cd-2bfec79a8022)
+
+Out-File
+
+
+This cmdlet is used to print the results of a cmdlet or a series of operations to a file on disk. The syntax for this output is as follows:
+<Data> | Out-File -Path "C:\path\to\out\file" -Append
+
+
+
+
+
+
+
+
+
+
+
+
