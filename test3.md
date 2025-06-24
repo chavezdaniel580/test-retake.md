@@ -665,6 +665,110 @@ Out-File
 This cmdlet is used to print the results of a cmdlet or a series of operations to a file on disk. The syntax for this output is as follows:
 <Data> | Out-File -Path "C:\path\to\out\file" -Append
 
+PowerShell Common Cmdlet Parameters
+The following list of common parameters is set in many PowerShell cmdlets.
+
+﻿
+
+ErrorAction
+﻿
+
+This parameter defines the action taken in the event of an error during execution. The most common use case for setting this parameter is to handle denied access errors, such as when the current PowerShell process does not have permission to access a particular file or directory during a survey script. Setting this parameter reduces the on-screen noise caused by the errors when set with its most common value SilentlyContinue. The ErrorAction parameter is set for any cmdlet.
+
+﻿
+
+This parameter is set with one of the following values.
+
+Stop: Ceases all operations, and the error message is displayed.
+
+Continue: Continues to operate, but verbose error messages are displayed to standard output.
+
+SilentlyContinue: Continues to operate, and no error messages are displayed. An error message is added to PowerShell's $Error variable and may be retrieved later.
+
+Ignore: Identical to SilentlyContinue, but no error messages are recorded, even silently.
+
+Inquire: Pauses in operating, displaying an error message, and prompting the user for permission to continue.
+
+The default behavior for any cmdlet in which this parameter is not manually set is defined by the ErrorActionPreference value. On the win-hunt Virtual Machine (VM), that value is Continue.
+
+﻿![image](https://github.com/user-attachments/assets/9e120852-43b3-4c6b-a9f6-10be9ca17a0e)
+
+Force
+
+
+In some cmdlets, an operation may be executed that cannot be undone, such as the overwriting or deletion of a file object, or restarting a service. In such cases, the normal operation of the cmdlet is to deny or prompt the user for execution. When a user understands the risks of the operation and desires for it to continue regardless, the -Force parameter switch is appended to the cmdlet command line to bypass any confirmation text and proceed to execution.
+ 
+The PowerShell Integrated Scripting Environment
+The PowerShell ISE is the editor installed by default in Windows OSs for creating and editing PowerShell scripts. 
+
+﻿
+
+Interface of the ISE
+﻿
+
+Toolbar
+﻿
+
+The toolbar at the top of the ISE window beneath the File menu contains buttons for many quick operations that are used over the course of script development. These include file management buttons such as New, Open, and Save; editing buttons such as Cut, Copy, Paste, Undo, and Redo; and execution buttons such as Run Script, Run Selection, and Stop Operation. Most buttons also have a corresponding keyboard shortcut, which is viewed by hovering the mouse over the button representing the action. For example, hovering over Run Selection shows that the keyboard shortcut for that operation is F8. 
+
+![image](https://github.com/user-attachments/assets/356e1a91-d768-444d-bfb7-fa2f061a713b)
+
+Script Pane
+
+
+By selecting New on the toolbar, the Script pane opens for editing.
+
+![image](https://github.com/user-attachments/assets/6825aae1-af1b-40f7-8b0e-ef2fb81c05ed)
+
+
+
+In this pane, the body of the script is entered, then saved using the Save button on the toolbar.
+
+Script Tab
+
+
+When multiple scripts are open simultaneously, the different documents may be navigated through the Script tab.
+
+![image](https://github.com/user-attachments/assets/b79cd76d-fc78-433e-8f5b-3ee91fa30a9b)
+
+Console Pane
+
+
+The Console pane of the ISE is used for running ad-hoc commands or for triggering the execution of a script for testing purposes. This pane follows all the rules of a normal PowerShell session, so it cannot be assumed that the console automatically begins in the same working directory as the script in production.
+
+![image](https://github.com/user-attachments/assets/669a1111-2931-42ac-bbe4-0567c714336f)
+
+Key Features of the ISE
+
+
+Automatic Completion
+
+
+As code is being entered in the ISE, the editor offers potential completions of known cmdlets for the user to select from a drop-down menu below the cursor. If a user selects Enter while a menu item is selected, the text automatically completes and editing may resume from the end of the text. 
+
+![image](https://github.com/user-attachments/assets/e3c4b105-ce07-4572-a724-3f94b44282e2)
+
+
+
+Selective Execution
+
+
+If the functionality for an individual selection of code needs to be tested, a user may run only those commands in the provided console window by selecting the code and F8. 
+![image](https://github.com/user-attachments/assets/bf1d1762-4199-485b-82e9-f09d66465569)
+
+Context-Sensitive Help
+
+
+In the ISE, the help information for a particular cmdlet or language feature may be brought up by selecting F1 when that element is highlighted. The ISE understands that the context for the requested help is the selected element. 
+
+
+A corresponding Get-Help <element> -ShowWindow command executes on the user’s behalf in the console window.
+
+![image](https://github.com/user-attachments/assets/3ea719e9-3c1c-4c77-bf31-58f23ac14507)
+
+
+
+
 
 
 
