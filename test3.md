@@ -415,6 +415,8 @@ As seen in Figure 11.1-15, if a particular connection is suspicious, details suc
 
 Get-ScheduledTask
 
+![image](https://github.com/user-attachments/assets/3e51eb1a-6472-42eb-8898-02b2e064e084)
+
 
 This cmdlet is used to retrieve a list of all scheduled tasks in the system. These are often a vector for adversary persistence or may be disabled by adversaries when the task runs scripts or programs to search for malicious activity. 
 
