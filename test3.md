@@ -740,6 +740,9 @@ When multiple scripts are open simultaneously, the different documents may be na
 Console Pane
 
 
+
+
+
 The Console pane of the ISE is used for running ad-hoc commands or for triggering the execution of a script for testing purposes. This pane follows all the rules of a normal PowerShell session, so it cannot be assumed that the console automatically begins in the same working directory as the script in production.
 
 ![image](https://github.com/user-attachments/assets/669a1111-2931-42ac-bbe4-0567c714336f)
@@ -773,6 +776,295 @@ A corresponding Get-Help <element> -ShowWindow command executes on the user’s 
 ![image](https://github.com/user-attachments/assets/3ea719e9-3c1c-4c77-bf31-58f23ac14507)
 
 
+
+########CDAH-M11L2-Querying Active Directory with PowerShell#############
+
+
+Active Directory Cmdlets for System Exploration
+Analysts can access AD information through PowerShell cmdlets. The cmdlets query AD to retrieve and display AD objects from the module ActiveDirectory. This section introduces both high-level and low-level cmdlets to use with AD. High-level cmdlets provide a more macro view of the system, while low-level cmdlets provide access to more specific components. Together, they provide a comprehensive view of a system, which is especially useful when analysts initially have little or no information. Using these cmdlets from high-level to low-level allows analysts to explore a system with a "top-down" approach that provides greater detail at each level. 
+
+﻿
+
+Filters and Syntax
+﻿
+
+Many of the cmdlets in this lesson are commonly paired with the parameter 
+
+-Filter to improve searching efficiency. Rather than extracting all information and then searching through it, filtering parameters extract and display only the most relevant results.
+
+﻿
+
+Filters may follow the Where-Object syntax, but enclose the filter string in double quotes rather than braces. As an example, the following filter outputs accounts that contain the name "Joe" and are also not trusted for delegation:
+
+-Filter "(Name -like '*joe*') -and (TrustedForDelegation -eq 'False')"
+
+AD Cmdlets for High-Level Objects
+PowerShell high-level cmdlets include the following:
+
+Get-ADDomain
+Get-ADForest
+Get-ADGroup
+Get-ADGroupMember
+Get-ADOrganizationalUnit
+﻿
+
+Get-ADDomain﻿
+﻿
+
+The cmdlet Get-ADDomain returns an AD domain object. A domain object is the common point of association between all subordinate objects such as users, computers, and groups associated with the domain.
+
+﻿
+
+Get-ADForest﻿
+﻿
+
+The cmdlet Get-ADForest returns the AD forest object, which is useful in environments with multiple domains in a single forest. 
+
+﻿
+
+Get-ADOrganizationalUnit﻿
+﻿
+
+The cmdlet Get-ADOrganizationalUnit returns any subcategories of AD objects within the domain, which are called Organizational Units (OU). This cmdlet may be combined with other cmdlets to create more complex queries. 
+
+﻿
+
+Get-ADGroup﻿
+﻿
+
+The cmdlet Get-ADGroup returns AD group objects. This primarily serves to determine group membership. Groups that allow higher privileges over some or all domain resources to their members must be closely monitored. For these types of groups, including users that do not strictly require higher privileges constitutes a significant security risk. 
+
+﻿
+
+Get-ADGroupMember﻿
+﻿
+
+The cmdlet Get-ADGroupMember returns a collection of AD user objects that are associated with a particular AD group. The group name is designated by the field Identity, which is required to execute this cmdlet. 
+
+﻿
+
+The next task provides an opportunity to test each of these cmdlets in a lab. 
+
+Test High-Level AD Cmdlets
+
+
+Continue using the VM win-hunt to work in the interactive session from the last lab. Test out the AD cmdlets introduced so far.
+
+
+Workflow
+
+
+1. Display the AD Forest object by calling the cmdlet without parameters, as follows:
+Get-ADForest
+
+
+
+2. Display the AD Domain object by calling the cmdlet without parameters, as follows:
+Get-ADDomain
+
+
+
+3. List all the OUs in the domain by entering the following query:
+Get-ADOrganizationalUnit -Filter *
+
+
+
+4. List all of the AD Group objects in the domain by entering the following query:
+Get-ADGroup -Filter *
+
+
+
+5. Display all properties of the AD Group object Administrators by entering the following command:
+Get-ADGroup -Identity Administrators -Properties *
+
+
+
+One field in this structure is members and their Lightweight Directory Access Protocol (LDAP) syntax. The cmdlet Get-ADGroupMember also provides this information, but with more direct access.
+
+
+6. List all members of the Administrators group by entering the following command:
+Get-ADGroupMember -Identity Administrators
+
+
+PowerShell low-level cmdlets include the following:
+Get-ADUser
+Get-ADComputer
+Get-ADDomainController
+
+Each cmdlet offers a variety of query options for analysts to use, as needed. The most common use cases can be applied to daily analyst operations. For example, analysts can apply AD queries on low-level objects to achieve the following:
+Identify recently created accounts
+List all domain-joined computers
+List all domain controllers in a forest
+
+Get-ADUser
+
+
+The cmdlet Get-ADUser retrieves the AD user objects for a domain. Analysts may use this cmdlet to thoroughly inventory user accounts, especially privileged accounts, and conduct least privilege assessments. This helps prevent successful social engineering attacks that target these accounts towards achieving network compromise.
+
+
+Identify Recently Created Accounts
+
+
+One of the common use cases for the cmdlet Get-ADUser is to find accounts that are recently created, and compare this list to known users of a system. It is common for malicious threat actors to create user accounts for persistence, especially if they are able to create privileged accounts.
+
+
+The property whenCreated displays all accounts in a list, sorted by the date of creation. This property is not part of the default display that the cmdlet produces, which is why it needs to be explicitly included in a command, as in the following example:
+Get-ADUser -Filter * -Properties whenCreated | Sort-Object -Property whenCreated | FT Name, SamAccountName, whenCreated -AutoSize
+
+Get-ADComputer
+
+
+The cmdlet Get-ADComputer retrieves all AD computer objects from the domain. This is useful for compiling a list of devices and determining the operating system, Internet Protocol (IP) address, and other helpful information about each device.
+
+Using the Get-ADComputer cmdlet, the following query retrieves information about all computers in AD, including their IPv4 addresses, operating systems, and operating system service packs:
+
+
+Get-ADComputer -Filter * -Properties ipv4Address, OperatingSystem, OperatingSystemServicePack
+
+
+
+This type of query helps analysts uncover whether an attacker has surreptitiously added a device to the physical footprint and joined it to the domain. The analyst just needs to compare the output from the query to an official assets inventory.
+
+
+List All Domain-Joined Computers
+
+
+Listing all domain-joined computers with each of their addresses and operating systems helps develop a logical inventory of the mission partner infrastructure. Comparing this information to official records helps identify any inconsistencies or changes. Network defenders must understand their own terrain if they are to effectively defend it.
+
+
+Get-ADDomainController
+
+
+The cmdlet Get-ADDomainController is used to return all AD computer objects that are DCs. Calling this command without any other parameters returns the primary DC. 
+
+
+List All Domain Controllers in a Forest
+
+
+The highest value targets available to a malicious threat actor are the DC machine account and the Administrator account privileges necessary to configure the domain. This makes it vital for analysts to identify each domain controller in an environment and scrutinize the logging practices on all devices listed. Analysts must also routinely check the list of domain controllers to ensure that unknown devices are not configured as domain controllers and that asset inventories are accurate for future reference.
+
+
+Additional Tools
+
+
+Two additional PowerShell cmdlets are available to help analysts explore systems through AD:
+Search-ADAccount
+Get-GPOReport
+
+
+
+Search-ADAccount
+
+
+The cmdlet Search-ADAccount identifies accounts that meet a particular criterion, usually related to account or password status. One use case for employing this cmdlet is to find accounts that may be the target of brute force or social engineering attacks. For example, an account with an expired password may be the subject of a phishing attack to steal credentials.
+
+
+Notable flags to search for include the following:
+ExpiredPassword
+AccountDisabled
+AccountExpiring
+AccountInactive
+LockedOut
+
+
+
+The results of a Search-ADAccount query may also be filtered with the parameters UsersOnly or ComputersOnly. An example of this cmdlet is available in an upcoming section.
+
+
+Find Locked Out Accounts
+
+
+The AD lockout policy is tied to repeated failed login attempts on a single account, within a set period of time. The repeated failures may indicate a brute force attack or they may just be the result of entering the wrong credentials accidentally. Performing an AD query with Search-ADAccount to find locked out accounts may reveal any ongoing initial access attempts by malicious threat actors.
+
+
+Get-GPOReport
+
+
+The cmdlet Get-GPOReport returns the metadata and content of any or all Group Policy Objects on a machine. As these policies are managed by the DC in an AD environment, this report provides an important understanding of the common device configurations in the network. This is helpful for determining what vulnerabilities and misconfigurations may be present.
+
+
+Get-GPOReport only runs locally on a domain machine since the permissions remote sessions require do not allow data to be sent across the connection. However, when provided access to a physical mission partner system, it is helpful to run this query to obtain a status of the current group policy posture. This query should be run in concert with a script that parses for vulnerable configurations or Security Technical Implementation Guide (STIG) findings.
+
+
+The report may be printed directly to the console or exported to a HyperText Markup Language (HTML) or Extensible Markup Language (XML) document. It is inadvisable to print directly to the console because the very long format of the output is not easily read by human eyes. The output makes previous commands and output inaccessible in the terminal.
+
+
+The report may also receive a Group Policy Object (GPO) from the pipeline or specify a policy by name, rather than create a report for all policies in a domain. 
+
+
+Export an XML Report of AD Group Policies
+
+
+The previous section explained how analysts can use a report of the Group Policies in a Domain to understand how devices across an environment are configured. Subsequently, analysts should peruse this type of report to find systemic vulnerabilities in the domain. 
+
+
+The general syntax for this activity is as follows:
+Get-GPOReport [ -Name <GPO Name> | -All ] [ -Domain <AD Domain> -Server <Domain Controller> ] -ReportType <XML | HTML> -Path <output file path>
+
+
+
+An analyst may export an XML report of AD Group Policies with the following command:
+Get-GPOReport -All -Domain "vcfed-int.lan" -Server "BK-DC01" -ReportType XML -Path "C:\GPOReports\GPOReportsAll.xml"
+
+![image](https://github.com/user-attachments/assets/eab6f7bb-fa25-4180-a083-35c66e3994b3)
+
+Run Common AD Queries on Low-Level Objects
+
+
+Continue using the VM win-hunt to work in the interactive session from the last lab. Test out the low-level AD cmdlets introduced in the previous task.
+
+
+Workflow
+
+
+1. In the PowerShell interactive session, output a list of all users in a domain by entering the following query:
+Get-ADUser -Filter *
+
+
+
+2. Print all properties of an AD user object, the logged in user, by entering the following command:
+Get-ADUser -Identity trainee -Properties *
+
+
+
+3. List all domain-joined computers with the following query:
+Get-ADComputer -Filter *
+
+
+
+4. Display all properties of an AD computer object, the device on which the PowerShell session is established, by entering the following command:
+Get-ADComputer -Identity "bk-dc02" -Properties *
+
+
+
+5. List all computers in the workstation’s organizational unit by entering the following command:
+Get-ADComputer -Filter * -SearchBase $(Get-ADOrganizationalUnit -LDAPFilter '(name=Workstations)') | FT Name
+
+
+
+6. List all domain-joined computers by entering the following command:
+Get-ADComputer -filter 'name -like "*"' -Properties * | select name,OperatingSystem,IPv4Address
+
+
+
+7. Use the wildcard filter (*) to retrieve all DCs for a domain by entering the following command:
+Get-ADDomainController -Filter *
+
+
+
+Below, Figure 11.2-2 displays the hostnames of the two DCs. In this network, as in many AD environments, the DCs are indicated in the machine naming convention.
+
+![image](https://github.com/user-attachments/assets/6f3b4316-844b-40da-bc65-36b49ca8557d)
+
+
+
+8. Alternatively, list all domain controllers in a forest by entering the following command:
+(Get-ADForest).Domains | foreach { Get-ADDomainController -Filter * -Server $_ | FT Name, OperatingSystem, Domain }
+
+
+
+9. Find locked out accounts by entering the following query:
+Search-ADAccount -LockedOut -UsersOnly | Format-Table Name, SamAccountName
 
 
 
