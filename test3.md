@@ -372,7 +372,8 @@ The syntax for this command is:
 Get-CimInstance -ClassName <Win32_Class>
 
 Or
-Get-CimInstance -Query "<SELECT x FROM win32_class WHERE y LIKE z>"
+![image](https://github.com/user-attachments/assets/8cfb3712-da42-45a4-9a1e-066fe6c0705c)
+
 
 Or 
 Get-CimInstance -ClassName <win32_class> -Filter @{"property"=VALUE} -Property Name
