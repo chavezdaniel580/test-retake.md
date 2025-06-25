@@ -2686,3 +2686,23 @@ PS C:\Windows\Temp> Find-InterestingFile -Path "C:\Users"
 Parsing through the output displays the entry in Figure 12.1-3, below:
 
 ﻿
+4. Return to the VM win-hunt to view any evidence of the activity that may be available.
+
+
+5. Open the bookmark for Kibana Discover - Elastic in the browser Chrome and enter the following credentials if prompted:
+Username: trainee@jdmss.lan
+Password: CyberTraining1!
+
+
+
+6. Determine whether explicit credentials were used for a logon in the logs shipped to Elastic by entering the following query:
+event.code: 4648 and winlog.event_data.TargetInfo:HTTP*
+
+
+
+This returns all records that explicitly supply credentials to conduct network logons to the HTTP service of a workstation. HTTP is the protocol over which WinRM communicates. WinRM uses either the alternative port 5985 or 5986 when using the HTTPS version of WinRM.
+
+
+If an attacker records those credentials separately and moves laterally from a different endpoint, the WinRM activity may still be monitored from the receiving host. The tool Evil-WinRM is available on the VM kali-hunt for this demonstration.
+
+
