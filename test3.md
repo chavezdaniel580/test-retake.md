@@ -1071,13 +1071,116 @@ Search-ADAccount -LockedOut -UsersOnly | Format-Table Name, SamAccountName
 ![image](https://github.com/user-attachments/assets/67836439-4251-4633-9225-536ebeee6e35)
 
 
+![image](https://github.com/user-attachments/assets/452d9033-4735-4f80-8d82-bc969922fda2)
+
+AD Environment Discovery Script
+When analysts audit the AD domain with tools such as Bloodhound, they must determine which AD objects exist in the current environment and which configurations lead to exploitable vulnerabilities. 
+
+﻿
+
+Create an AD Environment Discovery Script
+﻿
+
+Use the PowerShell ISE and the cmdlets introduced in this lesson to create a script that performs queries to discover the objects in the domain with the CPT toolkit. Determine which queries are appropriate for the script based on the questions asked on the next set of task cards.
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the VM win-hunt with the following credentials:
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Open the PowerShell ISE.
+
+﻿
+
+3. Enter the following three lines to create a connection between the analyst machine and the mission partner domain controller on which the upcoming queries will be performed:
+
+$dc = "172.25.20.3"
+
+$credentials = Get-Credential
+
+$session = New-PSSession -ComputerName $dc -Credential $credentials
+When prompted for credentials for the PowerShell session, enter the following:
+
+Username: vcfed-int\trainee
+Password: CyberTraining1!
+﻿
+
+4. ﻿Answer the next set of questions by entering the appropriate queries using the following syntax and running the appropriate script:
+
+   
+
+############Invoke-Command -Session $session -ScriptBlock {Cmdlet}#################
+
+
+![image](https://github.com/user-attachments/assets/f81e3187-9cc1-499b-a7c9-0ad6d65cf666)
+
+![image](https://github.com/user-attachments/assets/3ee2f314-b093-48ed-ac86-badd0b9a5244)
 
 
 
+![image](https://github.com/user-attachments/assets/39647def-1c5e-42ff-a8ba-20c19c4453df)
+
+
+![image](https://github.com/user-attachments/assets/96fb7eea-082d-4d3c-a02b-48d8e32fa293)
+
+
+Identifying AD Vulnerabilities with PowerShell
+In an AD environment, a number of potential vulnerabilities can lead to the compromise of a user, a system, or even an entire domain. The section addresses two possible concerns: 
+
+Accounts with passwords that never expire
+
+Accounts "roastable" by Kerberos Authentication Service Response (AS-REP)
+
+Accounts with Passwords That Never Expire
+﻿
+
+Accounts that do not require regular rotation of passwords are vulnerable to password spray attacks, especially when password reuse is involved. A user’s password on an insecure service may be compromised and then used in the mission partner environment. This allows the compromised account that retains the password indefinitely to extend the vulnerable window for the domain.
+
+﻿
+
+To effectively prevent this vulnerability, analysts may write a query that filters for accounts configured with the flag DONT_EXPIRE_PASSWORD set. In the AD user object, this flag is designated by the field passwordNeverExpires. The following query fulfills these requirements:
 
 
 
+############Get-ADUser -filter { passwordNeverExpires -eq $true -and enabled -eq $true } | Select Name, DistinguishedName##############
+﻿
+
+NOTE: The query in above is valuable in real situations, but not applicable in this lesson's controlled lab environment. The passwords for all accounts in this lesson never expire so that the lab environment is stable for lesson activities. 
+
+
+ Accounts Roastable by Kerberos AS-REP
+
+
+System environments may allow some user accounts to access domain resources using the Kerberos protocol without requiring Kerberos pre-authentication or correct credentials beforehand. These users expose the environment to a powerful attack by adversaries with "crackable" hashes that extract passwords. This attack is known as an AS-REP roast, which is named after the Kerberos message that is encrypted with the user’s NT hash. The Kerberos message is the target of the attack. Users vulnerable to this attack are configured with the flag DONT_REQ_PREAUTH set in the account. 
+
+
+Identify Kerberos Pre-Authentication Misconfigurations
+
+
+Query the flag DONT_REQ_PREAUTH in PowerShell using the cmdlet Get-ADUser and the property DoesNotRequirePreauth. 
+
+
+Workflow
+
+
+1. In the VM win-hunt, establish a remote connection to the domain controller and use PowerShell to determine which user is vulnerable to the AS-REP roast attack by executing the following query:
+
+   
+##############Get-ADUser -filter * -properties DoesNotRequirePreAuth | where {$_.DoesNotRequirePreAuth -eq "TRUE"} | select samaccountname#####################
 
 
 
+3. Use the output from this query to answer the following question.
+
+
+![image](https://github.com/user-attachments/assets/311e08b1-171a-4f56-91c7-f76bcacb0c29)
+
+
+![image](https://github.com/user-attachments/assets/665ac202-2423-4162-b1b8-9525f0517b82)
 
