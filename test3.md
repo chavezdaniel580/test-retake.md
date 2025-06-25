@@ -1066,6 +1066,7 @@ Below, Figure 11.2-2 displays the hostnames of the two DCs. In this network, as 
 9. Find locked out accounts by entering the following query:
 Search-ADAccount -LockedOut -UsersOnly | Format-Table Name, SamAccountName
 
+![image](https://github.com/user-attachments/assets/67836439-4251-4633-9225-536ebeee6e35)
 
 
 
