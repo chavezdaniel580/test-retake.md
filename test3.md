@@ -2318,3 +2318,17 @@ If Enabled is set to False, this indicates that the rule is successfully disable
 
 ![image](https://github.com/user-attachments/assets/24c10258-8896-4981-bbc3-60a8f17eec76)
 
+![image](https://github.com/user-attachments/assets/ecc5befb-61b7-40fd-befa-d4033415d62c)
+
+
+![image](https://github.com/user-attachments/assets/30b7c3a7-315e-4923-a66d-9c5765761d1e)
+
+
+![image](https://github.com/user-attachments/assets/474b5c2d-98bd-429c-b595-ae6cd6df9c89)
+
+![image](https://github.com/user-attachments/assets/821e7e2c-34e9-41cf-81eb-f8491b8f4951)
+
+
+What profile includes the firewall rule File Server Remote Management (SMB-In)?
+What command blocks inbound traffic over port SMB by creating a new firewall rule named Block Inbound SMB?
+What firewall profile is enabled on dc01?
