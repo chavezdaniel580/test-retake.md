@@ -1184,3 +1184,411 @@ Workflow
 
 ![image](https://github.com/user-attachments/assets/665ac202-2423-4162-b1b8-9525f0517b82)
 
+
+![image](https://github.com/user-attachments/assets/1ab366a8-2e50-4528-b137-d7026f09683d)
+
+What Is a PowerShell Cmdlet?
+A PowerShell cmdlet (pronounced “command-let”) is a lightweight command that manipulates objects within the PowerShell environment. Cmdlets can be recognized by their naming convention, which employs a verb-noun pattern. This pattern is apparent in the following examples of popular cmdlets:
+
+Get-Help
+Get-Process
+Start-Service
+A cmdlet comprises a single command that performs an action and returns a Microsoft .NET object to the next command within the pipeline. Cmdlets are simple and designed to be combined with other cmdlets within the pipeline chain. The following are examples of common cmdlet verbs and what they indicate:
+
+GET - retrieve data
+SET - establish or change data
+OUT - direct the command output to a specified destination
+PowerShell cmdlets have many different traits that differentiate them from commands in other command-shell environments. Cmdlets are instances of Microsoft .NET classes and can be created from a few lines of code. Cmdlets are not stand-alone executables, nor do they handle the same tasks as the PowerShell runtime. The runtime handles parsing, error presentation, and output formatting are handled, whereas cmdlets do not. Cmdlets process input from the pipeline, rather than from streams of text, and they deliver objects as output to the pipeline. 
+
+﻿
+
+Cmdlets are also available in different forms. This includes binary (C#) cmdlets, advanced script functions, and workflows. To create a binary cmdlet, a class must be implemented that derives from one of two special cmdlet base classes. The derived class must conduct the following tasks:
+
+Declare an attribute that identifies the derived class as a cmdlet.
+Define public properties that contain attributes that identify the public properties as cmdlet parameters.
+Override one or more of the input processing methods to process records. 
+﻿
+
+Table 11.3-1, below, lists common terms for creating or interacting with PowerShell cmdlets:
+
+![image](https://github.com/user-attachments/assets/6e0cb406-2452-4bf0-abc7-f68e79db57e5)
+
+Creating a PowerShell Cmdlet from Scratch
+Declaring Functions for Cmdlets
+﻿
+
+Creating custom PowerShell cmdlets starts with creating a PowerShell function. A simple function does not have complex parameter support, whereas an advanced function supports multiple arrangements of different parameter values.
+
+﻿
+
+A PowerShell class is used to create multiple instances of objects at run time. When defining a class, its name is also its type. For example, if a class named Device is declared and a variable named $dev is initialized to a new instance of Device, $dev is an object or instance of type Device. Each instance of Device can then have different values in its properties. 
+
+﻿
+
+A simple function in PowerShell is declared with a function keyword, a function name, and a set of curly brackets {}. Within the curly brackets is the code the function executes. The following is an example of a function named Get-Version that returns the current version of PowerShell:
+
+function Get-Version {
+    $PSVersionTable.PSVersion
+}
+﻿
+
+While the Get-Version example above executes code, many other functions execute other cmdlets or commands. For example, a function may include the cmdlet Get-Process to get a list of processes. The function may also combine Get-Process with other cmdlets in a pipeline and designate the output to store all of collected objects in a single object. The single object may then be directed to output all its collected data and return it to the user that executed the function. 
+
+﻿
+
+Converting Functions into Cmdlets
+﻿
+
+Converting a function into a cmdlet is a matter of updating the script’s syntax. The minimum required changes are to add the attribute CmdletBinding as the first line in the body of the function, followed by a param block, as follows:
+
+[CmdletBinding()]
+param(
+) 
+﻿
+
+Any other changes are optional. For example, other attributes can be specified within the syntax [CmdletBinding()]. Adding additional attributes in this syntax allows functions to access several methods and properties through the variable $PsCmdlet by using the blocks begin, process, and end. 
+
+﻿
+
+Although the param block is also required, it does not need to have any parameters defined in the function. Parameter definitions can be added using advanced functions that provide instructions to the cmdlet. 
+
+         
+
+After a cmdlet is created, it can be saved as a script module with the extension .psm1. This extension allows PowerShell to use rules and module cmdlets in the file. Having a PowerShell file saved as a script module makes it easy to use the built-in cmdlet Import-Module to run the custom cmdlets on other systems. The  cmdlet Import-Module adds one or more modules to the current session. By default, Import-Module only imports a module into the current session. To use this cmdlet for something else, it would need to be specified in the PowerShell profile.
+
+﻿
+
+Create a Basic Cmdlet
+﻿
+
+Use PowerShell ISE to create a basic PowerShell cmdlet from scratch. First, create a PowerShell function that displays the name of each running process, its Process Identifier (PID) number, and its Parent Process Identifier Number (PPID). Then, add the necessary code to convert the function into a cmdlet. 
+
+![image](https://github.com/user-attachments/assets/fee56ad1-ac2e-4a27-87c8-4a7c30a89726)
+
+
+efine the class ProcInfo by adding the following text on lines 1 through 5 of the new script:
+class ProcInfo {
+[int] $PID
+[int] $PPID
+[string] $PName
+}
+
+
+
+5. Create the function Get-ProcessesPids by inputting the following text on lines 7 through 19:
+Function Get-ProcessesPids {
+	$processes = Get-Process
+	$output = New-Object -TypeName "System.Collections.ArrayList"
+	foreach($proc in $processes) {
+		$tempProc = New-Object ProcInfo
+$tempProc.PName = $proc.ProcessName
+$tempProc.PID = $proc.Id
+$tempProc.PPID = (Get-CimInstance Win32_Process | 
+Where ProcessID -eq $proc.Id).ParentProcessId
+$output.Add($tempProc) | Out-Null
+}
+return $output
+}
+
+
+
+6. Execute the script by entering the following function call at the beginning of line 21:
+Get-ProcessesPids
+
+
+
+This basic script has a PowerShell class, a function, and a line to call the function so the script can be executed. However, the script is not yet a cmdlet because it is missing both the attribute CmdletBinding and the Param block. 
+
+
+7. Save the PowerShell script as ProcPids.ps1, and run the script.
+
+
+8. Remove the function call Get-ProcessesPids on line 21.
+
+
+This line is not required in the script after the script is converted into a cmdlet. 
+ 
+9. Convert the script into a cmdlet by adding the following text on lines 8 through 10:
+
+    
+[CmdletBinding()]
+param(
+)
+
+![image](https://github.com/user-attachments/assets/f0f7b70c-5d9b-467d-aa7c-6a2ded8c7363)
+
+Save the new cmdlet as ProcPids-Cmdlet.psm1
+
+
+11. Within the PowerShell session, change to the directory where the files are saved by entering the following command:
+cd .\Documents
+
+
+
+12. View the PowerShell files by entering the following command:
+ls
+
+
+
+13. Import the module with the following command:
+Import-Module .\ProcPids-Cmdlet.psm1 -Force
+
+
+
+The option -Force ensures that the new cmdlet definition from the file overwrites any previous definition loaded into memory as a module. This is important when making changes and adjustments to the cmdlet code.
+
+
+14. Execute the newly created cmdlet by entering the following command:
+Get-ProcessesPids 
+
+
+
+The name of the cmdlet is the same as the function name that was defined in the code.
+
+
+15. View the cmdlet’s auto-generated Get-Help file with the following command:
+Get-Help Get-ProcessesPids
+
+
+
+The cmdlet Get-Help displays information about PowerShell commands and cmdlets. When a cmdlet is created, it automatically generates a help file for that cmdlet. The cmdlet Get-Help automatically generates the following items for the cmdlet:
+Name
+Syntax of the cmdlet
+Parameter list
+Common parameters
+Parameter attribute table
+Rema rks 
+ 
+Advanced Cmdlet Parameters
+Additional parameter attributes and arguments are available for creating advanced functions. These additional features can be used to limit the parameter values that are submitted with the parameter. Both types of parameters are available to users: the parameters added to the function as well as the common parameters that PowerShell adds automatically to all cmdlets and advanced functions. This section introduces the following advanced parameters and attributes that are available for PowerShell cmdlets: 
+
+Switch parameters
+
+Parameter sets
+
+Parameter attributes
+
+Alias attributes
+
+﻿
+
+Switch Parameters
+﻿
+
+Switch parameters do not take any parameter value. Instead, their presence or absence conveys a Boolean true-or-false value. When a switch parameter is present, it has a true value. When this parameter is absent, it has a false value.
+
+﻿
+
+To create a switch parameter in a function, specify the switch type in the parameter definition. Switch parameters are easy to use and are preferred over Boolean parameters, which have a less natural syntax in PowerShell. For example, to use a switch parameter, the user enters the following parameter in the command:
+
+-IncludeAll
+﻿
+
+Whereas a Boolean parameter requires entering the parameter as well as the Boolean value, as such:
+
+-IncludeAll $true 
+﻿
+
+When creating switch parameters, the parameter name must be carefully chosen. Avoid ambiguous terms that imply a value is required. Instead, ensure the parameter name communicates the effect of the parameter to the user.
+
+﻿
+
+Parameter Sets
+﻿
+
+PowerShell uses parameter sets to enable single cmdlets to perform different actions for different scenarios. Parameter sets allow for exposure to different PowerShell parameters for the users. Parameter sets also allow users to specify parameters to return different information. 
+
+﻿
+
+Each parameter set must have a unique parameter that the PowerShell runtime uses to expose the appropriate parameter set. The unique parameter should be a mandatory parameter. A mandatory parameter means that the user must specify the parameter and the PowerShell runtime uses that parameter to identify the Parameter set.
+
+﻿
+
+When multiple parameter sets are defined, the keyword DefaultParameterSetName of the attribute CmdletBinding can be used to specify the default parameter set. PowerShell uses the default parameter set if the information provided by the command does not indicate the parameter set to use. 
+
+﻿
+
+The syntax for defining multiple parameter sets is as follows:
+
+"DefaultParameterSetName=" attribute (CmdletBinding)
+﻿
+
+The attribute ParameterSetName specifies the parameter set to which the parameter belongs. If a parameter set is not specified, the parameter belongs to all the parameter sets defined by the function. Therefore, to create unique parameter sets, each set must have at least one parameter that is not a member of any other parameter set. 
+
+﻿
+
+Only one value for ParameterSetName can be specified in each argument. Only one argument for ParameterSetName in each parameter attribute is allowed. Adding more parameter attributes indicates that a parameter appears in more than one parameter set. Below is the syntax for this argument:
+
+"ParameterSetName=" attribute (param block)
+﻿
+
+Parameter Attribute
+﻿
+
+The attribute Parameter declares the attributes of function parameters. This attribute is optional and can be omitted if none of the parameters of the function need attributes. However, for a function to be recognized as an advanced function, it must have either the CmdletBinding or Parameter attributes, or both. The attribute Parameter provides arguments that define the characteristics of the parameter, such as whether it is mandatory or optional. 
+
+﻿
+
+The following syntax is used to declare the attribute Parameter, an argument, and an argument value. The parentheses that enclose the argument and its value must follow Parameter with no intervening space. Commas can be used to separate arguments within the parentheses. 
+
+param(
+    [Parameter(Argument=value)]
+    $ParameterName
+)
+﻿
+
+The attribute Mandatory indicates that the parameter is required. The parameter is optional if this argument is not specified. This attribute can be set to =$false or $true. Making the parameter optional lets the user run the cmdlet with or without the parameter. If the attribute is set to $true, the parameter must be provided otherwise the cmdlet displays an error message. The expected argument for the parameter is a string, indicated by adding the identifier [String] before the parameter name. The following is an example of using the argument Mandatory to make the parameter mandatory:
+
+param(
+    [Parameter(Mandatory=$true)]
+    [string[]]
+    $ParameterName
+)    
+﻿
+
+When the cmdlet executes with a parameter, the value provided on the command line is stored in the variable $ParameterName, as indicated in the above example. An if statement within the cmdlet can determine if the parameter $ParameterName was used on the command line. This is known as a check, which is used to determine if a parameter was provided at all. Checks tell the cmdlet how to proceed with the output.
+
+﻿
+
+The argument Position determines whether the parameter name is required when the parameter is used in a command. When a parameter declaration includes the argument Position, the parameter name can be omitted. PowerShell then identifies the unnamed parameter value by its position or order in the list of unnamed parameter values within the command. 
+
+﻿
+
+The value of the argument Position is specified as a number. A value of 0 represents the first position in the command, a value of 1 represents the second position, and so on. If a function has no positional parameters, PowerShell then assigns positions to each parameter based on the order in which the parameters are declared. However, the best practice for using positional parameters is to use the argument Position. 
+
+﻿
+
+The following example uses the argument Position with a value of 0. It uses the parameter ComputerName. When -ComputerName is omitted, its value must be the first or only unnamed parameter value in the command.  
+
+param(
+    [Parameter(Position=0)]
+    [string[]]
+    $ComputerName
+)
+﻿
+
+Alias Attribute
+﻿
+
+The Alias attribute establishes an alternate name or nickname for a cmdlet or cmdlet parameter. The parameter aliasnames specifies a set of comma-separated aliases for the cmdlet parameter. The following is the syntax for an alias:
+
+[Alias(aliasnames)]
+﻿
+
+There are two types of aliases, each with its own specific use case and meaning:
+
+﻿
+
+Cmdlet Aliases﻿
+
+The alias attribute is used with the cmdlet declaration. This is shorthand of a full cmdlet to make it easier to specify a cmdlet and not type out the full name. For example, the Get-Command cmdlet has a built-in alias of gcm.
+
+Each cmdlet alias name must be unique.
+
+This must be placed outside of the param block within a cmdlet.
+
+Parameter Aliases﻿
+
+The alias attribute is used with the Parameter attribute when a cmdlet parameter is specified. 
+
+Each parameter alias name must be unique within a cmdlet. 
+
+The alias attribute is used once for each parameter in a cmdlet.
+
+This must be placed within the param block in a cmdlet.
+
+﻿
+
+Complex Cmdlet Parameters
+﻿
+
+Modify the existing PowerShell cmdlet and add complex parameters to the cmdlet. 
+
+
+Integrating with RESTful APIs in PowerShell
+A critical skill for Host Analysts is to develop custom tools and scripts that perform automated tasks for network communication between systems. Implementing network support in programming languages is typically complicated and time-consuming. However, PowerShell resolves these issues with cmdlets that support REST. REST defines a set of recommendations and constraints for network communication between web-based systems using Hypertext Transfer Protocol (HTTP).
+
+﻿
+
+Networked systems that adhere to the REST conventions are referred to as “RESTful”. PowerShell provides a RESTful API that facilitates client-server HTTP communications using the cmdlet invoke-restmethod. PowerShell connects to RESTful web services to easily integrate between custom scripts and existing systems on the network.
+
+﻿
+
+The next section explains how PowerShell supports the following:
+
+Sending data to an HTTP server
+Receiving data from an HTTP server
+Using invoke-restmethod
+Sending Data to an HTTP Server
+﻿
+
+PowerShell provides different methods to send a request to an HTTP server. Four methods are listed in Table 11.4-1, below. Individual web servers determine how to respond to these methods.
+
+![image](https://github.com/user-attachments/assets/f4d4a204-2b30-4037-a20c-f7b5a95dc1fb)
+
+HTTP Request Data Options
+
+
+An HTTP request includes the method, header, resource path, and body. The following table provides additional information about these components:
+
+![image](https://github.com/user-attachments/assets/9054ab5c-3811-48d0-a27b-828e18176438)
+
+Another way to send data is with Uniform Resource Locator (URL) parameters or query strings. In these cases, additional key-value pairs are encoded in the resource path. This type of data passing allows a website to remember data between sessions. The following example URL includes two key-value pairs. The key query has a value of test and the key page has a value of 2:
+http://domain.com/search?query=test&page=2
+
+Receiving Data from an HTTP Server
+
+
+Table 11.4-3, below, groups the different HTTP response codes into broad categories. The most well-known response code, 404 Not Found, is commonly displayed when URLs have a typo.
+
+
+![image](https://github.com/user-attachments/assets/55c4d7ff-458c-4881-94a7-d0afbf4ef38f)
+
+Using Invoke-RestMethod
+
+
+Invoke-RestMethod is a robust cmdlet with many options including proxy, encryption, and compression support. Table 11.4-4, below, provides the basic options relevant to the labs in this lesson. One potential stumbling block is that PowerShell does not allow a user to send a GET request with a message body. Elastic allows the POST and GET requests to be used interchangeably, so any GET request that Elastic suggests can also be completed with a POST request.
+
+
+![image](https://github.com/user-attachments/assets/40734809-ce8c-48aa-b654-f981646b2793)
+
+
+
+
+
+Basic GET Request Example
+
+
+The following command does not specify the options URI and Method:
+$response = Invoke-RestMethod  http://site.com/people/1
+
+
+
+The URI is assumed to be the first parameter provided and the default Method is Get. Omitting the parameter informs the cmdlet to do a Get request.
+
+
+Headers Example
+
+
+The following example creates a new dictionary object called $headers. This object uses the type String for both the key and value pairs:
+$headers = New-Object "System.Collections.Generic.Dictionary[String,String]"
+$headers.Add("X-DATE", '9/29/2014')
+$headers.Add("X-SIGNATURE", '234j123l4kl23j41l23k4j')
+$headers.Add("X-API-KEY", 'testuser')
+$response = Invoke-RestMethod 'http://site.com/people/1' -Headers $headers
+
+
+
+Post Example
+
+
+JavaScript Object Notation (JSON) is an open standard that was originally intended for JavaScript, but has gained popularity in many other types of software. It is an alternative to various markup languages such as Extensible Markup Language (XML) and Yet Another Markup Language (YAML). JSON is commonly pronounced “Jay-sawn,” although “Jason” is also acceptable.
+
+
+The body of the following request uses JSON format to define a single key-value pair of name-steve in the form of a hashtable. The hashtable is converted to a JSON and passed into the body of the RESTful method.
+$person = @{
+   name='steve'
+}
+$json = $person | ConvertTo-Json
+$response = Invoke-RestMethod 'http://site.com/people/1' -Method Post -Body $json -ContentType 'application/json'
+
