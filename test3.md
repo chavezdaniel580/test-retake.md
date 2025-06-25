@@ -2090,4 +2090,231 @@ The commands in this lab enable analysts to retrieve useful information about a 
 ![image](https://github.com/user-attachments/assets/56cc2471-7e67-4a92-a840-18bc60c144da)
 
 
+![image](https://github.com/user-attachments/assets/39cdef8f-cf5c-4194-ad82-a074a440ddbb)
+
+
+############System Settings Queries###########
+Using PowerShell to query and set system settings increases the efficiency of many tasks. Instead of clicking through a graphical user interface, PowerShell uses elegant commands that quickly perform almost any task imaginable on Windows systems. The next set of task cards introduces the following types of cmdlets:
+
+Group Policy Object (GPO)
+Item
+NetFirewallRule
+To explore additional modules and cmdlets on the system, use the cmdlets Get-Module and Get-Command.
+
+
+Use GPO Cmdlets
+GPO Cmdlets
+﻿
+
+The GPO cmdlets are part of the module GroupPolicy. These cmdlets administer Group Policy in a Windows Server.
+
+﻿
+
+Use GPO Cmdlets
+﻿
+
+Use GPO cmdlets to retrieve information on GPO policies in a domain, create a new GPO policy, and export a report about the newly created GPO policy.
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the VM dc01 using the following credentials: 
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Using an administrative PowerShell, return all GPOs on the domain energy.lan by running the following command:
+
+Get-GPO -All -Domain "energy.lan"
+
+![image](https://github.com/user-attachments/assets/c60d3925-b777-4a35-bd60-940840259c9c)
+
+﻿
+
+3. Create a new GPO in the domain of the user with the cmdlet New-GPO, as follows:
+
+New-GPO -Name "ScreenSaverTimeout" -Comment "This sets the screen saver timeout to 5min."
+
+![image](https://github.com/user-attachments/assets/3fde0927-b764-423a-a44e-d2fd7ff83add)
+
+﻿
+
+4. Apply a registry-based policy to the new GPO by running the following command:
+
+Set-GPRegistryValue -Name "ScreenSaverTimeout" -Key "HKCU\Software\Policies\Microsoft\Windows\Control Panel\Desktop" -ValueName ScreenSaveTimeOut -Type String -Value 300
+
+![image](https://github.com/user-attachments/assets/584ab546-d4ff-47b7-bd85-b7b9d279e335)
+
+﻿
+
+5. Link the GPO to an Organizational Unit (OU) by running the cmdlet New-GPLink, as follows:
+
+New-GPLink -Name "ScreenSaverTimeout" -Target "ou=bp,dc=energy,dc=lan"
+
+![image](https://github.com/user-attachments/assets/a186d5bd-ca66-4072-8db4-d16a71bcb154)
+
+﻿
+
+6. Save a HyperText Markup Language (HTML) report of the new GPO to the desktop by running the cmdlet Get-GPOReport, as follows:
+
+Get-GPOReport -Name "ScreenSaverTimeout" -ReportType HTML -Path "C:\Users\trainee\Desktop\gporeport.html"
+
+![image](https://github.com/user-attachments/assets/0b149a39-486f-40a3-9ea0-b2c513617828)
+
+﻿
+
+7. Open and review the newly generated report.
+
+﻿
+
+The commands in this lab enable analysts to query information on and create Group Policy objects. The GPO report generated in the last step displays information about a GPO that can be shared with the team. The information is identical to what is presented in the Group Policy editor in Windows. 
+
+
+Use Item Cmdlets
+Item Cmdlets
+﻿
+
+The item cmdlets are part of the module Microsoft.PowerShell.Management. These cmdlets query and set items in different types of data stores. For example, item cmdlets may be used to query and modify registry keys.
+
+﻿
+
+Use Item Cmdlets
+﻿
+
+Use Item cmdlets to retrieve information on a registry key, create a new registry entry, and remove a registry key. Continue using the VM dc01 to work in PowerShell as an Administrator.
+
+﻿
+
+Workflow
+﻿
+
+1. In PowerShell, query a run key in the local machines registry by entering the following command:
+
+Get-Item HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
+
+![image](https://github.com/user-attachments/assets/16bc4f1d-f783-4f63-baf9-6f26780045da)
+
+﻿
+
+2. Create a new property in the run key with the cmdlet New-ItemProperty, as follows: 
+
+New-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "Notepad" -Value "%windir%\system32\notepad.exe"
+
+
+![image](https://github.com/user-attachments/assets/4583793e-59cd-4022-8709-54db5694e9e2)
+
+﻿
+
+The cmdlet New-Item is also available to create a whole new registry key.
+
+﻿
+
+3. Display the new property by running the cmdlet Get-Item, as follows:
+
+Get-Item HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
+
+![image](https://github.com/user-attachments/assets/c66389bd-2c68-4bde-a813-32725d9a4237)
+
+﻿
+
+4. Delete the property by running the cmdlet Remove-ItemProperty, as follows:
+
+Remove-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "Notepad"
+
+
+![image](https://github.com/user-attachments/assets/254ae910-de33-47db-96e1-ffa7a0b55d06)
+
+﻿
+
+The commands in this lab enable analysts to query the  registry and manage registry e ntries on a local host.
+
+
+
+ Use NetFirewallRule Cmdlets
+NetFirewallRule Cmdlets
+﻿
+
+The NetFirewallRule cmdlets are part of the module NetSecurity and are used to modify host firewall rules.
+
+﻿
+
+Use NetFirewallRule Cmdlets
+﻿
+
+Use NetFirewallRule cmdlets to retrieve a local host's firewall profiles, retrieve information on a local host's firewall rules, create a new firewall rule on the local host, and disable a firewall rule on a local host. Continue using the VM dc01 to work in PowerShell as an Administrator.
+
+﻿
+
+Workflow
+﻿
+
+1. In PowerShell, list all the firewall profiles on the local host by running the following command:
+
+Get-NetFirewallProfile -All
+
+![image](https://github.com/user-attachments/assets/3c61ee6e-7e46-4473-bbd6-d1971c32b541)
+
+﻿
+
+2. List all the rules in the profile domain by entering the cmdlet Get-NetFirewallRule, as follows:
+
+Get-NetFirewallProfile -Name Domain | Get-NetFirewallRule
+
+
+![image](https://github.com/user-attachments/assets/ad6a3629-c808-4b85-b2d9-c16c2b036fe0)
+
+﻿
+
+3. Create a new firewall rule in the domain profile to block all outbound traffic to port 1337 by running the cmdlet New-NetFirewallRule, as follows:
+
+New-NetFirewallRule -DisplayName "Block Outbound Port 1337" -Direction Outbound -LocalPort 1337 -Protocol TCP -Action Block -Profile Domain
+
+
+![image](https://github.com/user-attachments/assets/131b2203-0076-4bea-9aa8-333bcccf2229)
+
+﻿
+
+4. Review the new rule using the cmdlet Get-NetFirewallRule, as follows:
+
+Get-NetFirewallRule -DisplayName "Block Outbound Port 1337"
+
+![image](https://github.com/user-attachments/assets/bb027a99-9d76-429b-9ec5-86f3b3c1e0fd)
+
+﻿
+
+5. Disable the new rule with the cmdlet Disable-NetFirewallRule, as follows:
+
+Disable-NetFirewallRule -DisplayName "Block Outbound Port 1337"
+
+
+﻿
+
+6. Verify the rule was disabled by viewing the information output by the following command:
+
+Get-NetFirewallRule -DisplayName "Block Outbound Port 1337"
+
+
+ ![image](https://github.com/user-attachments/assets/8a9b0db4-c0b3-487b-bc8c-a30fb7f15d1e)
+
+
+What cmdlet creates a registry key?
+new-item
+
+![image](https://github.com/user-attachments/assets/76a94f64-cc60-4b72-8bd2-97559c391863)
+
+![image](https://github.com/user-attachments/assets/27107de2-2290-4db7-9819-e9f0b7574e90)
+
+
+
+
+
+If Enabled is set to False, this indicates that the rule is successfully disabled. This last step and the previous commands presented in this lab enable analysts to interact with a local host firewall and manage its rules.
+
+
+![image](https://github.com/user-attachments/assets/ace73505-374b-4a7d-b24e-0cba926a4a87)
+
+![image](https://github.com/user-attachments/assets/24c10258-8896-4981-bbc3-60a8f17eec76)
 
