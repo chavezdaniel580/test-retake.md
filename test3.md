@@ -1878,5 +1878,216 @@ SCHTASKS /Create /TN test2 /RU system /TR c:\apps\myapp.exe /SC ONEVENT /EC Secu
 NOTE: One reason this command is complicated is because the modifier option /MO is overloaded. This means that the values given to this parameter depend on the context of other parameters.
 
 
+System Status Queries
+PowerShell offers many cmdlets to query a wide variety of information. These cmdlets are especially useful for obtaining information about the status of a system. The following cmdlets are the most common for retrieving specific system information about local or remote computers: 
+
+Get-WinEvent retrieves Windows event logs from local and remote computers.
+Get-Process retrieves the processes running on a local computer.
+Get-Service retrieves services on a local computer.
+Get-HotFix retrieves the hotfixes installed on a local or remote computer.
+The next set of tasks provide hands-on labs to explore each of these cmdlets and their applicable use cases.
+
+Use Get-WinEvent
+Get-WinEvent
+﻿
+
+The cmdlet Get-WinEvent queries event logs on a local or remote computer. Ideally an environment's logs are gathered and processed by a Security Information and Event Management (SIEM) system. However, analysts may eventually run into a host that is not sending logs off the system. The cmdlet Get-WinEvent provides a convenient on-system option to query system logs, especially when off-system logging is unavailable. This cmdlet also checks the logging configuration of a specified system. 
+
+﻿
+
+Use Get-WinEvent
+﻿
+
+Use Get-WinEvent to retrieve the status of log providers on the remote system bp-wkstn-10. Retrieve detailed information and all the available logs from a specific log provider.
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the Virtual Machine (VM) dc01 with the following credentials:
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Open PowerShell as an Administrator.
+
+﻿
+
+3. Return a list of all logging providers for bp-wkstn-10 (whether or not they are enabled) by running the following command:
+
+Get-WinEvent -ComputerName bp-wkstn-10 -ListLog * | Format-Table LogName, IsEnabled
+﻿
+
+Adding the flag -ComputerName to this cmdlet enables remote querying.
+
+﻿
+
+4. List more detailed information about a specific log provider by running the following command:
+
+Get-WinEvent -ComputerName bp-wkstn-10 -ListLog Microsoft-Windows-PowerShell/Operational | Format-List -Property *
+
+![image](https://github.com/user-attachments/assets/708ee65b-0d02-4777-af5e-3825ebbabad9)
+
+﻿
+
+5. List all logs from Microsoft-Windows-PowerShell/Operational by running the following command:
+
+Get-WinEvent -ComputerName bp-wkstn-10 -LogName Microsoft-Windows-PowerShell/Operational
+
+
+![image](https://github.com/user-attachments/assets/4c63430f-8f9c-4205-b803-ecb9142a07a1)
+
+﻿
+
+The commands in this lab enable analysts to discover the logging configuration and list logs on a remote system.
+
+﻿
+
+Use Get-Process
+Get-Process
+﻿
+
+The cmdlet Get-Process retrieves information on the processes running on a local host. Running Get-Process on its own returns a list of all active processes on the host. Thereafter, additional commands can be run to drill down into specific processes and discover more information.
+
+﻿
+
+Use Get-Process
+﻿
+
+Use Get-Process to retrieve all processes on a local host, as well as detailed information and specific version data on specific processes on the local host. Continue using the VM dc01 to work in PowerShell as an Administrator.
+
+﻿
+
+Workflow﻿
+
+﻿
+
+1. In PowerShell, return the fields Id, Name, and Path for all active processes by running the following command:
+
+Get-Process | Format-Table Id, Name, Path
+
+![image](https://github.com/user-attachments/assets/22e75adc-ae0b-48bf-8768-a5d7d4b38953)
+
+﻿
+
+2. Return detailed information on the processes conhost and lsass by running the following command:
+
+Get-Process conhost, lsass | Format-List *
+
+![image](https://github.com/user-attachments/assets/20241f69-a7a5-48bd-b321-6211ccec0e0e)
+
+
+﻿
+
+3. Retrieve the version information on the process conhost by running the following command:
+
+Get-Process conhost -FileVersionInfo 2>$null
+﻿
+
+The 2>$null part of the command redirects errors to $null, rather than printing them.
+
+﻿![image](https://github.com/user-attachments/assets/e769c9bf-1ec7-455b-9f0c-b33cb1581e8c)
+
+
+Use Get-Service
+Get-Service
+﻿
+
+The cmdlet Get-Service retrieves information on the services running on a local host. Running Get-Service on its own returns a list of all services on the host.
+
+﻿
+
+Use Get-Service
+﻿
+
+Use Get-Service to retrieve all running services on a local host, all running services that contain a specific string, and additional details on a specific service running on the local host. Continue using the VM dc01 to work in PowerShell as an Administrator.
+
+﻿
+
+Workflow
+﻿
+
+1. In PowerShell, list all running services by entering the following command:
+
+Get-Service | Where-Object {$_.Status -eq "Running"}
+
+![image](https://github.com/user-attachments/assets/bc5333c1-4e3d-4dec-8d02-702d5e3f4b90)
+
+﻿
+
+2. Display all running services that have names starting with net by running the following command:
+
+Get-Service -Name "net*" | Where-Object {$_.Status -eq "Running"}
+
+![image](https://github.com/user-attachments/assets/04353e40-d962-4b9c-9f7b-879d41ee3f72)
+
+﻿
+
+3. Return additional details about the service Netlogon by running the following command:
+
+Get-Service -Name Netlogon | Format-List *
+
+![image](https://github.com/user-attachments/assets/192e68e0-3287-4d2a-97d7-114f1c2c807f)
+
+﻿Use Get-HotFix
+Get-HotFix
+﻿
+
+The cmdlet Get-HotFix queries installed hotfixes on a local or remote computer. This is useful when auditing a group of systems to ensure important hotfixes have been applied. Running Get-HotFix by itself lists all hotfixes on the local machine. 
+
+﻿
+
+Use Get-HotFix
+﻿
+
+Use Get-HotFix to retrieve all installed hotfixes on a remote host, hotfixes containing a specific string, and a hotfix with a specific hotfix Identifier (ID). Continue using the VM dc01 to work in PowerShell as an Administrator.
+
+﻿
+
+Workflow
+﻿
+
+1. In PowerShell, return all hotfixes installed on bp-wkstn-9 by running the following command:
+
+Get-HotFix -ComputerName bp-wkstn-9
+
+![image](https://github.com/user-attachments/assets/94fb28c0-a24e-443f-99b9-c233f861a4f7)
+
+﻿
+
+2. Display security update hotfixes, sorted by the date installed, by running the following command:
+
+Get-HotFix -Description Security* -ComputerName bp-wkstn-9 | Sort-Object -Property InstalledOn
+
+![image](https://github.com/user-attachments/assets/69421116-3e60-4531-beeb-d24694f8de4e)
+
+﻿
+
+3. Return detailed information on a specific hotfix run by running the following command:
+
+Get-HotFix -Id KB2847927 -ComputerName bp-wkstn-9 | Format-List *
+
+![image](https://github.com/user-attachments/assets/ee7cfd8f-2f9f-474c-aac8-9af878ae7228)
+
+﻿
+
+The commands in this lab enable analysts to query installed hotfixes on a remote computer.
+
+The commands in this lab enable analysts to retrieve information on services running on a local host. 
+The commands in this lab enable analysts to retrieve useful information about a process running on a local host.
+
+![image](https://github.com/user-attachments/assets/492a7da9-8832-4f71-b550-33825d551af1)
+
+
+![image](https://github.com/user-attachments/assets/b0d8fe1c-5144-401e-8328-fe73e9b21ac8)
+
+![image](https://github.com/user-attachments/assets/6822dcc5-30c8-4a84-9c2a-e0153a63f4a6)
+
+![image](https://github.com/user-attachments/assets/f13051ff-c3bc-40c8-b0cc-1abcdb378898)
+
+![image](https://github.com/user-attachments/assets/56cc2471-7e67-4a92-a840-18bc60c144da)
+
 
 
