@@ -909,6 +909,8 @@ One of the common use cases for the cmdlet Get-ADUser is to find accounts that a
 
 
 The property whenCreated displays all accounts in a list, sorted by the date of creation. This property is not part of the default display that the cmdlet produces, which is why it needs to be explicitly included in a command, as in the following example:
+
+
 Get-ADUser -Filter * -Properties whenCreated | Sort-Object -Property whenCreated | FT Name, SamAccountName, whenCreated -AutoSize
 
 Get-ADComputer
