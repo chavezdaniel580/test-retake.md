@@ -3396,3 +3396,17 @@ PS C:\Windows\System32> Invoke-Command -ScriptBlock {Get-CimInstance Win32_Bios 
 
 
 
+Run the following command. Use the output to answer the question that follows.
+
+
+1. In the PowerShell Terminal, in the VM win-hunt, enter the following:
+PS C:\Windows\System32> Get-CimInstance Win32_OperatingSystem|Select-Object BuildNumber
+
+
+
+![image](https://github.com/user-attachments/assets/57125aac-414a-45e9-ad22-59b16a87f74e)
+
+
+![image](https://github.com/user-attachments/assets/1827efd7-c6ca-4695-8b77-bada5fb2c601)
+![image](https://github.com/user-attachments/assets/1827efd7-c6ca-4695-8b77-bada5fb2c601)
+
