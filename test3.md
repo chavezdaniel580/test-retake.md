@@ -2705,4 +2705,4 @@ This returns all records that explicitly supply credentials to conduct network l
 
 If an attacker records those credentials separately and moves laterally from a different endpoint, the WinRM activity may still be monitored from the receiving host. The tool Evil-WinRM is available on the VM kali-hunt for this demonstration.
 
-
+n
