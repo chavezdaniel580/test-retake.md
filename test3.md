@@ -4622,3 +4622,229 @@ for row in array1:
 
 ![image](https://github.com/user-attachments/assets/0989640d-057f-4170-8ce1-ece37b68ff8d)
 
+
+
+Create and Edit a Python Dictionary
+The previous lab ran Python statements in an interactive prompt. This next lab creates a Python script using the Vim text editor, then executes the script from the shell command line. This lesson uses the following common commands for the Vim text editor:
+
+Entering i enables insert mode, which allows text to be written to the file.
+
+Using the escape key (esc) while in insert mode returns Vim to normal mode. 
+
+Entering :wq in normal mode saves and exits the file.
+
+﻿
+
+Create a Python Dictionary
+﻿
+
+Create a dictionary from scratch and populate data into the dictionary. Then, execute the script to display the output. Use the common Vim commands listed above, as needed.
+
+﻿3. Create the file dictionary.py in Vim by entering the following command:
+vim dictionary.py
+
+
+
+4. Display line numbers for Vim by entering the following command: 
+:set number
+
+
+
+5. Create a new dictionary by adding the following text on line 1:
+new_dictionary = {}
+
+
+
+6. Print the empty dictionary by entering the following text on line 3:
+print(new_dictionary)
+
+![image](https://github.com/user-attachments/assets/f133651a-7812-4a0c-a874-9b5e837be3f6)
+
+
+
+The syntax print() prints the output from the command to the shell. The item to print is placed within the parentheses of the print() syntax. In step 6, the item in parentheses is the variable that was assigned for the dictionary. 
+
+
+7. Print the type of data structure that was just created by entering the following text on line 5:
+print (type(new_dictionary))
+
+
+
+The code added to line 5 identifies the data structure used in the script, which is useful when the data structure is unknown. It is important to identify the correct data structure when working with Python because each data structure has a different use case.
+
+
+8. Save the script and exit Vim by entering the following:
+:wq
+
+
+
+9. Execute the script by entering the following command:
+python dictionary.py
+
+Edit a Python Dictionary
+
+
+Continue working in the Linux terminal using the VM lin-hunt-cent. Create a Python dictionary, then iterate through the dictionary to display its contents. Edit the Python script and append data to the existing dictionary.
+
+
+Workflow
+
+
+1. Create a new file, testresults.py in Vim by entering the following:
+vim testresults.py
+
+
+
+2. Create a dictionary named test_results and populate data into it by adding the following text on line 1:
+test_results = {"Frank":"Passed", "Corey":"Passed", "Daniel":"Failed"}
+
+
+
+3. Iterate through the dictionary and display only the values in its key:value pairs by adding the following text on lines 3 and 4:
+for results in test_results.values():
+		print(results)
+
+![image](https://github.com/user-attachments/assets/1fcebc1a-f9c0-451b-8270-ab88be8ea678)
+
+
+
+
+Displaying only the values in a dictionary is useful when the keys do not need to be displayed. The example above displays only the test results (values), and omits the names of those who took the test (keys).
+
+
+4. Save the Python script and exit Vim by entering the following: 
+:wq
+
+
+
+5. Execute the script by entering the following command:
+python testresults.py
+
+![image](https://github.com/user-attachments/assets/f4910582-92b7-4cfb-a5a5-c0d397d80ccf)
+
+6. Open the file testresults.py with Vim. 
+
+
+7. Remove the code on lines 3 and 4.
+
+
+8. Add an item to the dictionary by entering the following text on line 3:
+test_results["Alexandra"] = "Failed" 
+
+This method appends a new key:value pair to the existing dictionary.
+
+
+9. Print the output when the script is executed by adding the following text on line 5:
+print(test_results)
+
+![image](https://github.com/user-attachments/assets/84977d1b-1103-4605-a553-350ace5b702e)
+
+
+10. Save the Python script and exit Vim by entering the following:
+:wq
+
+
+
+11. Execute the script by entering the following command:
+python testresults.py
+
+![image](https://github.com/user-attachments/assets/3e759490-3806-4155-bbf6-137f64d21b33)
+
+
+![image](https://github.com/user-attachments/assets/125580b7-eb74-4054-8339-fae598c8bf6a)
+
+
+
+Create and Edit a Python List
+Create a list and populate data into the list. Then, edit the list and add another item to it. 
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the VM lin-hunt-cent using the following credentials:
+
+Username: trainee
+Password: CyberTraining1!
+
+2. Open a Linux terminal.
+
+﻿
+
+3. Create the file grocerylist.py with Vim, by entering the following command:
+
+vim grocerylist.py
+﻿
+
+4. Create a new list by adding the following text on lines 1 and 2:
+
+groceries = ["apples", "milk", "chicken", "bread"]
+prices = ["2.99", "3.60", "10.99", "3.10"]
+﻿
+
+5. Print the output of the script by entering the following text on lines 4 and 5:
+
+print(groceries)
+print(prices)
+
+![image](https://github.com/user-attachments/assets/a57c216b-2482-471d-8bd6-7f501d857adf)
+
+
+6. Save the Python script and exit Vim by entering the following:
+:wq
+
+
+
+7. Execute the script with the following command:
+python grocerylist.py
+
+![image](https://github.com/user-attachments/assets/ce882846-95df-4423-b5e8-bf198af7cc6a)
+
+
+
+
+8. Open the file grocerylist.py with the Vim text editor.
+
+
+9. Remove the print items on lines 4 and 5.
+
+
+10. Add an item to the list groceries by entering the following text on line 3:
+groceries.append("oranges")
+
+
+
+The above code adds an item to the already existing list groceries. The syntax to append an item to an existing list is listname.appened("item"). It is also possible to add multiple items to a list using the following syntax:
+listname.extend(["item1", "item2", "item3"])
+
+
+
+11. Iterate through the list groceries and display the list in a more readable format by adding the following text on lines 5 and 6:
+for number in groceries:
+	print(number)
+
+
+
+The code in step 11 uses a for loop to iterate over each item in the list. It uses the word number to make the code cleaner and easier to view.
+
+
+![image](https://github.com/user-attachments/assets/d67444df-6696-4c0b-832f-71d0cd4c7dee)
+
+
+
+
+12. Save the Python script and exit Vim by entering the following command:
+:wq
+
+
+
+13. Execute the Python script by entering the following command:
+python grocerylist.py
+
+![image](https://github.com/user-attachments/assets/07a06c3b-feb2-4ccd-8227-b17e8e1421f0)
+
+
+
+
+
