@@ -2810,13 +2810,17 @@ A document pops up as an example of an object being loaded that the user did not
 
 
 12. Reset the profile to clear the compromised command with the following command:
+
+
 PS C:\Windows\system32> Clear-Content C:\Users\trainee\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
 
 
 
-13. Exit and reopen PowerShell to verify that the profile has been cleared.
+14. Exit and reopen PowerShell to verify that the profile has been cleared.
 
 
 ![image](https://github.com/user-attachments/assets/d697dd6c-a54d-4af3-b897-e315d546fd16)
 
 
+![image](https://github.com/user-attachments/assets/eb31cc30-4211-42a4-84bc-48f447338776)
+![image](https://github.com/user-attachments/assets/eb31cc30-4211-42a4-84bc-48f447338776)
