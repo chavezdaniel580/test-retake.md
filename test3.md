@@ -3455,3 +3455,101 @@ This syntax produces an error that needs to be corrected to work properly.
 
 
 
+Use PowerShell to Interact with WMI
+In addition to Get-WmiObject and Get-CimInstance, there are many other WMI-specific commands available within PowerShell. This section covers additional commands that defenders may need in the future to accomplish the following:
+
+List additional WMI Cmdlets
+
+List additional available CimCmdlets
+
+Close a running process
+
+Delete a folder
+
+Check whether a file exists
+
+Filter results
+
+List Additional WMI Cmdlets
+﻿
+
+The command Get-Command -Noun WMI* displays additional WMI commands, as indicated in Figure 12.4-1, below:
+
+![image](https://github.com/user-attachments/assets/581e4860-b50e-41a5-bd6e-4b78074a3a40)
+
+Close a Running Process and Delete a Folder
+
+
+The command Remove-WmiObject can be used to close a running process or delete a file or a directory, in the following ways:
+
+
+Close the Running Process notepad.exe
+Get-WmiObject -Query "select * from win32_process where name='notepad.exe'" 
+| Remove-WmiObject
+
+
+
+Delete the Folder Test
+Get-WMIObject -Query "Select * From Win32_Directory Where Name ='C:\\Test'" 
+| Remove-WMIObject
+
+
+
+Defense analysts can use Remove-WmiObject to stop a program on an infected host from running a malicious file and then use the command to remove it from the system through WMI. 
+
+
+Check Whether a File Exists
+
+
+Another useful class displayed in the CimCmdlets list is CIM_DataFile. This class allows for a fast search across a local host or network to search for specific filenames or file extensions. The following command uses CIM_DataFile to verify whether the file malware.exe exists:
+Get-WMIObject -query "select * from CIM_DataFile where Name = 'C:\\malware.exe'"
+
+
+
+
+
+Filter Results
+
+
+The results provided by a command often contain more information than required. The parameter -Property filters results to a specific field or a series of fields to provide faster access to only what is needed.
+
+
+As an example, running the following command returns five fields:
+Get-CimInstance -ClassName Win32_Bios
+
+
+
+However, using the parameter -Property minimizes this further. To return only the field SerialNumber, the command must be piped into Select-Object, as follows:
+Get-CimInstance -ClassName Win32_BIOS|Select-Object -Property SerialNumber
+
+
+
+To return a specific selection of fields, such as both SerialNumber and Version, each filtering criteria must be separated by commas. The following is an example of a command that returns only the two fields specified:
+Get-CimInstance -ClassName Win32_BIOS|Select-Object -Property SerialNumber, Version
+
+
+
+The parameter -ExpandProperty displays only the results, while omitting the header information. In addition to omitting headers, -ExpandProperty can extract and display specific values from objects as well as flatten hierarchical data structures. These capabilities are useful for simplifying complex data and focusing on key information. Figure 12.4-3, below, displays the output from -Property with the header “SerialNumber” and the output from -ExpandProperty, which leaves out the header:
+
+
+
+![image](https://github.com/user-attachments/assets/6e8a2d4f-6d82-4aa6-b615-02164bf6c1ce)
+
+
+
+This section touched briefly on piping. Additional information about pipes and pipelines are provided in an upcoming section of this lesson. 
+
+
+Access Multiple Remote Hosts
+
+
+Providing multiple computer names to the parameter -ComputerName allows the simultaneous retrieval of information from multiple hosts. The following command is an example of retrieving information about the service VolumeShadowCopy on multiple remote hosts using filters and commas:
+Get-CimInstance Win32_Service -Filter "Name = 'VSS' -ComputerName RemoteHost,RemoteHost2,RemoteHost3 -Credential $credentials
+
+![image](https://github.com/user-attachments/assets/44ce88ec-9155-4df6-8e34-41cf473b249e)
+
+
+![image](https://github.com/user-attachments/assets/960c24e6-316c-4a71-8b2b-c3f531b7a1fc)
+
+
+
