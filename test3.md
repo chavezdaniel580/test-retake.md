@@ -4164,9 +4164,25 @@ Loop
 Loop
 Loop
 
+
 ![image](https://github.com/user-attachments/assets/3e1611b4-61e9-4ae0-a26d-8d3acff788f4)
 
 
 ![image](https://github.com/user-attachments/assets/a570db6d-dba2-4acf-a986-df5064019bf0)
-![image](https://github.com/user-attachments/assets/a570db6d-dba2-4acf-a986-df5064019bf0)
+
+
+Python while Loop
+The previous question asks about the following Python code:
+
+x = 0
+while (x < 5):   
+     print("Loop")
+	x += 1
+﻿
+
+The while statement in this code executes until the variable x < 5 is no longer true. After each code execution, 1 is added to the value of x before the loop continues. When x < 5 is no longer true, the code stops printing Loop. After the fifth iteration of the loop, x < 5 is no longer true, so the loop is exited. 
+
+﻿
+
+Executing the code returns the following output:
 
