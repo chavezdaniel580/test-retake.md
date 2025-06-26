@@ -3383,4 +3383,16 @@ In this command, the field -ComputerName needs to be populated with the name of 
 
 
 
+ Enter the following:
+PS C:\Windows\System32> Invoke-Command -ScriptBlock {Get-CimInstance Win32_Bios |Select-Object ReleaseDate} -ComputerName 172.16.4.2 -Credential $creds
+
+
+![image](https://github.com/user-attachments/assets/12f13f57-6f7e-41e1-b984-b017193716ef)
+
+
+
+
+![image](https://github.com/user-attachments/assets/128a86bc-842d-4bd9-b27e-5cf3fdb6fb24)
+
+
 
