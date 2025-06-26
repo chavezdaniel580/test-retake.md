@@ -4189,4 +4189,436 @@ The while statement in this code executes until the variable x < 5 is no longer 
 ﻿
 
 Executing the code returns the following output:
+Loop
+Loop
+Loop
+Loop
+Loop
+
+
+
+Initiate interactive mode running on the host by entering the following command:
+python
+
+
+
+4. Define two variables (a and b) by entering the following commands: 
+a = 45
+b = 21
+
+
+
+5. Use the operator if to create a conditional statement that evaluates a and b by entering the following command:
+if a > b:
+...	  print("a is greater than b")
+
+
+
+NOTE: To execute the command in step 5, an indent must be inserted prior to the print("a is greater than b") portion of the code and you must press Enter.
+
+
+6. Select Enter.
+
+
+The conditional statement proves true because 45 is greater than 21. This returns the following output:
+a is greater than b
+
+![image](https://github.com/user-attachments/assets/e418825b-2105-4a90-abc8-81bd46002cc6)
+
+
+
+
+Workflow
+
+
+1. In the current Terminal session, create a Boolean statement by entering the following operation:
+if a < b:
+  print("a is less than b")
+else:
+  print("a is not less than b")
+
+
+
+This statement uses the operator if to evaluate whether variable a is less than variable b. If this condition is true, it prints the string a is less than b. If the condition is false, it prints the string a is not less than b. 
+
+
+Since 45 is not less than 21, the condition in the statement is evaluated as false. Executing this operation returns the following output:
+a is not less than b
+
+
+
+Develop a for Loop
+
+
+Use Python's interactive mode to develop a loop using the operator for. Continue working in the VM lin-hunt-cent.
+
+
+Workflow
+
+
+1. Open a new terminal session and access Python in interactive mode. 
+
+
+2. Define a new value for variable x by entering the following command: 
+x = 7
+
+
+
+3. Define a range for the variable i with the operator for, by entering the following command:
+for i in range(1,x):
+  print(i) 
+
+
+
+The for loop in the code executes until x, in the range(1,x) is reached. When the variable i reaches 7, the code stops printing. This outputs the following six digits for i:
+1
+2
+3
+4
+5
+6
+
+
+Develop a while Loop
+
+
+Use Python's interactive mode to develop a loop using the while operator. Continue working in the same Terminal session as the previous workflow, in the VM lin-hunt-cent.
+
+
+Workflow
+
+
+1. In the current Terminal session, create a while loop by entering the following operation:
+counter = 0
+while counter < 3:
+  print("inside loop")
+  counter += 1
+else:
+  print("outside loop")
+
+
+
+The while loop in the code executes until the variable counter is no longer less than 3. For every loop completed, Python adds an integer value of 1 to the variable, and then continues the loop. When the variable counter is no longer less than 3, the loop completes the else command and ends the loop. 
+
+
+The variable counter reaches a value that is no longer less than 3 after executing three times. Thereafter, the else statement is executed. This results in the following output:
+inside loop
+inside loop
+inside loop
+outside loop
+
+![image](https://github.com/user-attachments/assets/0eb34cd4-ec9a-4203-9a2a-d8229e9a5754)
+
+
+
+![image](https://github.com/user-attachments/assets/76f3e94c-ca46-4274-a995-3b21a5b4c404)
+
+
+
+Python Data Structures
+Python data structures organize data by type, which allows greater efficiency when accessing the data. The four basic Python data structures include the following:
+
+Lists
+
+Sets
+
+Tuples
+
+Dictionaries
+
+﻿
+
+Everything in Python is an object, including data structures. An object is "mutable" if its value can change. The object is "immutable" if its value cannot be changed. Whether or not an object's value can change helps determine the best use case for each type of data structure.
+
+﻿
+
+Lists
+﻿
+
+A list is an ordered collection of data. To create a Python list, place the items in square brackets and separate each item with commas. The following example defines the variable numbers as a list of numerals from 1 through 5 using this syntax:
+
+numbers = [1, 2, 3, 4, 5]
+﻿
+
+Lists are mutable because items can be added and removed from the list at any time. However, the order of items in a list does not change. Items retain their order in the list, for as long as the list is available. The order uniquely defines each item in the list by an index starting at zero. In the following example, the item 3 can be removed, however the order still remains as per the original example from above:
+
+numbers = [1, 2, 4, 5]
+﻿
+![image](https://github.com/user-attachments/assets/38387eb6-4a69-4d3a-b514-747c298bce2d)
+
+
+Looping Lists
+
+
+Python supports iterating over a list using for loops, while loops, and comprehensions. A for loop iterates over a list before performing a given action. A for loop completes a loop over each item in the list unless it is explicitly stopped. The following example uses the list numbers, from the previous example, and a for loop to print each item from the list:
+# Looping Over a List in Python with a For Loop
+numbers = [1, 2, 3, 4, 5]
+
+for number in numbers:
+    print(number)
+
+#Output
+1
+2
+3
+4
+5
+
+
+
+A while loop continues to iterate until it meets a specified set of conditions. The following example uses the function len to return the length of the list. The while loop directs Python to continue to print i, as long as it is less than the length of the list. 
+numbers = [1, 2, 3, 4, 5]
+
+# Get length of list using len() function
+length = len(list)
+i = 0
+
+while i < length:
+    print(list[i])
+    i += 1
+
+#Output
+1
+2
+3
+4
+5
+
+
+
+Python comprehensions are a compact way of iterating over a list. The following example uses a comprehension to print out each item from the list numbers. A list comprehension only requires one line of code, and does not need a for or while loop to iterate over the list.  
+# Using List Comprehensions to Iterate Over a List
+numbers = [1, 2, 3, 4, 5]
+[print(number) for number in numbers] 
+
+#Output
+1
+2
+3
+4
+5
+[None, None, None, None, None]
+
+
+
+Tuples
+
+
+Python tuples are similar to Python lists. They are both built-in data structures for ordered collection of objects. However, tuples have more limited functionality than lists. Lists are mutable whereas tuples are immutable. Data that is not intended to be modified should be stored in tuples. This prevents accidental deletion or modification. 
+
+
+Tuples are created by placing a sequence of values, separated by commas, in parentheses. The following example follows this syntax to define the variable tuple_1 as a tuple:
+tuple_1 = ("blue", "green", "yellow", 10)
+
+
+
+Python provides a powerful tuple feature that assigns the right-hand side of values to the left-hand side of values. This is referred to as "unpacking". Unpacking extracts tuple values and combines them into a single variable. The example x, y = (1, 2) uses tuple syntax to assign the values on the right side (1, 2) to each variable on the left side (x, y), based on the position of each value. This defines the variables as x = 1 and y = 2. 
+
+
+Another way to use this feature is to assign each item in a tuple to a new variable. The following example assigns three values to the variable info. It then assigns three new variables to each tuple value in info by listing each new variable in order of its matching value. Printing each new variable displays the new assignments:
+info = ("Kathy Simpson", "Marketing", "Senior")
+(name, department, level) = info
+
+print(name)
+print(department)
+print(level)
+
+#Output
+Kathy Simpson
+Marketing
+Senior 
+
+
+
+Dictionaries
+
+
+Python dictionaries have different traits, depending on the Python version in use. In Python 3.6 and earlier, a dictionary data structure is an unordered collection of data values that stores data in a key: value format. From Python version 3.7 and later, dictionaries are ordered collections. Similar to lists, dictionaries are mutable and dynamic, so they can grow or shrink as needed. Dictionary values are accessed through their keys, rather than by their positions.
+
+
+A dictionary is defined by enclosing a comma-separated list of key: value pairs in curly braces {}, as follows:
+dictionary = {
+    key: value,
+    key: value,
+    key: value
+}
+
+![image](https://github.com/user-attachments/assets/f5b2df6d-3b19-43bb-81e2-d09fff52e281)
+
+
+
+Python allows iterating through both the keys and values in a dictionary. The syntax for iterating is dictionary.items() where dictionary is the name of the dictionary to iterate through. This returns one key: value pair, at a time. The following example defines the dictionary dict, then defines the variable items with the iterating syntax. This iterates through the dictionary items when printed:
+dict = {'name': 'Jeff', 'age': '25', 'address': 'New York'}
+items = dict.items()
+print(items)
+dict_items([('name', 'Jeff'), ('age', '25'), ('address', 'New York')])
+
+#Output
+dict_items([('name', 'Jeff'), ('age', '25'), ('address', 'New York')])
+
+
+
+Python also allows iterating through either just the keys or just the values in a dictionary, rather than iterating through pairs. Iterating through dictionary keys uses the syntax dictionary.keys() to return an object containing all the dictionary keys. Iterating through dictionary values uses the syntax dictionary.values() to return only the values in a Python dictionary. In the following example, the variable items1 is defined with the syntax to iterate through only the keys and the variable items2 is defined with the syntax to iterate through only the values:
+dict = {'name': 'Jeff', 'age': '25', 'address': 'New York'}
+items1 = dict.keys()
+print(items1)
+#Output
+dict_keys(['name', 'age', 'address'])
+
+#Using dictionary.values
+items2 = dict.values()
+print(items2)
+#Output
+dict_values(['Jeff', '25', 'New York']) 
+
+
+
+Sets
+
+
+A set is a unique collection of data that stores multiple items in a single variable. Sets are unordered, cannot be modified, and do not have indexes. A set is used when the existence of the data is more important than its order. Items may be added or removed in a set, but they cannot be modified. Items in a set must have unique values. The following is an example of a Python set with three items:
+set_a = {"item 1", "item 2", "item 3",}
+
+
+
+Python Multidimensional Arrays
+An array is a vector that contains elements of the same data type. For example, an array may contain only characters, only integers, or only floating-point numbers. Arrays are different from lists because arrays need to be declared, while lists do not. Arrays are also preferred for storing large amounts of data because they are more compact and efficient. Additionally, arrays are inherently capable of numerical operations.
+
+﻿
+
+A type code is a single character that specifies the type of object an array stores when creating the object. In the Python Type column int stands for integer. The type float stands for floating-point numbers, which are numbers that include decimal points. Table 13.2-3, below, contains the type codes used by the Python module array.
+
+
+ ![image](https://github.com/user-attachments/assets/4fe675ed-85c8-436d-bb1a-52644246d403)
+
+
+The syntax for the Python module array is as follows:
+import array
+array.array(typecode[, initializer])
+
+Multidimensional Lists and Arrays
+
+
+Python supports multidimensional lists and arrays. A multidimensional object defines and stores data in a format with more than two dimensions. 
+
+
+A multidimensional array is a two-dimensional array that has more than one row and column. To identify the position of an element in a multidimensional array, two indexes should be specified instead of only one. This can be done by fitting a list inside of another list, which is also known as a "nested" or multidimensional list. A multidimensional list takes the form of a basic list, such as List = [1, 2], but includes other lists as elements in the following way:
+List = [[1, 2], [3, 4], [5, 6]]
+
+
+
+A multidimensional array can be created by passing two or more lists of elements to the function. This type of array is created using the list class of Python, rather than the Python array class. The following example nests two list items within a single list to define the array:
+array = [[1, 2, 3, 4], [5, 6, 7, 8]]
+
+#Output
+print(array)
+[[1, 2, 3, 4], [5, 6, 7, 8]]
+print(type(array))
+<class 'list'>
+
+
+
+Arrays in list format can also be developed in a two step process. First, each row is defined as a standalone list. Second, an array groups the rows together, in its own list. The example below follows this procedure by defining three rows, then implementing the array:
+row1 = [0, 0, 0, 0, 0]
+row2 = [0, 0, 0, 0, 0]
+row3 = [0, 0, 0, 0, 0]
+
+array = [row1, row2, row3]
+
+
+
+The array can then be accessed with a for loop, as follows:
+for row in array:
+print (row)
+
+
+
+Create Python Arrays
+
+
+Use an interactive Python prompt to create multiple arrays, then access individual elements of each array.
+
+
+Workflow
+
+
+1. Log in to the Virtual Machine (VM) lin-hunt-cent using the following credentials:
+Username: trainee
+Password: CyberTraining1! 
+
+
+
+2. Open a Linux terminal.
+
+
+3. Launch an interactive python prompt with the following command:
+python
+
+
+
+4. Create a multidimensional array by placing values between the square brackets, using the following syntax:
+array = []
+
+
+
+5. Display the initialized empty array by entering the following:
+print (array)
+
+![image](https://github.com/user-attachments/assets/2809277c-2d57-4006-8df2-a0f51cd1b4e9)
+
+
+
+
+6. Create Python lists by entering the following:
+List = [1, 2, 3, 4]
+List1 = [5, 6, 7, 8]
+List2 = [9, 10, 11, 12]
+
+
+
+
+
+7. Add the newly created lists to the array with the following syntax:
+array = [List, List1, List2]
+
+
+
+8. Iterate through the array with a for loop, as follows:
+for list in array:
+...	print(list)
+
+
+
+9. Submit the enter key twice to return the output.
+
+
+![image](https://github.com/user-attachments/assets/7ec38a4b-c1cd-4072-9e99-641f3e02c7a9)
+
+
+10. Iterate through a specific list within the array by creating a for loop, as follows:
+for list in array:
+	print(List2)
+
+11. Submit the enter key twice to return the output.
+![image](https://github.com/user-attachments/assets/39afa535-1287-43e5-b1c9-0fb2b56b82dd)
+
+
+12. Create rows in Python with the following code: 
+row1 = [0, 0, 0, 0]
+row2 = [0, 0, 0, 0]
+row3 = [0, 0, 0, 0]
+
+
+
+13. Create a new array made of the rows by entering the following:
+array1 = [row1, row2, row3]
+
+
+
+14. Use a for loop to iterate through array1.
+for row in array1:
+...     print (row)
+
+
+![image](https://github.com/user-attachments/assets/0989640d-057f-4170-8ce1-ece37b68ff8d)
 
