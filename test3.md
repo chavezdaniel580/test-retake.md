@@ -4846,5 +4846,49 @@ python grocerylist.py
 
 
 
+2. Open a Linux terminal. 
+
+
+3. Edit the Python file employeedata with Vim by entering the following:
+vim employeedata.py
+
+
+
+4. Create a dictionary named employees on line 1, by entering the following:
+employees = {}
+
+
+
+5. Add a list into the dictionary in the key:value format by entering the following text on lines 3 and 4:
+employees["Name"] = ["Chuck", "Emily", "Max", "Laura"]
+employees["Age"] = ["35", "25", "42", "55"]
+
+
+
+The values step 5 uses for each key:value pair are entered as Python lists. Python allows lists for dictionary values, but not for dictionary keys.
+
+
+6. Print the output by adding the correct print function on line 6:
+print(employees)
+
+
+
+7. Create a new list named new_employees by entering the following on line 5 (before the print function):
+new_employees = ['Sam', 'Frank', 'Amy']
+
+
+
+8. Append new_employees as a sublist of the dictionary by adding the following line between the new_employees list and the print function:
+employees["Name"].append(new_employees)
+
+![image](https://github.com/user-attachments/assets/eab64e49-983b-4d22-87f7-00e863577c57)
+
+9. Execute the python script so that it outputs the following:
+10. 
+#Output
+{'Name': ['Chuck', 'Emily', 'Max', 'Laura', ['Sam', 'Frank', 'Amy']], 'Age': ['35', '25', '42', '55']}
+
+
+![image](https://github.com/user-attachments/assets/71fc7214-de06-47dc-a0e8-f9a8dc4d6509)
 
 
