@@ -3408,5 +3408,32 @@ PS C:\Windows\System32> Get-CimInstance Win32_OperatingSystem|Select-Object Buil
 
 
 ![image](https://github.com/user-attachments/assets/1827efd7-c6ca-4695-8b77-bada5fb2c601)
-![image](https://github.com/user-attachments/assets/1827efd7-c6ca-4695-8b77-bada5fb2c601)
+
+
+WMI Query Language (WQL)
+
+
+In previous sections it was demonstrated that WMI information can be accessed through Get-WmiObject and Get-CimInstance. WQL is another option for accessing WMI information. WQL allows for the same type of queries as the previous two commands, but uses Structured Query Language (SQL) formatting. 
+
+
+The main WQL statements are Select, Where, and From. PowerShell users are still required to use Get-WMIObject or Get-CimInstance to call WQL before being able to use WQL. The parameter -Query must also be used to differentiate between accessing WMI through WQL or through the Class directly. The following WQL example obtains information about the BIOS using the parameter -Query, followed by Select * from and the class name:
+
+Get-WmiObject -Query "Select * from Win32_Bios"
+
+Comparing WQL, Get-WmiObject, and Get-CimInstance
+
+
+There are many situations in which WQL is a better option than Get-WmiObject or Get-CimInstance. The four main differences between WQL and Get-WMIObject and Get-CimInstance include the following:
+Syntax
+Performance
+Debugging
+Tab completion 
+
+![image](https://github.com/user-attachments/assets/952fa387-c23e-49c6-9f82-9fd95329bf13)
+
+
+
+![image](https://github.com/user-attachments/assets/952fa387-c23e-49c6-9f82-9fd95329bf13)
+
+
 
