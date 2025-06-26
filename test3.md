@@ -3315,8 +3315,61 @@ PS C:\>Get-WmiObject -List
 
 
  ![image](https://github.com/user-attachments/assets/ee3a8929-bec4-4580-8ba9-ddb586887386)
-![image](https://github.com/user-attachments/assets/ee3a8929-bec4-4580-8ba9-ddb586887386)
+
+###########win32_service###############
 
 
+
+Querying WMI for Investigations
+The different classes in WMI contain useful information about the activity and behavior of a Windows host. Recognizing the most common classes enables a defender to quickly access important information from the host to use during investigations. The two ways that WMI can be used are locally and remotely. 
+
+﻿
+
+The command Get-Member can be used with Get-CIMinstance to display all available fields of a specific class. This command combination prints a table that contains the Name, MemberType and Definition of the available fields that can be filtered on. The following syntax retrieves this table for the class Win32_BIOS, which can be replaced with any other class to display its corresponding information:
+
+Get-CIMinstance Win32_BIOS | Get-Member
+﻿
+
+Local Machines
+﻿
+
+One example of using the WMI command for a local machine is to query the host to examine which services are configured. This is particularly useful for investigating a host that potentially has a malicious service. 
+
+﻿
+
+The following command finds and lists all services that start at the time the computer boots. It uses the class Win32_Service, as well as the option -Filter and the cmdlet Select-Object:
+
+PS C:\>Get-CimInstance Win32_service -Filter "StartMode = 'Auto'"|Select-Object Name, StartMode, PathName
+﻿
+
+The option -Filter limits the results to only return services that automatically start at boot, as noted by "StartMode = 'Auto'". The pipe to the cmdlet Select-Object filters the objects returned to only display the Name, StartMode, and PathName.
+
+﻿
+
+Remote Machines
+﻿
+
+Both Get-WmiObject and Get-CimInstance can be used to access remote machines. However, this depends on the services the remote system supports and has running. Get-WmiObject uses Distributed Component Object Model (DCOM) and Get-CimInstance uses Windows Remote Management (WinRM).
+
+﻿
+
+For remote access to work, the Windows Firewall must be configured to allow DCOM and WinRM traffic. For example, DCOM operates on port 135, which is open by default on all Windows systems. Therefore, Get-WmiObject is often easier to use. WinRM, on the other-hand, listens on both Hypertext Transfer Protocol (HTTP) port 5985 and Hypertext Transfer Protocol Secure (HTTPS) on port 5986. These are enabled by default on servers and are typically disabled on workstations for Get-CimInstance.
+
+﻿
+
+The commands Get-WmiObject and Get-CimInstance allow defenders to search for Indicators of Compromise (IOC) across a large number of hosts. Any command that can be run locally can also be run remotely. A common task such as retrieving running processes on a remote server, can be accomplished by running the following command:
+
+PS C:\> Get-CimInstance -ClassName Win32_Process -ComputerName Server64
+﻿
+
+In this command, the field -ComputerName needs to be populated with the name of a computer or an IP address to be able to access the remote host.
+
+
+
+
+![image](https://github.com/user-attachments/assets/ddcd7017-b1ce-4c4c-b572-5f101bc540fe)
+
+
+![image](https://github.com/user-attachments/assets/bf06b3a9-9547-4b5d-a917-f63c3174a20d)
 
 
