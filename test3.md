@@ -2800,7 +2800,9 @@ PS C:\Windows\system32> Copy-Item C:\Users\trainee\Documents\Microsoft.PowerShel
 This overwrites the default user profile with a malicious profile from the specified file location.
 
 
-10. Exit PowerShell and reopen it to view the compromised profile. 
+10. Exit PowerShell and reopen it to view the compromised profile.
+
+![image](https://github.com/user-attachments/assets/d697dd6c-a54d-4af3-b897-e315d546fd16)
 
 
 A document pops up as an example of an object being loaded that the user did not configure.
@@ -2819,8 +2821,11 @@ PS C:\Windows\system32> Clear-Content C:\Users\trainee\Documents\WindowsPowerShe
 14. Exit and reopen PowerShell to verify that the profile has been cleared.
 
 
-![image](https://github.com/user-attachments/assets/d697dd6c-a54d-4af3-b897-e315d546fd16)
+![Uploading image.png…]()
+![Uploading image.png…]()
+![Uploading image.png…]()
+![Uploading image.png…]()
 
 
-![image](https://github.com/user-attachments/assets/eb31cc30-4211-42a4-84bc-48f447338776)
+
 ![image](https://github.com/user-attachments/assets/eb31cc30-4211-42a4-84bc-48f447338776)
