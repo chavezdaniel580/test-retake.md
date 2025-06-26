@@ -3275,22 +3275,10 @@ iwr http://127.0.0.1:8080/ -Me POST -B 'get-process'
 
 
 
-![image](https://github.com/user-attachments/assets/be29702d-2abd-4240-b7cf-a10f709fcf34)
+![image](https://github.com/user-attachments/assets/a380c6e1-5685-42b7-a9bc-b2fc08daca96)
 
 
-![image](https://github.com/user-attachments/assets/ac937417-746a-4934-aa48-691a5a8aaf9e)
-
-
-
-![image](https://github.com/user-attachments/assets/9fbb62b4-0c1b-4f90-b0a3-b3e0222b57ec)
-
-
-
-
-![image](https://github.com/user-attachments/assets/9fbb62b4-0c1b-4f90-b0a3-b3e0222b57ec)
-
-![image](https://github.com/user-attachments/assets/ac937417-746a-4934-aa48-691a5a8aaf9e)
-
+![image](https://github.com/user-attachments/assets/c43112c1-8542-4413-9958-6e9b9ec6e36e)
 
 
 
