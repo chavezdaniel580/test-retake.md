@@ -3288,6 +3288,34 @@ iwr http://127.0.0.1:8080/ -Me POST -B 'get-process'
 
 
 
+What Is WMI/CIM?
+CIM and WMI are used interchangeably to refer to the infrastructure for managing data and operations on Windows-based operating systems. CIM is an open standard from the Distributed Management Task Force (DMTF). CIM provides a common definition of management information for systems, networks, applications, and services. CIM allows for vendor extensions. WMI is Microsoft’s proprietary implementation of CIM for the Windows platform. CIM and WMI share the same purpose, as well as many equivalent functions and features.
+
+﻿
+
+WMI and CIM are commonly misunderstood as a single tool or command. Rather, WMI and CIM form a framework for accessing data stored within classes. An example of a class is Win32_Process, which contains the running processes of a Windows host. CIM_Process is the CIM version of Win32_Process.
+
+﻿
+
+Commands and Classes
+﻿
+
+There are two main commands for accessing WMI: Get-WmiObject and Get-CimInstance. The command Get-WmiObject is the precursor to Get-CimInstance and is now the deprecated method for accessing WMI. Although Get-WmiObject still functions, Microsoft recommends using the command Get-CimInstance when using PowerShell 3.0 and above. Both Get-WmiObject and Get-CimInstance use the same or equivalent class names, but have other differences outlined in this lesson.
+
+﻿
+
+The command Get-WmiObject has an alias that shortens the command to gwmi. The alias for Get-CimInstance is gcim. This lesson uses both WMI and CIM aliases to interact with the classes within WMI. 
+
+﻿
+
+There are at least 137 classes available within WMI, which can be difficult to remember. Running the following command in PowerShell provides a complete, verbose list of Windows classes to query:
+
+PS C:\>Get-WmiObject -List
+
+
+
+ ![image](https://github.com/user-attachments/assets/ee3a8929-bec4-4580-8ba9-ddb586887386)
+![image](https://github.com/user-attachments/assets/ee3a8929-bec4-4580-8ba9-ddb586887386)
 
 
 
