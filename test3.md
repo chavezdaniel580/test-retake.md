@@ -2821,9 +2821,6 @@ PS C:\Windows\system32> Clear-Content C:\Users\trainee\Documents\WindowsPowerShe
 14. Exit and reopen PowerShell to verify that the profile has been cleared.
 
 
-![image](https://github.com/user-attachments/assets/fc224701-a44b-4151-bd42-4ec2d4d3fecd)
-![image](https://github.com/user-attachments/assets/fc224701-a44b-4151-bd42-4ec2d4d3fecd)
-
 
 
 ![image](https://github.com/user-attachments/assets/eb31cc30-4211-42a4-84bc-48f447338776)
@@ -2831,4 +2828,7 @@ PS C:\Windows\system32> Clear-Content C:\Users\trainee\Documents\WindowsPowerShe
 
 
 
+
+
+![image](https://github.com/user-attachments/assets/fc224701-a44b-4151-bd42-4ec2d4d3fecd)
 
