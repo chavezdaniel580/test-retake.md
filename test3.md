@@ -3281,6 +3281,14 @@ iwr http://127.0.0.1:8080/ -Me POST -B 'get-process'
 ![image](https://github.com/user-attachments/assets/c43112c1-8542-4413-9958-6e9b9ec6e36e)
 
 
+![image](https://github.com/user-attachments/assets/ea111af4-022c-4a8d-8791-1e7e476d701b)
+
+
+![image](https://github.com/user-attachments/assets/844fa6f2-0907-425d-b8e0-8c088a193c90)
+
+
+
+
 
 
 
