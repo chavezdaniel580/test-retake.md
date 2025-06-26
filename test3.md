@@ -3553,3 +3553,54 @@ Get-CimInstance Win32_Service -Filter "Name = 'VSS' -ComputerName RemoteHost,Rem
 
 
 
+Pipelines
+Pipelines ("|") provide the ability to feed data from one command into another for further processing. Common pipelines include Format-Table, Format-List, Select-Object, and Select-String. 
+
+﻿
+
+Format-Table
+﻿
+
+The default output of any PowerShell command is Format-Table. This format displays output in a table with headers across the top of the data, as displayed below in Figure 12.4-5. 
+
+
+![image](https://github.com/user-attachments/assets/948bf469-320b-4edb-85ca-7fc22b5b37f0)
+
+
+
+
+Format-List
+
+
+The option Format-List, displayed below in Figure 12.4-6, outputs the data in a list with headers on the left as a column.
+
+![image](https://github.com/user-attachments/assets/e40cfb5e-e8c0-446f-ae9a-0eae234a2c06)
+
+
+Sort-Object 
+
+
+The option Sort-Object sorts the output of the data alphabetically so that it is easier to read. The output can be sorted based on the name of the column. Figure 12.4-7, below, illustrates how the output from the following command sorts all objects based on the column HandleCount:
+gcim Win32_Process|Sort-Object HandleCount
+
+
+![image](https://github.com/user-attachments/assets/ebcbbbe6-6a0b-46c4-8f23-44b295bea5a3)
+
+
+Select-String 
+
+
+The option Select-String, illustrated below in Figure 12.4-8, is a command built into PowerShell and searches through the output of a command that is piped into it for matching patterns. This is similar to using the command findstr in a Windows command prompt or the command grep in a Linux terminal.
+
+
+
+![image](https://github.com/user-attachments/assets/56a08d0e-cc72-437b-bf4c-6a4828ac50e2)
+
+
+
+
+![image](https://github.com/user-attachments/assets/33c02c3e-b8e9-4409-b1d7-29eb2650380c)
+
+
+
+
