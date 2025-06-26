@@ -4845,6 +4845,10 @@ python grocerylist.py
 ![image](https://github.com/user-attachments/assets/07a06c3b-feb2-4ccd-8227-b17e8e1421f0)
 
 
+![image](https://github.com/user-attachments/assets/b35fe028-3116-4539-b956-84670810940e)
+
+
+
 
 2. Open a Linux terminal. 
 
