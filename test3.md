@@ -2831,8 +2831,4 @@ PS C:\Windows\system32> Clear-Content C:\Users\trainee\Documents\WindowsPowerShe
 
 
 
-![Uploading image.png…]()
-![Uploading image.png…]()
-![Uploading image.png…]()
-![Uploading image.png…]()
 
