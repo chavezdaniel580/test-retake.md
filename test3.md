@@ -3433,7 +3433,18 @@ Tab completion
 
 
 
-![image](https://github.com/user-attachments/assets/952fa387-c23e-49c6-9f82-9fd95329bf13)
+Enter the following WQL query to filter through a list of processes and only select explorer.exe:
+gcim -Query "SELECT * FROM Win32_Process WHERE ProcessID = 'explorer.exe"
 
+
+
+This syntax produces an error that needs to be corrected to work properly. 
+
+
+4. Analyze the error output to locate the error in the command entered in the last step.
+
+
+
+![image](https://github.com/user-attachments/assets/d71457a7-bcef-4931-bb04-e111be407a48)
 
 
