@@ -4896,3 +4896,367 @@ employees["Name"].append(new_employees)
 ![image](https://github.com/user-attachments/assets/71fc7214-de06-47dc-a0e8-f9a8dc4d6509)
 
 
+Test a Python Function
+One trait Python shares with other high-level programming languages is that it has a defined syntax for constructing commands. Commands are constructed with components known as functions, similar to how a cooking recipe is made of different ingredients.  The functions allow Python to execute programs and reuse code. 
+
+﻿
+
+Python Function Overview
+﻿
+
+A Python function is a block of code that performs a certain action. The following is an example of the Python function print_text, which prints a statement that passes the string Hello World! to standard output:
+
+def print_text():
+  print("Hello World!")
+﻿
+
+In the function print_text, the keyword def is placed before the function name. Keywords are necessary for defining the function in Python.
+
+﻿
+
+Test a Python Function
+﻿
+
+Test the performance of a Python function within a script.
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the Virtual Machine (VM) lin-hunt-cent using the following credentials:
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Open Terminal.
+
+﻿
+
+3. Open an empty text editor within Terminal by entering the following command:
+
+[trainee@lin-hunt-cent ~]$ vim hello.py
+﻿
+
+4. Set the text editor to Insert mode by entering the letter i﻿
+
+﻿
+
+5. Enter the following function into the text editor:
+
+def print_text():
+  print("Hello World!")
+
+print_text()
+﻿
+
+The function in step 5 is similar to the example from the previous section, but with one difference. Step five adds the command print_text() to the last line of the code to call the defined function during script execution.
+
+﻿
+
+6. Exit the text editor’s Insert mode by entering the ESC key.
+
+﻿
+
+7. Exit the text editor while saving changes to the script hello.py by entering the following command:
+
+:wq
+﻿
+
+8. Run the Python script by executing the following command:
+
+[trainee@lin-hunt-cent ~]$ python hello.py
+﻿
+
+The output is as follows:
+
+Hello World!
+
+﻿
+
+This output indicates that the function print_text() correctly executed and printed the statically-defined text string to the screen. This is basic function performance. Upcoming labs in this lesson explore more complex functions that print different types of strings.
+
+﻿
+
+The next series of tasks in this lesson introduce the following additional components of Python functions:
+
+Parameters
+Arguments
+passes an argument  and Parameters
+Returning Values
+
+
+ Parameters and Arguments
+Parameters
+﻿
+
+The function in the previous lab is efficient for printing only the specific text string, Hello World!. This code has limited reusability because the text string printed by this function cannot be modified. This limits its use to only those occasions where printing Hello World! is valuable. One way to improve the reusability of this code is to have a variable define the string to be printed, rather than having the string hard-coded and contained within the function itself. The approach allows different string variables to be passed to the function and make the action of printing more dynamic. Such variables are known as parameters and they are included in the function definition.
+
+﻿
+
+The following revision to the function print_text replaces the string Hello World! with the parameter msg:
+
+def print_text(msg):
+  print(msg)
+﻿
+
+This revision makes the code more reusable since the string to print is no longer hard-coded into the function. Instead, the string is accepted as a parameter when the function print_text is called.
+
+﻿
+
+Since the value of the parameter msg is not defined in the function print_text, a value must be passed from elsewhere in the Python program or else this function results in an error. 
+
+﻿
+
+View a Parameter Error
+﻿
+
+Observe the error that results when the value of a parameter is missing.
+
+﻿
+
+Workflow
+﻿
+
+1. Enter the VM lin-hunt-cent. If necessary, enter the following credentials:
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Open Terminal.
+
+﻿
+
+3. Open the Python script hello.py in the text editor by entering the following command:
+
+[trainee@lin-hunt-cent ~]$ vim hello.py
+﻿
+
+4. Set the text editor to Insert mode by entering the letter i﻿
+
+﻿
+
+5. Modify the function print_text() by replacing the string Hello World! with the parameter msg, as follows:
+
+def print_text(msg):
+  print(msg)
+
+print_text()
+﻿
+
+6. Exit the text editor’s Insert mode by entering the ESC key.
+
+﻿
+
+7. Exit the text editor while saving changes to the script hello.py by entering the following command:
+
+:wq
+﻿
+
+8. Run the Python script by executing the following command:
+
+[trainee@lin-hunt-cent ~]$ python hello.py
+﻿
+
+Executing this Python script outputs the following error:
+
+TypeError: print_text() missing 1 positional argument: 'msg'
+﻿
+
+The modified function print_text has a new definition which includes the parameter msg. This is why the error from executing this script reports that the function call print_text() is missing one positional argument. In order to satisfy the required msg parameter in the function definition, an argument must be passed within the function call print_text.
+
+﻿
+
+Arguments
+﻿
+
+Passing an argument into a function occurs when a previously defined variable name is included within a previously defined function call. In the following script, the first line defines the variable myMsg as Hello World!. The second line is a function call that consists of the name of the previously defined function print_text along with the newly defined variable myMsg.
+
+myMsg = "Hello World!"
+print_text(myMsg)
+﻿
+
+In this instance, the result of the above function call is Hello World!﻿
+
+﻿
+
+After providing the variable definition and argument in the function call, executing the function no longer produces an error. 
+
+﻿
+
+Pass an Argument into a Function
+﻿
+
+Continue working in Terminal, in the VM lin-hunt-cent, to modify the script hello.py so that it successfully executes a function that includes an argument.
+
+﻿
+
+Workflow
+﻿
+
+1. In Terminal, open the Python script hello.py in the text editor by entering the following command:
+
+[trainee@lin-hunt-cent ~]$ vim hello.py
+﻿
+
+2. Set the text editor to Insert mode by entering the letter i﻿
+
+﻿
+
+3. Modify the function print_text() by defining the variable myMsg and adding an argument so that the function is written as follows:
+
+def print_text(msg):
+    print(msg)
+
+myMsg = "Hello World!"
+print_text(myMsg)
+﻿
+
+4. Exit the text editor’s Insert mode by entering the ESC key.
+
+﻿
+
+5. Exit the text editor while saving changes to the script hello.py by entering the following command:
+
+:wq
+﻿
+
+6. Run the Python script by executing the following command:
+
+[trainee@lin-hunt-cent ~]$ python hello.py
+﻿
+
+Executing this Python script outputs the following:
+
+Hello World!
+﻿
+
+After the argument myMsg is passed along with the function call print_text, the script  execute s without the error seen in the previous lab. This function is also now more reusable since it will print any text string passed to it a s an arg ument. The value of the variable myMsg can be changed to any text string and passed to print_text for printing to the sc reen.
+
+
+argument to a function and Parameters
+A function call can include multiple parameters that make the function more dynamic. In the following example, the function new_print_text calls two parameters, string1 and string2, to be used with a print command:
+
+def new_print_text(string1,string2):
+  print(string1,string2)
+﻿
+
+The function new_print_text can be used with a couple of variable definitions followed by a function call, as follows:
+
+myMsg1 = "Hello "
+myMsg2 = "World!"
+
+new_print_text(myMsg1,myMsg2)
+﻿
+
+Executing this function call prints the combined string Hello World!, just as in the previous examples in this lesson. However, changing the sequence of these two arguments so that the variable myMsg2 is listed first provides a different output. Instead of Hello World!, the resulting combined string prints World!Hello. This is an example of positional arguments, where arguments and parameters are linked according to the order in which they are provided.
+
+﻿
+
+In contrast to positional arguments, keyword arguments explicitly define the argument value that corresponds to a function parameter. The following function call prints the string Hello World! because the function parameters are used as keywords that are assigned specific values:
+
+myMsg1 = "Hello "
+myMsg2 = "World!"
+
+new_print_text(string2=myMsg2, string1=myMsg1)
+﻿
+
+When using keyword arguments, a variable name can be used as shown or a specific value can be given, such as (string2="World!", string1="Hello").
+
+
+﻿![image](https://github.com/user-attachments/assets/0572e289-ae66-4e0d-8ef2-c01ab352a3c0)
+
+
+Similar to keyword arguments, function parameters explicitly define default values when a given argument is not provided. The following function call produces an error because the function new_print_text expects two arguments, while the example below only lists one:
+
+new_print_text(string2=myMsg2)
+﻿
+
+A solution to resolve this error is to use a default value. In the following example, the parameter string1 has been set to a default value of This Is My. When the previous function call is made with only string2 defined, this setting prints This Is My World! instead of resulting in an error. 
+
+def new_print_text(string2, string1="This Is My"):
+  print(string1,string2)
+﻿
+
+Defining a default value for a parameter is useful for correctly executing a function that requires a non-empty value. All default arguments must follow non-default arguments, as in the previous example, otherwise an error results.
+
+﻿
+
+The previously defined functions work well for printing one or two string values. However, code reusability can be improved by adding the ability to print a variable number of string values. For instance, if the string Hello World! We are coding! were to be printed using the function above, it would have to be passed as one string or broken into two strings. Yet, if there was a need to collect multiple single-word strings and combine them into a single string output, there would need to be a function definition that allows up to five parameters. Twenty or one thousand single-word strings would be more complex.
+
+﻿
+
+To allow for a more feasible function definition, a single parameter can be defined with *args. This allows for a variable number of arguments to be passed to the function when called. In the following example of a new function definition, *args is set as the only function parameter which accepts a variable-length argument:
+
+def variable_print_text(*args):
+  for i in args:
+    print(i)
+
+variable_print_text("Hello","World!","We","are","coding!")
+﻿
+
+When the last line of code in this function is called, the function recognizes an argument length of five and iterates through each to print to the screen the phrase Hello World! We are coding!﻿
+
+﻿
+
+Pass Passing an argument into a function into a Function
+﻿
+
+![image](https://github.com/user-attachments/assets/ebbd7a89-8283-4d0b-a7db-21c6276ccf26)
+
+
+![image](https://github.com/user-attachments/assets/47cd616c-cca5-465d-874d-731ef28992b7)
+
+
+
+Modify the script hello.py so that it successfully executes a function that accepts a variable number of arguments. Continue working in Terminal, in the VM lin-hunt-cent.
+
+﻿
+
+Workflow
+﻿
+
+1. In Terminal, open the script hello.py in the text editor by entering the following command:
+
+[trainee@lin-hunt-cent ~]$ vim hello.py
+﻿
+
+2. Set the text editor to Insert mode by entering the letter i﻿
+
+﻿
+
+3. Edit hello.py to include the following code:
+
+def variable_print_text(*args):
+  for i in args:
+    print(i)
+
+variable_print_text("Hello","World!","We","are","coding!")
+﻿
+
+4. Exit the text editor’s Insert mode by entering the ESC key.
+
+﻿
+
+5. Exit the text editor while saving changes to the script hello.py by entering the following command:
+
+:wq
+﻿
+
+6. Run the Python script by executing the following command:
+
+[trainee@lin-hunt-cent ~]$ python hello.py
+﻿
+
+Executing the script prints the following:
+
+Hello
+World!
+We
+are
+coding!
+﻿
+
+The script output shows that each of the arguments passed to the function variable_print_text was successfully printed to the screen, in the order by which it was passed. This indica tes that  the use of *args as a function parameter was successful at accepting multiple argumen ts witho ut the need to explicitly define a separate parameter for each possible ar gument.
