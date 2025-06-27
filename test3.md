@@ -5577,10 +5577,15 @@ r'\'(.+?)\''
 
 ############This regular expression includes the following components:################
 r - Treats the pattern as a raw string that allows escape characters.
+
 ' - Opens the pattern (only the first single quote).
+
 \' - Indicates that a single quote is part of the pattern and not a closing single quote ending the pattern.
+
 (.+?) - Accepts any characters that follow the previous single quote in a non-greedy fashion. Without the question mark, the entire original string would be returned.
+
 \' - Closes the second single quote pattern, which results in a pattern that searches for any characters contained by single quotes.
+
 ' - Closes the first single quote pattern and defines what the regular expression should search for.
 
 
