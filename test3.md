@@ -6039,6 +6039,10 @@ i - Activates insert mode, allowing text to be written to the file.
 :set number - Adds lines to the Vim text editor.
 Additionally, entering the escape (esc) key exits the insert mode and returns to normal mode.
 
+
+
+
+
 ﻿
 
 
@@ -6086,7 +6090,11 @@ This code displays a list of the processes being used on the Linux system and he
 
 [trainee@lin-hunt-cent ~]$ sudo python process.py 
 [sudo] password for trainee: CyberTraining1!
-﻿
+
+
+
+ ![image](https://github.com/user-attachments/assets/a1b6f648-7558-4447-ac1d-24f5da1a63c4)
+
 
 8.  Use Vim to edit process.py:
 
@@ -6584,3 +6592,435 @@ It is possible that Python has optimized processes in the background, leading to
 
 
 Additional Resource
+
+
+#########CDAH-M14L2-Building a Tool with Python#############
+
+
+Script Complexity
+Programming, which includes scripting, can be categorized into three levels of complexity: basic, moderate, and complex. Before diving into scripting with Python, this lesson begins by illustrating the best practices for writing code for each of these levels of complexity. Many of these practices are also part of the PEP 8 – Style Guide for Python Code. The recommendations in this lesson allow programmers to share and review each other's code more easily and efficiently, which helps ensure the scripts are functional and effective.
+
+﻿
+
+For the most part, all best practices that apply for simple projects apply just as well to more complex projects. Simple coding and scripting best practices are universally useful, regardless of the size of a project. However, the best practices for more complex scripts may be unnecessary or inefficient for smaller and simpler projects. The Scripting Best Practices attachment provides a comparative summary of the best practices introduced in this lesson.
+
+
+ Best Practices for Simple Scripts
+Simple projects begin with building a tool for a single function. For example, the function may be to download and extract a file from the internet on a Linux host. The code for this simple function may be written as follows:
+
+import os
+# Downloads and extracts a file
+os.system("curl http://github.com/https://github.com/SpiderLabs/HostHunter/releases/download/v1.6/hosthunter_v1.6.tar -o hosthunter_v1.6.tar")
+os.system("tar -xvf hosthunter_v1.6.tar")
+﻿
+
+Simple scripts have simple best practices that primarily focus on improving readability.
+
+﻿
+
+Improving Readability
+﻿
+
+Short, consistently-spaced lines of code are easy to read. This is why each line of code should be limited to a maximum of 79 characters. Additionally, Python syntax requires indentation for specific blocks of code. PEP 8 recommends adding four spaces for each level of indentation that a code block requires. The following code block exemplifies both of these best practices for improving readability in a simple script. The second line is indented by four spaces while the third line is indented by an additional four spaces, totalling eight spaces before the code begins:
+
+def readfile():
+    with open("file1.txt", "r") as data:
+        for i in data.readlines():
+            print (i)
+﻿
+
+Implementing a standard for indentation discourages programmers from indenting inconsistently across projects and making code difficult to read. The following is an example of incorrect indentation. This code block adds two tabs for each level of indentation instead of four spaces. Spacing each indented line this far apart decreases readability:
+
+with open("file1.txt", "r") as data:
+    for i in data.readlines():
+        print (i)
+﻿
+
+NOTE: In a scripting environment, the tab size can be configured to use four spaces; this is considerably easier than adding four spaces per indentation.﻿
+
+﻿
+
+Cybersecurity professionals generally use simple scripts to perform specific tests and functions. These best practices for creating high quality, simple scripts set the foundation for advanced script-building. Regardless of scripting complexity or language, the golden rule is to main tain readability. Reviewing and updating code is cumbersome when a script is unintelligible.
+ ﻿
+
+
+﻿![image](https://github.com/user-attachments/assets/de1489d7-1d43-49c4-bea3-17898be5c178)
+
+
+ Compartmentalizing Components
+
+
+Moderate Python scripts are similar to traditional Object-Oriented Programming (OOP). OOP describes a programming style in which developers create a robust program or application based on a core piece of data or concept. The first example of a simple project was for a function that downloads and extracts a file from the internet on a Linux host. This example can be transformed into OOP by separating the tasks the program performs into individual functions, as follows:
+import os
+def downloadfile():
+	os.system("curl http://github.com/https://github.com/SpiderLabs/HostHunter/releases/download/v1.6/hosthunter_v1.6.tar" -o hosthunter_v1.6.tar)
+	extractfile()
+
+def extractfile():
+	os.system("tar -xvf hosthunter_v1.6.tar") 
+#Call the functions for execution
+downloadfile()
+
+
+
+
+
+Scripts that are moderately complex include more structured pieces such as classes and methods. Python best practices recommend placing these components in separate files and calling them into other scripts. This allows programmers to troubleshoot, improve, and maintain individual parts of the program, rather than having to manage a massive script in its entirety.
+ 
+Performing Unit Tests
+
+
+As scripts increase in complexity, they also become more vulnerable to regression. Regression occurs when fixing bugs in the code creates new ones. Unit testing is one way to prevent regression. A unit test is a Python module wherein programmers call parts of their code, declare what the code is expected to output, and then perform tests to check whether or not the called section of code runs correctly. Unit testing is a robust technique that is highly recommended for frequent Python users, however it is not covered in depth in this lesson. 
+
+
+
+![image](https://github.com/user-attachments/assets/965d3bc7-2138-4f82-9e31-84b82da6f304)
+
+
+![image](https://github.com/user-attachments/assets/356de367-0d08-42eb-b744-230c812547d1)
+
+
+Best Practices for Complex Scripts
+Using Parent Classes
+﻿
+
+Python scripts become complex when a complete Python program consists of multiple maintained programs. A recommended practice for these complex projects is to store common objects in a parent class. This is similar to how imported modules and programs are stored. Modules are miniature programs that solve a specific function, such as converting a measurement from imperial to metric. Other programs can then import these modules. A programmer may call a specific module whenever its operation needs to be performed. 
+
+﻿
+
+Dating code comments and documenting the use of individual modules is critical at this point, to help programmers troubleshoot in the future. As an example, programmers may refer to the dates and documentation to identify code that has been written to solve a business need that is no longer required or code that references older versions of Python that no longer function.
+
+﻿
+
+Maintaining Documentation
+﻿
+
+Documenting environment versions and date of creation helps track changes to the code, which is especially important when maintaining multiple environments. Python comes in different versions and environments that can be built in many different ways. Any bugs in the core code of Python can affect how programs function in each of these environments. Documenting environment versions also helps code reviewers assess any impact of code improvements on programs.
+
+﻿
+
+Imported third-party modules and other code dependencies also need to be documented. Programmers have very little, if any, control over these tools, so they rely on the documentation. Documenting the versions of a specific module helps debug code that malfunctions due to updates from external sources. 
+
+﻿
+
+Docstrings
+﻿
+
+Documentation in Python is referred to as a documentation string, or docstring. PEP provides a style guide for properly documenting Python for readability. A docstring is placed within a function or class between a set of triple quotes, as in the following example:
+
+def complex(real=0.0, imag=0.0):
+    """Form a complex number.
+
+    Keyword arguments:
+    real -- the real part (default 0.0)
+    imag -- the imaginary part (default 0.0)
+    """
+    if imag == 0.0 and real == 0.0:
+        return complex_zero
+    ...
+﻿
+
+Docstrings are commonly confused for multiline comments because they are both types of comment code. Both docstrings and multiline comments provide information about the surrounding code in a series of non-executable lines. However, a docstring operates differently than a multiline comment. A docstring is accessible within a running Python program. On the other hand, a multiline comment is not accessible while a script runs. To turn a multiline comment into a docstring, it must be created within a function or a class.
+
+﻿
+
+The docstring from the example above can be printed with the following code while the Python complex function runs:
+
+print (complex.__doc__)
+﻿
+
+Proper code documentation eliminates the need to read functional elements during review and troubleshooting. This, in turn, minimizes the time it takes for people to parse the code when debugging and improving previously written code. 
+
+
+
+![image](https://github.com/user-attachments/assets/a046ad47-c9c9-4608-8c69-3b4fdca615ed)
+
+
+![image](https://github.com/user-attachments/assets/527aee3d-17a0-415c-8404-8ccbbee78117)
+
+
+
+
+Python and MITRE ATT&CK
+The MITRE ATT&CK framework is a collection of the TTPs that cyber actors have used in cyber attacks. A handful of publicly available Python modules use the MITRE ATT&CK framework to assist with testing MITRE's list of TTPs in an environment. Modules that are available on GitHub include pyattck, mitreattack-python, and Red Canary's Atomic Red Team library of tools. Using these tools is the fastest way to check whether an environment is protected against a specific technique or vulnerable to that technique.
+
+﻿
+
+Atomic Red Team Tools
+﻿
+
+The Atomic Red Team tool library provides offensive cyber tools that are mapped based on the attack methods documented in the MITRE ATT&CK framework. The Atomic Red Team GitHub page stores all configuration information in YAML Ain’t Markup Language (YAML) file formats that can be imported into other scripts to automate MITRE tests. Figure 14.2-1 displays some of the information listed in the YAML file for T1548.002.
+
+
+﻿![image](https://github.com/user-attachments/assets/fa1ac05a-4c72-4c3a-b114-8d3f8b167de4)
+
+ Figure 14.2.2, below, displays the information provided in the command and cleanup_command sections of the YAML file for T1548.002. The command section provides the commands for performing the test. The cleanup_command section removes the artifacts from the system that are created when the command section runs.
+
+
+
+![image](https://github.com/user-attachments/assets/9d04d085-c4de-4ebf-a73a-c142db9d8bf5)
+
+
+
+In Figure 14.2-2 above, the #{executable_binary} parameter needs to be replaced with a binary that requires UAC permissions.
+
+
+The following code implements the commands from the YAML file in the previous two figures. This code determines whether or not a system is vulnerable to a User Account Control (UAC) bypass allowing for privilege escalation:
+import os
+os.system("reg.exe add hkcu\software\classes\mscfile\shell\open\command /ve /d cmd.exe /f")
+os.system("cmd.exe /c eventvwr.msc")
+
+
+
+Next is a lab that continues using the example YAML file for MITRE T1548.002 and places this information in Python format.
+
+
+Run MITRE Tests with Python
+
+
+Open a new Python project, import the command line arguments provided from the Atomic Red Team project, and run a sample script.
+
+Workflow
+
+
+1. Log in to the Virtual Machine (VM) win-hunt using the following credentials:
+Username: trainee
+Password: CyberTraining1!
+
+
+
+2. From the desktop, open Pycharm Community Edition.
+
+
+3. In the PyCharm Welcome window, select New Project.
+
+
+4. In the Location field, replace the project name pythonProject with UACBypass, then select Create.
+
+
+![image](https://github.com/user-attachments/assets/c79b7aed-bf38-41c8-8db4-ddc232f1ec4d)
+
+5. From the folder tree in the left pane, expand UACBypass to navigate to and select the main.py script.
+
+
+Python includes sample text by default to start any new Python script. However, this lesson uses code provided by Atomic Red Team for test number one of T1548.002 - Abuse Elevation Control Mechanism: Bypass User Access Control. 
+
+
+6. Create a blank script file by selecting and deleting all the text on lines 1-16 of main.py.
+
+
+7. From the toolbar at the top of the window, select File, then Open.
+
+
+8. In the Open File or Project window, expand the following sequence of folders to fin d T1548 .002.yaml:
+Users
+trainee
+Documents
+
+9. Select T1548.002.yaml from the folder tree, then select OK to open the file.
+
+
+T1548.002.yaml is a configuration file from the Atomic Red Team project. This YAML file contains the command line required to run a test for the T1548.002 TTP.
+
+
+10. From the open file T1548.002.yaml, copy the contents of lines 18 and 19, which display the following:
+reg.exe add hkcu\software\classes\mscfile\shell\open\command /ve /d "#{executable_binary}" /f
+
+cmd.exe /c eventvwr.msc
+
+
+
+To execute the test, analysts must replace the "#{executable_binary}" placeholder text in the first line with an up-to-date malicious file. It is convenient that only this portion of the command needs to be edited to run the test. However, editing each additional test becomes tedious when analysts need to execute different programs over multiple tests. It is simpler to create a script in a programming language like Python. 
+
+
+In this lab, instead of modifying and saving the script before running each new test, analysts can manually enter the binary for a script to run by placing the commands from lines 18 and 19 into the script. Analysts may also choose to automate the test further by creating a list of applications to test, then iterating through that list.
+
+
+11. Paste the copied contents from lines 18 and 19 into main.py.
+
+
+12. Modify the pasted content from the previous step so that main.py displays only the following code:
+import os
+
+os.system("reg.exe add hkcu\software\classes\mscfile\shell\open\command /ve /d " + input("Enter a process name (cmd.exe): " ) + " /f")
+os.system("cmd.exe /c eventvwr.msc")
+
+13. Execute the script by selecting run in the upper-right corner of the window, as highlighted in Figure 14.2-4, below:
+
+
+![image](https://github.com/user-attachments/assets/0dbc9c0b-f137-4554-b19b-8187f42bbc23)
+
+
+Executing the script presents an output at the bottom of Pycharm that prompts for a binary to run.
+
+
+14. Enter cmd.exe on the prompt line and press enter.
+
+
+The output confirms that the script ran successfully. Running the script also causes Windows Defender to display a pop-up that states the attack has been blocked and removed, as displayed below in Figure 14.2-5. Since Windows Defender is able to successfully block and mitigate the threat, this indicates that the system is not vulnerable to T1548.002 test #1.
+
+
+
+![image](https://github.com/user-attachments/assets/f536d605-9f01-4651-a867-c100e945e088)
+
+
+
+![image](https://github.com/user-attachments/assets/fa0d5209-7f44-4676-b1b4-6d9580a204af)
+
+
+Automating Forensic Collection
+Collecting artifacts for cyber forensics is a constantly evolving process, improved upon and maintained by many professionals in the cybersecurity industry. It is impossible for one person to develop and code all of the new techniques discovered by security professionals to use in data collection. This is one reason investigators often incorporate scripts and other technical information into their own simpler scripts, rather than writing all new code themselves.
+
+﻿
+
+Python is a great tool for scripting new forensic artifact collection tools into an automated process, per the requirements of a given organization. For example, if a novel memory collection method is discovered and shared publicly, different law enforcement organizations and security personnel may choose to incorporate these new methods into their own scripts to meet specific organizational needs. 
+
+﻿
+
+Scripting forensic collection with Python also allows analysts to process large datasets, all at once. For example, an analyst may need to investigate 1,000 security camera clips for a potential suspect. Instead of watching all those clips, the analyst could reduce investigation time by integrating an image processing script into a Python script that tags any clip with a person in it.
+
+
+
+Collecting Artifacts with Python
+Analysts have many options to automate the collection of forensic artifacts, such as the open source tools that are available online. Additionally, custom Python scripts can be written to address any gaps, should analysts need to collect specific artifacts not addressed by predefined scripts. 
+
+﻿
+
+The next section provides a sample of various code snippets that can be entered into the Windows command line utility in a Python script. These snippets extract forensic information from the following Windows sources:
+
+Registries
+Directories
+Command line utilities and files
+A lab is also provided to learn how to extract the passwords saved on a Windows host.
+
+﻿
+
+################Registries#####################
+﻿
+
+The following code queries the Windows registry and reads keys from specific registry locations:
+
+import os
+os.system("reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Run")
+﻿
+
+The Windows registry can also be accessed directly without using the underlying Windows command line by running the python-registry module with the following code:
+
+from Registry import Registry
+reg=Registry.Registry("C:\\Windows\\System32\\config\\SOFTWARE")
+key = reg.open(r'Microsoft\Windows\CurrentVersion\Run')
+for data in [val for val in key.values() if val.value_type() == Registry.SZ or val.value_type() == Registry.RegExpandSZ]:
+	print (data.name(), data.value())
+﻿
+
+This code prints out the data contained in the SOFTWARE hive's Run key, which is executed when a user logs into the machine.
+
+
+![image](https://github.com/user-attachments/assets/efb6e7a7-9717-4f3d-aff0-78c81f73ae37)
+
+﻿
+
+##############Directories##################
+﻿
+
+The following code obtains a file list of the C:\Users\Public\Documents directory:
+
+import os
+os.system('dir /a /s /b C:\Users\Public\Documents')
+﻿
+
+Use Python's os.walk module with the following code to obtain the file list without using the underlying Windows command line:
+
+import os
+for root, dirs, files in os.walk("C:\\Users\\Public\\Documents"):
+	for name in files:
+		print (name)
+
+
+ ![image](https://github.com/user-attachments/assets/d41027a5-69bd-463a-a67c-4585b87d1ed2)
+
+
+##############Commands and Files##################
+﻿
+
+Python offers the ability to use regular expressions to extract information. The following code leverages this feature by using regular expressions to extract only IP addresses and count the total addresses from the Windows systeminfo utility:
+
+import os,re
+
+os.system('cmd.exe /c systeminfo > output.txt')
+ips = []
+with open('output.txt', 'r') as data:
+	for i in data.readlines():
+		for z in re.findall('[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}', i):
+			ips.append(z)
+print (len(ips))
+﻿
+
+![image](https://github.com/user-attachments/assets/7d11ee51-bc3a-43e7-8110-421cc6ecb186)
+
+
+
+Workflow
+
+
+1. Log in to the VM win-hunt using the following credentials:
+Username: trainee
+Password: CyberTraining1!
+
+
+
+2. Open a command prompt.
+
+
+3. Run the script for The LaZagne Project without any parameters by entering the following command:
+python "C:\Users\trainee\Documents\LaZagne-master\Windows\laZagne.py"
+
+
+
+The output from this command displays the different Windows tools and options for finding passwords on the host. 
+
+
+4. Open Pycharm Community Edition.
+
+
+5. From the top left of the window, select File, then select New Project near the search bar. 
+
+
+6. Replace the highlighted pythonProject path text with PasswordExtractor, then select Create.
+When prompted, choose This Window.
+
+7. Select and delete all text on lines 1-16 of  main.py  to create a blank script file.
+
+
+8. Enter the following code to extract any passwords on the system with laZagne.py and store the results and passwords in dedicated files:
+import os,re
+
+passwords = []
+
+os.system("python C:\\Users\\trainee\\Documents\\LaZagne-master\\Windows\\laZagne.py all > results.txt")
+
+with open('results.txt', 'r') as results, open('pw.txt', 'w') as pw:
+    for i in results.readlines():
+        for data in re.findall('Password:.*', i.strip()):
+            pw.write(data)
+            passwords.append(data)
+print ("The passwords found are: ")
+for passw in passwords:
+    print (passw.split(":")[1])
+
+     
+This script stores the entire utility output in the file results.txt and stores only the passwords in the file pw.txt.
+
+
+9. Execute the script by selecting the run icon from the menu at the top.
+
+
+After a few seconds, the results should display two passwords. Additionally, both results.txt and pw.txt are stored in C:\Users\trainee\PycharmProjects\PasswordExtractor\
+
+
+After creating the PasswordExtractor script, forensic analysts can edit its commands to expand its functionality or include it in other Python scripts for future investigations.
+
+
+Use the information from this lab to answer the next question.
+
+
