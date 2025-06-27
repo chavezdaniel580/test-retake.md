@@ -5330,3 +5330,134 @@ Finally, classes may also contain their own methods. Defining a method within a 
 
 
 ![image](https://github.com/user-attachments/assets/68bd24e0-3408-4629-b734-ac6ed4f2b3b9)
+
+
+
+
+
+
+Set Up a Jupyter Notebook Using Python
+Jupyter Notebook is a browser-based, open-source application that supports program development in a large number of programming languages. The development environment is known as a “notebook.” A Jupyter notebook provides an interactive programming session similar to a Command-Line Interface (CLI). Each notebook of code can be saved, then imported into and exported out of other existing notebooks or Python scripts. Jupyter's seamless integration allows for ease of use, code reusability, and code sharing.
+
+﻿
+
+Jupyter Notebook is useful for collaboration within a coding project as multiple users can use the same notebook to share code. However, Jupyter does not generate code nor does it translate code from one programming language to another. Jupyter cannot help with converting Java or C++ code into Python. This lesson focuses on using only the Python coding language within Jupyter Notebook.
+
+﻿
+
+The following lab walks through the process of creating a new Jupyter Notebook for the controlled execution of Python code. The lab highlights how portions of Python code can be separated into individual sections. This is similar to code breakpoints that allow debugging and analysis before executing an entire program.
+
+﻿
+
+Set Up a Jupyter Notebook
+﻿
+
+Create a new Jupyter Notebook. Then, test the notebook by entering Python code, executing commands, and examining the output of running sections of code.
+
+
+
+![image](https://github.com/user-attachments/assets/43a2b54c-a114-4724-9baa-16ca48111bb0)
+
+
+
+Python Library Modules
+Python provides a number of pre-built modules for common tasks to aid in program efficiency. These modules are part of the Python standard library. Locating modules and their source code provides more information on the functionality of the different modules available. This information helps identify and select specific functions to import. This section reviews the following topics to enable analysts to leverage Python modules:
+
+Python standard library
+Identifying module functions
+Locating a Python module
+Python Standard Library
+﻿
+
+Although creating and importing custom modules are powerful for code reuse, it is not efficient to create a large number of modules to complete simple tasks such as the following:
+
+Calculating math 
+Enumerating filesystem paths
+Determining the current date and time
+The better option is to use the Python standard library. The library uses Python installers to provide built-in modules that provide standardized functions. For example, one common function from the standard library is math. When imported into a Python script, this function provides several methods of performing arithmetic such as trigonometric functions.
+
+﻿
+
+Another function from the standard library is print. This function prints objects to either a file or standard output (terminal). Unlike math, it is unnecessary to use an import statement to call print since it is a built-in function. Built-in functions are members of the standard library provided to all Python programs by default.
+
+﻿
+
+In addition to modules, the standard library also provides data types such as int, float, str, and list. This provides a great deal of core functionality for Python scripts and handles the logic necessary to ensure that these data types work as expected.
+
+﻿
+
+Identifying Module Functions
+﻿
+
+The previous lab used the following line of code to import a function:
+
+from Lab1 import make_sandwich
+﻿
+
+This explicitly imports only the function make_sandwich from the module Lab1. Alternatively, the entire module can be imported so that the import includes all additional modules and their functions. This task uses the following syntax, replacing Lab1 with the specific module name:
+
+import Lab1
+﻿
+
+Importing a module and all its functions requires Python to place each imported function into memory during execution. This may cause a Python script to use more resources than necessary. This is why the best practice is to import only those functions that are necessary to properly execute a specific Python script.
+
+﻿
+
+ Using dir()
+﻿
+
+The function dir() is a handy tool that returns a list of object attributes. It is a member of the standard library, so it does not need to be imported. Using dir() with a module returns the names of the module attributes and functions. Figure 13.4-7, below, displays how the function make_sandwich is listed at the end of all the attributes for the module Lab1.
+
+
+
+![image](https://github.com/user-attachments/assets/c9158fb0-b336-4877-a931-28e6e3368993)
+
+
+
+
+The output for dir() depends on the nature of the module being analyzed. The module Lab1 contains only a single function, so its output is sparse. The standard library module math contains a number of functions associated with mathematics, so it outputs significantly more attributes, as displayed in Figure 13.4-8, below:
+
+
+
+![image](https://github.com/user-attachments/assets/511abc08-7f57-4320-b66d-0e3cc5649a5d)
+
+Outputting all available attributes is helpful when trying to recall the names of specific functions to import, so that the entire module does not need to be imported. As an example, a script may require computing the square root of a number. Performing the command dir(math) provides the function sqrt as an option. After identifying this function name, the following code can be used to import only the necessary function:
+from math import sqrt
+
+
+
+This minimizes the footprint of the script. 
+
+
+
+Locating a Python Module
+
+
+Locating Python modules and their source codes is helpful for editing a module's functionality and debugging. An example of a debugging case is if a custom Python program is designed to request the value of pi to 20 decimal places, but this always results in an error. The function pi belongs to the module math. Locating and analyzing the source code for math provides more information as to why this error always occurs. In Python, the function pi within the module math returns the value of pi to 15 decimal places (3.141592653589793) by default. Therefore, requesting a greater number of decimal places outputs an error. Reviewing the source code for different modules, such as math, helps understand their applications and limitations.
+
+
+Using inspect
+
+
+The location of a module depends on the organizational structure of a given Python project and whether a certain module is a member of the standard library. One way to locate a Python module is with the module inspect. Although inspect is a built-in module, it is not a member of the standard library. This module provides the method getfile(), which returns the path of the object being inspected. Figure 13.4-9, below, provides an example of importing inspect and printing the getfile() search for the function make_sandwich:
+
+
+
+![image](https://github.com/user-attachments/assets/cda0c000-03d2-42a9-9ca0-e1d54719af7e)
+
+
+
+
+The method getfile() can also be used to identify the locations of modules. In the following example in Figure 13.4-10, the module inspect is calling upon itself to identify its own directory:
+
+
+
+![image](https://github.com/user-attachments/assets/3f63088b-15d2-40c2-b33a-4897723a02db)
+
+
+
+![image](https://github.com/user-attachments/assets/2d1835e9-d593-442d-bac8-ddde15df4987)
+
+
+
+![image](https://github.com/user-attachments/assets/1fdcb52b-3415-495d-b530-1cec4e23fbc6)
