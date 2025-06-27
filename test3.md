@@ -5078,6 +5078,10 @@ myMsg = "Hello World!"
 print_text(myMsg)
 ﻿
 
+![image](https://github.com/user-attachments/assets/e500baf8-cf5e-44ed-a356-6875db8e74a9)
+
+
+
 In this instance, the result of the above function call is Hello World!﻿
 
 ﻿
@@ -5139,6 +5143,11 @@ After the argument myMsg is passed along with the function call print_text, the 
 argument to a function and Parameters
 A function call can include multiple parameters that make the function more dynamic. In the following example, the function new_print_text calls two parameters, string1 and string2, to be used with a print command:
 
+
+
+![image](https://github.com/user-attachments/assets/6a17e6ef-2fe3-4fed-ad1c-b9da9158ee36)
+
+
 def new_print_text(string1,string2):
   print(string1,string2)
 ﻿
@@ -5166,7 +5175,6 @@ new_print_text(string2=myMsg2, string1=myMsg1)
 When using keyword arguments, a variable name can be used as shown or a specific value can be given, such as (string2="World!", string1="Hello").
 
 
-﻿![image](https://github.com/user-attachments/assets/0572e289-ae66-4e0d-8ef2-c01ab352a3c0)
 
 
 Similar to keyword arguments, function parameters explicitly define default values when a given argument is not provided. The following function call produces an error because the function new_print_text expects two arguments, while the example below only lists one:
@@ -5203,11 +5211,6 @@ When the last line of code in this function is called, the function recognizes a
 
 Pass Passing an argument into a function into a Function
 ﻿
-
-![image](https://github.com/user-attachments/assets/ebbd7a89-8283-4d0b-a7db-21c6276ccf26)
-
-
-![image](https://github.com/user-attachments/assets/47cd616c-cca5-465d-874d-731ef28992b7)
 
 
 
@@ -5260,3 +5263,54 @@ coding!
 ﻿
 
 The script output shows that each of the arguments passed to the function variable_print_text was successfully printed to the screen, in the order by which it was passed. This indica tes that  the use of *args as a function parameter was successful at accepting multiple argumen ts witho ut the need to explicitly define a separate parameter for each possible ar gument.
+
+
+
+![image](https://github.com/user-attachments/assets/1a85cf06-765c-4903-9bce-f86796608f52)
+
+
+
+
+Class Layout and Characteristics
+The previous Python code examples in this lesson used variables and methods to manipulate data and program output. Another valuable tool is the Python class, which can be thought of as a mold for creating objects. Just as a mold shapes various types of materials, a single Python class can create various objects that share common attributes. 
+
+﻿
+
+The following lines of code illustrate the usefulness of Python classes. The first line defines the class without using the keyword def. This is followed by an object constructor __init__, which initializes a newly created object state. Since this Python class is concerned with malware, assume that each object of this class is a certain kind of malware (virus, trojan, worm, etc.) and the instance variables help define the object in relation to the class.
+
+﻿
+
+class Malware:
+
+  # Constructor
+  def __init__(self,name,mtype,tlevel)
+
+    # Instance variables
+    self.name = name
+    self.mtype = mtype
+    self.tlevel = tlevel
+
+  # Class attributes
+  attr1 = "has a malware signature"
+  attr2 = "has been analyzed"
+
+  # Class method
+  def define(self):
+    print(self.name, self.attr1)
+    print(self.name, self.attr2)
+    print("Refer to documentation for", self.name)
+﻿
+
+The instance variables are name, mtype (malware type), and tlevel (threat level). These instance variables have values provided as attributes to the constructor when a class object is instantiated, such as with the following line of code:
+
+malware1 = Malware("Cryptolocker","trojan","high")
+﻿
+
+Instantiating an object in Python is similar to calling a method. The difference is that a class creates an object and assigns attributes to that object, while a method simply performs some action. In addition to instance variables that are specific to certain objects, there are also class attributes that are shared by each object of a class. In the example above, each object that is a member of the class Malware shares two attributes, regardless of the values of the instance variables.
+
+﻿
+
+Finally, classes may also contain their own methods. Defining a method within a class benefits from the parameter self, which is a reference to a particular object instance. For example, malwa re1 in th e code above is a variab le which  holds a Malware class object with the name Cryptolocker . The me thod define within the class Malware only needs to take in the parameter self, rather than a specific name value. This is because the name Cryptolocker is passed as an instance variable specific to the object malware1 and is referenceable as self.name when used in the class  method.
+
+
+![image](https://github.com/user-attachments/assets/4dda902a-3996-4008-b0ba-4bbc78eb006b)
