@@ -5315,6 +5315,8 @@ Instantiating an object in Python is similar to calling a method. The difference
 Finally, classes may also contain their own methods. Defining a method within a class benefits from the parameter self, which is a reference to a particular object instance. For example, malwa re1 in th e code above is a variab le which  holds a Malware class object with the name Cryptolocker . The me thod define within the class Malware only needs to take in the parameter self, rather than a specific name value. This is because the name Cryptolocker is passed as an instance variable specific to the object malware1 and is referenceable as self.name when used in the class  method.
 
 
+![image](https://github.com/user-attachments/assets/a9b33e5c-9a55-4d20-a7a7-041c1b852a8f)
+
 
 
 ![image](https://github.com/user-attachments/assets/7d0aee28-7cc2-4b42-ae1f-c3138cd63d79)
