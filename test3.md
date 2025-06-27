@@ -5314,3 +5314,8 @@ Finally, classes may also contain their own methods. Defining a method within a 
 
 
 ![image](https://github.com/user-attachments/assets/4dda902a-3996-4008-b0ba-4bbc78eb006b)
+
+
+
+
+![image](https://github.com/user-attachments/assets/68bd24e0-3408-4629-b734-ac6ed4f2b3b9)
