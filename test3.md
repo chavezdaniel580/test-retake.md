@@ -5461,3 +5461,190 @@ The method getfile() can also be used to identify the locations of modules. In t
 
 
 ![image](https://github.com/user-attachments/assets/1fdcb52b-3415-495d-b530-1cec4e23fbc6)
+
+
+
+
+![image](https://github.com/user-attachments/assets/b40d765d-ad65-472f-9863-7aef5ed935a1)
+
+
+
+
+
+![image](https://github.com/user-attachments/assets/ccfc435a-e058-4081-bc90-983977802cac)
+
+
+
+
+Data Parsing and Filtering with Python Modules and Functions
+The Elasticsearch query from the previous lab outputs many columns of data. This includes the column observer, as highlighted in Figure 13.4-11, below. This column provides Fully Qualified Domain Names (FQDN) as part of strings formatted as {'name': 'FQDN'}. It's possible to parse a list of system FQDNs from these query results after filtering the FQDN from the rest of the characters in the column values.
+
+
+
+
+![image](https://github.com/user-attachments/assets/65a183eb-0c98-49bc-9990-455d0eebd98f)
+
+
+Parse and Filter Data
+
+
+Parse and filter data from the Elasticsearch query results in the Lab2 Jupyter Notebook. 
+
+
+Workflow
+
+
+1. Log in to the VM lin-hunt-cent with the credentials below:
+Username: trainee
+Password: CyberTraining1!
+
+
+
+2. Open the notebook Lab2 in Jupyter Notebook.
+
+
+3. Perform text manipulation to extract the FQDNs from the column observer and create a new column systems by entering and executing the following code to the empty cell at the bottom of the Lab2 notebook:
+df['observer'] = df['observer'].astype(str)
+df['systems'] = df['observer'].str.rsplit("'",3).str[2].str.strip()
+df
+
+
+
+The Pandas data frame method astype(str) casts the contents of the column observer as a string. Running this command creates the column systems and populates its values through string manipulation of the values in the column observer. The column observer formats its values as {'name': 'FQDN'}, which are two substrings in single quotes that are separated by a colon. This substring arrangement allows the function str.rsplit to use the single quote delimiter to split the string. 
+
+
+The function str.rsplit("'",3) splits the string {'name': 'FQDN'} at each single quote before FQDN, which creates three substrings. Substrings are counted from zero, so the FQDN is included in substring number two. This is noted with .str[2]. The method str.strip() removes any leading or trailing whitespace characters.
+
+
+Choosing different substring values changes the results. For example, the output would be different if str[2] was changed to str[0], as displayed in Figure 13.4-12, below. As str.rsplit("'",3) splits the entire string in each entry of the column observer into three substrings, str[0] selects the first substring. The first substring is always {'name.
+
+
+
+![image](https://github.com/user-attachments/assets/dfd0e827-8ff2-4585-9a9b-3811448b7cc0)
+
+
+
+4. Print the column systems of the Elasticsearch query results by entering and executing the following code into a new empty block in the notebook:
+print(df['systems'])
+
+
+
+The results present duplicate values. 
+
+
+5. Filter by unique values by invoking the pandas function unique(), as follows:
+print(df['systems'].unique())
+
+
+
+Filtering reduces the number of FQDN values from 1240 to just 14 unique values. 
+
+
+6. Sort the list of unique FQDNs by combining the function sorted() with the function unique(), as follows:
+print(sorted(df['systems'].unique()))
+
+
+
+Parsing and Filtering with Regular Expressions
+The previous lab presented a method of parsing and filtering data that uses string manipulation with the functions rsplit() and strip(). Data can also be parsed and filtered using regular expressions, which act as a powerful shorthand for complex pattern matching. 
+
+﻿
+
+Regular expressions can be used with the Elasticsearch query results from Lab2. In this example, the column observer contains strings that include FQDNs with extraneous characters and information. Figure 13.4-13, below displays how head() is used to limit the number of lines that are printed from the data frame:
+
+
+
+
+![image](https://github.com/user-attachments/assets/a2e66010-fae3-4ec9-8a01-7e2873d0421d)
+
+
+
+
+Each entry in this column follows the pattern {'name': '[FQDN]'}. To extract specific data from each row in the column, a regular expression can be used to parse the FQDN from the substring housed within the second set of single quotes as shown in the code block in Figure 13.4-14, below:
+
+
+
+![image](https://github.com/user-attachments/assets/bd6ae433-111a-499f-a793-fe92835630d6)
+
+
+
+
+
+In this code block, the module for regular expressions (re) is imported, and the data within the column observer is cast into strings. Then, the data in each row of observer is inspected using the function re.findall(). This function is useful in this case since there are multiple pattern matches for each row. The following regular expression is used with this function:
+r'\'(.+?)\''
+
+
+
+############This regular expression includes the following components:################
+r - Treats the pattern as a raw string that allows escape characters.
+' - Opens the pattern (only the first single quote).
+\' - Indicates that a single quote is part of the pattern and not a closing single quote ending the pattern.
+(.+?) - Accepts any characters that follow the previous single quote in a non-greedy fashion. Without the question mark, the entire original string would be returned.
+\' - Closes the second single quote pattern, which results in a pattern that searches for any characters contained by single quotes.
+' - Closes the first single quote pattern and defines what the regular expression should search for.
+
+
+![image](https://github.com/user-attachments/assets/006ce0d3-40e4-46ee-bf14-2397e5322eaf)
+
+
+
+The function re.findall() returns a list containing all pattern matches within a string. This is useful because each string has two regular expression pattern matches. For example, the first string results in ['name', 'dmz-smtp.energy.com]. Since it is clear that the second substring contains the FQDN, only fqdn[1] is printed in the code block from Figure 13.4-14, above.
+
+
+The following additional regular expression parsing functions are also available:
+re.match() - Searches for a regular expression pattern in a string and returns the first occurrence in the first line. Also ignores any additional patterns that exist in a multi-line string.re.search() - Finds the first pattern match for every line in a string.
+Parsing and filtering data allows analysts to reduce the size of a dataset and format it for further analysis. A common analysis task is to search data to match known strings or substrings. The systems data from the notebook Lab2 is an example of data that is ready for closer analysis since it was parsed and filtered in the last lab. This data provides strings and substrings to match against. 
+
+
+Search Data with Regular Expressions
+Continue working in the VM lin-hunt-cent. Identify indicators of compromise by using the regular expression module to search the Elasticsearch query results for the following systems:
+BP-WKSTN-10.energy.laneng-wkstn-3.energy.lanzeroday.energy.lan
+Workflow
+
+
+1. Open the notebook Lab2 in Jupyter Notebook, if it is not already open.
+
+
+2. Search the Elasticsearch query results by entering and executing the following code in the free block at the end of the notebook:
+import re
+search_list = ["BP-WKSTN-10.energy.lan","eng-wkstn-3.energy.lan","zeroday.energy.lan"]
+
+for i in df['systems'].unique():
+    for j in search_list:
+        if re.search(j,i):
+            print("Found a match for " + j)
+
+
+
+This output identifies two systems in the search_list that are present in the Elasticsearch query results, so they are worth investigating. This search calls the function unique() before engaging the column systems to provide refined results. Performing this search without unique() affects the number of results returned and includes the duplicate values that exist in the column systems.
+
+
+The method above is useful when there is a list of known strings to search for, such as FQDNs. However, often there is only a substring available, such as wkstn. 
+
+
+3. Display all systems containing the substring wkstn in their FQDN by entering and executing the following:
+for i in df['systems'].unique():
+    wkstn_hunt = re.search("wkstn", i)
+    if wkstn_hunt:
+        print("Discovered " + i)
+
+
+
+The search result prints only the FQDNs that meet the criteria in the code. These results indicate that the search is case-sensitive. 
+
+
+4. Ignore casing in the search results by adding re.IGNORECASE to the argument and executing the search, again, as follows:
+for i in df['systems'].unique():
+    wkstn_hunt = re.search("wkstn", i, re.IGNORECASE)
+    if wkstn_hunt:
+        print("Discovered " + i)
+
+
+
+This results in the regular expression search and filtering provide the most accurate results, according to the search criteria.
+
+
+
+
+
+![image](https://github.com/user-attachments/assets/12a027b5-12c0-47ac-ba90-58e0ddd4a0bb)
