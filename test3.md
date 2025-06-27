@@ -6019,6 +6019,7 @@ slice1 = slice(5)
 
 The ou tput is  cleane r to re ad.
 
+The output provides five sliced fields to give where before there wasnt 10 fields to give
 
 ![image](https://github.com/user-attachments/assets/ce0ee2d7-975f-4f78-b3c3-50b201506941)
 
