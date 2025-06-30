@@ -7855,3 +7855,415 @@ Modify the log_script_2 to search for the term sudo within the /var/log director
 ![image](https://github.com/user-attachments/assets/c2be34ec-db32-4c9c-80cc-c51bb129db82)
 
 
+![image](https://github.com/user-attachments/assets/0a2d3cd0-4999-4002-9561-d76f9b73f2d1)
+
+Which command is used to list all crontab scheduled tasks on the host?
+![image](https://github.com/user-attachments/assets/c31daf79-e34a-4935-8826-2073ae53b5b4)
+
+Which command is used to modify the crontab on the host?
+![image](https://github.com/user-attachments/assets/9e5d307c-0236-4086-b051-b5d1e6ea7eb3)
+
+Which syntax schedules log_script_2 to execute at 9 a.m., 12 p.m., and 5 p.m. every weekday?
+![image](https://github.com/user-attachments/assets/a302483c-f3e6-4856-8c30-64ff38a200e1)
+
+Crontab Syntax
+The following syntax schedules log_script_2 to execute at 9 a.m., 12 p.m., and 5 p.m. every weekday:
+
+﻿
+
+0 9,12,17 * * 1-5
+﻿
+
+In the syntax, the * indicates that the script can execute on all possible values in each field. For this script, the fields are MIN, DOM, and MON. 9,12,17 indicates the hours the script executes, meaning 9 a.m., 12 p.m., and 5 p.m.. The numbers 1-5 in the DOW field indicate that the script executes on Monday (1), Tuesday (2), Wednesday (3), Thursday (4), and Friday (5) (weekdays). 
+
+ 
+
+Crontab can be a complex syntax to use without practice. The resources below assist in providing proper syntax when a desired schedule is input. 
+
+﻿
+
+
+
+#############CDAH-M15L2-Perl and Perl Regular Expressions###############
+
+Perl Scripting Overview
+Perl is a stable, general-purpose programming language used for a wide variety of tasks, such as system administration, web development, and programming. Perl can integrate into such databases as Oracle, MySQL, and PostgreSQL and can also work with other markup languages such as Hypertext Markup Language (HTML) and Extensible Markup Language (XML). 
+
+﻿
+
+Perl, which is open source, is popular in web programming due to its text manipulation capabilities and rapid development cycle. Perl also has the ability to work in an interactive mode. 
+
+﻿
+
+The following command prints the output Hello World:
+
+perl -e 'print "Hello World\n"'
+﻿
+
+Perl also allows users to add comments to code to provide supporting information. This can be done with the following format:
+
+# This is a comment.  
+
+Perl Data Types
+An interpreter is a program that directly executes program instructions written in one of the many high-level programming languages. The interpreter transforms the high-level program into an intermediate language that it then executes.
+
+﻿
+
+The Perl interpreter automatically selects one of three data types in Perl, based on the data itself. The data types are scalars, arrays, and hashes. 
+
+﻿
+
+Scalars
+﻿
+
+A scalar, the most basic Perl data type, represents a single unit of data: an integer, a floating point, a character, a string, a paragraph, or an entire web page. A scalar is preceded by a dollar ($) symbol. 
+
+﻿
+
+Numeric scalars hold such values as whole numbers, integers, and floating points. Example code using numeric scalars is as follows:
+
+$integer = 100;
+$negativeint = -150;
+$floating = 11.5;
+
+print "integer = $integer\n";
+print "negative = $negativeint\n";
+print "floating = $floating\n";
+
+#Output
+integer = 100
+negative = -150
+floating = 11.5
+﻿
+
+String scalars hold values like a word or paragraph. String scalars require double-quoted strings, as single quotes behave differently with a string. 
+
+﻿
+
+Example code using string scalars is as follows:
+
+$var = "This is a string.";
+$qoute = 'This is a single quoted string - $var';
+$double = "This is a double quoted string - $var";
+$escape = "This is an example of an escape -\tHello, World!";
+
+print "var = $var\n";
+print "quote = $quote\n";
+print "double = $double\n";
+print "escape = $escape\n";
+
+#Output
+var = This is a string.
+quote = This is a single quoted string - $var
+double = This is a double quoted string - This is a string.
+escape = This is an example of an escape - Hello, World!
+﻿
+
+The scalar data type also includes scalar operations, such as addition, subtraction, and multiplication, that can be performed on strings and integers. 
+
+﻿
+
+Arrays
+﻿
+
+An array is a variable that stores an ordered list of scalar values. Array variables are preceded by the @ symbol. To refer to a single element within an array, the $ symbol prefixes the variable name, followed by the index of the element in square brackets. 
+
+﻿
+
+When an array is created, the data is populated within parentheses or the qw// operator. The qw// operator returns a list of strings separating the delimited string by white space. An example of using the qw// operator is the following:
+
+@days = qw/Monday
+Tuesday
+…
+Sunday/;
+﻿
+
+When individual elements of an array are being accessed, the variable must be prefixed with a $, and the element index must be appended within the square brackets [ ] after the name of the variable. An example is as follows:
+
+@months = qw/Jan Feb Mar Apr May Jun Jul Aug/;
+
+print "$month[1]\n";
+print "$month[5]\n";
+
+#Output
+Feb
+Jun 
+﻿
+
+Array indexes start from 0, so to access the first element of an array, 0 is provided as the index number. A negative number may also be provided as an index number, in which case the elements would be counted from the end instead of from the beginning of the array, and -1 would be the last element in the array. 
+
+﻿
+
+A shortcut exists in Perl arrays that can be used for sequential numbers and letters. Using sequential number arrays, users avoid entering all elements of a series (for example, all elements from 1 to 100 or from a to z). Examples are as follows:
+
+@array = (1..9); #array with numbers 1 to 9
+@array = (a..h); #array with letters from a to h
+﻿
+
+Hashes
+﻿
+
+A Perl hash, also called an associative array, is defined by key-value pairs. Descriptive keys are used to access a hashed element. The prefix for a hash variable is a percentage (%) symbol. Elements within a hash are separated by a comma or by using => as an alias. This makes it easier to distinguish the key-value pairs when they are in a large list. An example of a simple hash is as follows:
+
+%employeedata = ('Jeff' => 31, 'Lauren' => 24, 'Andrew' => 56);    
+﻿
+
+The above example is one way to create a hash in a list format. Hashes can also be created by assigning a value to a key on a one-to-one basis. This method is useful for smaller amounts of data and makes reading the data easier. 
+
+﻿
+
+To access individual elements from a hash, the variable must be prefixed with a $, and the element key must be appended within curly brackets { } after the name of the variable. An example is as follows:
+
+%employeedata = ('Jeff' => 31, 'Lauren' => 24, 'Andrew' => 56);
+print "$employeedata{'Jeff'}\n";
+print "$employeedata{'Lauren'}\n";
+
+#Output
+31
+24
+﻿
+
+It is also possible to extract part of a hash in the form of an array. This can be done using the @ prefix for the array variable to store the returned value in a list form. An example is as follows:
+
+%employeedata = ('Jeff' => 31, 'Lauren' => 24, 'Andrew' => 56);
+@array = @employeedata{'Jeff', 'Andrew'};
+print "Array : @array\n";
+
+#Output
+Array : 31 56
+﻿
+
+With the Perl hash data type, it is possible to return a list of all the keys or all the values within a hash (using the keys function or values function, respectively). The syntax for the keys function is keys %hash, and the syntax for the values function is values %hash. Examples are as follows:
+
+%employeedata = ('Jeff' => 31, 'Lauren' => 24, 'Andrew' => 56);
+@names = keys %employeedata;
+print "$names[0]\n";
+print "$names[1]\n";
+print "$names[2]\n";
+
+#Output
+Jeff
+Lauren
+Andrew
+
+%employeedata = ('Jeff' => 31, 'Lauren' => 24, 'Andrew' => 56);
+@ages = values %employeedata;
+print "$ages[0]\n";
+print "$ages[1]\n";
+print "$ages[2]\n";
+
+#Output
+31
+24
+56
+
+Operators and Variables
+In Perl, numerous operators exist that provide different functions and operations for a script. Perl provides operators that can help with numeric operations, including arithmetic, Boolean, and bitwise operations.
+
+﻿
+
+Arithmetic operators deal with basic math operations of adding, subtracting, multiplying, and dividing. Examples of these operators in use are as follows:
+
+print 10 + 25, "\n";
+print 30 - 20, "\n";
+print 100 * 100, "\n";
+print 50 / 2, "\n"; 
+
+#Output
+35
+10
+1000
+25
+﻿
+
+When combining the above operators, Perl performs the calculations using operator precedence, where multiplication and division have higher precedence than addition or subtraction. Parentheses force Perl to perform the calculations based on user preference. 
+
+﻿
+
+Perl equality operators, or relational operators, compare numbers within a script. Table 15.2-1 provides descriptions and examples of the equality operators:
+
+﻿![image](https://github.com/user-attachments/assets/2b0e2ee1-e747-4977-82f3-9ca5080b6074)
+
+ Perl also has operators that can be used for string comparison. Table 15.2-2 provides descriptions and examples of these operators:
+
+ ![image](https://github.com/user-attachments/assets/61fd4d34-4a18-4474-864c-e60db339dfca)
+
+ 
+
+Perl variables are the reserved memory locations that can store values. When a variable is created, memory space is reserved for it. Based on the data type of a variable, the interpreter decides what can be stored in the reserved memory. By assigning different data types to variables, integers, decimals, and strings can be stored in these variables. 
+
+
+File, Directory, and Error Handling
+File handling in Perl consists of associating a file handle with a file and using a variety of operators and functions to read and update the data stored with the datastream associated with the file handle. A file handle is an internal Perl structure that associates a physical file with a name. Through the file handle, it is possible to read and write from or to the file, depending on how the file is opened. 
+
+﻿
+
+The open() function can be used to open files. This function has three parameters that can be used:
+
+Filehandle: The variable that associates with the file (for example, FH).
+Mode: The mode in which the file is opened. (See Table 15.2-3 for modes.)
+Filename: The path to the file being opened.
+﻿Table 15.2-3 provides the operators and descriptions of the modes that can be used when opening a file:
+
+﻿![image](https://github.com/user-attachments/assets/a1e2e76c-03a5-4ec2-9cd7-3d03f71a5a4b)
+
+
+
+The following is an example of opening a file in read mode:
+open(FH, '<' 'home/trainee/test.txt');
+
+while(FH) {
+   print "$_";
+}
+
+
+
+To close a file handle in Perl, the close() function is used. Once a file is processed, it should be explicitly closed. If no file handle is specified, Perl closes the currently selected file handle. An example using syntax for the close function is as follows:
+open(FH, '<' 'home/trainee/test.txt');
+
+while(FH) {
+   print "$_";
+}
+close(FH)
+
+
+
+The read function reads a block of information from the file handle. The syntax for the read function is as follows:
+read FILEHANDLE, SCALAR, LENGTH, OFFSET
+
+
+
+The length of the data read is defined by LENGTH, and the data is placed at the start of SCALAR if no OFFSET is specified. The function returns the number of bytes read on success, 0 if the end of file is reached with no bytes read, or undef if there was an error. 
+
+
+The main function used to return information from file handles is the print function. The syntax for the print function is as follows:
+print FILEHANDLE LIST
+
+
+
+The print function prints the value of LIST to FILEHANDLE or to the current output file handle. An example of the print function is as follows:
+
+print "This is a test"\n";
+
+
+
+The rename() function can be used to change the name of a file, as shown in the following example:
+
+rename("/home/trainee/test.txt", "/home/trainee/file1.txt");
+
+![image](https://github.com/user-attachments/assets/ea442693-8296-4057-af88-de83455c7261)
+
+Perl has multiple ways to list all the files within a directory. One of the simplest ways is to use the glob() operator, and the opendir() function also makes this possible. Examples of these functions is as follows (where $dir represents the directory of the files to be listed):
+$dir = "home/trainee/*";
+@files = glob($dir);
+
+foreach(@files) {
+	print $_. "\n";
+}
+
+
+$dir = "home/trainee/*";
+opendir (DIR, $dir)
+while(($filename = readdir(DIR))) {
+	print("$filename\n");
+}
+
+
+
+Directories may be created, removed, or changed by using the mkdir, rmdir, or chdir function, respectively. These functions require the correct permissions to create or remove a directory. 
+
+
+Perl has multiple functions for handling errors. The warn function raises a warning message printed to STDERR. This function is useful for printing a warning to a user. The die function is similar to warn but will also exit the script. The die function can be used if the script must be stopped due to an error in the program. Examples of the warn and err functions are as follows:
+chdir('/home') or warn "Can't Change Directory";
+
+
+chdir('/home') or die "Can't Change Directory";
+
+
+What is the command to run 'print "Hello World\n"' in interactive mode?
+![image](https://github.com/user-attachments/assets/c25174af-1c53-4301-9911-ba7dba9e0125)
+
+
+Perl Regular Expressions
+A Perl Regular Expression (RegEx) is a pattern that provides a flexible and concise means to match a string of characters. A RegEx may be simple or complex, depending on what pattern is being matched. The method for applying a RegEx is to use the pattern-binding operators =~ and !~. The =~ is a test and assignment operator. The operator !~ is just like =~, except the return value is negated in the logical sense. Perl includes three RegEx operators, as follows:
+
+m// - Match
+s/// - Substitute
+tr/// - Transliterate
+
+The forward slashes in each operator act as a delimiter for the specified RegEx. If any delimiters are being used, they can be used in place of a forward slash.
+
+﻿
+
+The match operator is used to match a RegEx with a string or statement. The string that is passed to the match operator can be enclosed within any character that can be used as a delimiter to a RegEx. For example, m// is the same as m{}, m(), or m><. They are all valid delimiters for the RegEx. The only difference is that when using the forward slashes as delimiters, the m from m// can be omitted. When using any other delimiters, however, the m must be included as the prefix.
+
+﻿
+
+The match operator also has its own set of modifiers that modify the RegEx, as follows:
+
+i - Makes the match case insensitive.
+m - Specifies that if the string has newline characters, the ^ and $ operators now match against a newline boundary instead of a string boundary.
+o - Evaluates the expression only once.
+s - Allows the use of . to match a newline character. 
+x - Allows the use of white space in the expression for clarity.
+g - Globally finds all the matches.
+cg - Allows the search to continue even after a global match fails.
+﻿
+
+In addition to the operators above, the ?PATTERN? operator can be used to match only once within the string that is being searched.
+
+﻿
+
+Perl has RegEx variables that all have different meanings. The $& contains the entire matched string, $` contains everything before the matched string, and $' contains everything after the matched string, as the following examples show:
+
+############down below look in between // in this example =~ m/is/; ########################
+
+$string = "This is a test string.";
+############$string =~ m/is/;#################
+print "Before: $`\n";
+print "Matched: $&\n";
+print "After: $'\n";
+
+#Output
+Before: This
+Matched: is
+After: a test string.
+﻿
+
+The substitution operator s/// allows for matching text to be replaced with new text. The syntax for this operator is s/PATTERN/REPLACEMENT/;. The PATTERN is the RegEx for the text being searched for. The REPLACEMENT is a specification for the text or RegEx being used to replace the found text. 
+
+﻿
+
+Similar to the match operator, the substitution operator also has its own set of modifiers, as follows:
+
+i - Makes the match case insensitive.
+m - Specifies that if the string has newline characters, the ^ and $ operators now match against a newline boundary instead of a string boundary.
+o - Evaluates the expression only once.
+s - Allows the use of . to match a newline character. 
+x - Allows the use of white space in the expression for clarity.
+g - Replaces all occurrences of the found expression with the replacement text.
+e - Evaluates the replacement as if it were a statement and uses its return value as the replacement text. 
+
+The translation, or transliteration, operator does not use regular expressions for its search or replacement values. The translation operators are tr/SEARCHLIST/REPLACEMENTLIST/cds and y/SEARCHLIST/REPLACEMENTLIST/cds. The translation replaces all occurrences of the characters in SEARCHLIST with the corresponding characters in REPLACEMENTLIST. 
+
+﻿
+
+Standard Perl ranges can also be used with the translation operator. This allows ranges of characters to be specified either by letter or number to be replaced. For example, to change the case of the string, the following syntax can be used:
+
+$string =~ tr/a-z/A-Z/;
+﻿
+
+The translation operator also has a list of operators that can be used to modify the characters. The following are the operators related to translation:
+
+c - Complements SEARCHLIST.
+d - Deletes the characters matching SEARCHLIST that do not have a corresponding entry in REPLACEMENTLIST.
+s - Removes the duplicate sequences of characters that were replaced.
+
+Other, more complex regular expressions can be used to match anything that is needed for a given situation. Table 15.2-5 provides some of the most common complex regular expressions:
+
+﻿![image](https://github.com/user-attachments/assets/92174502-c144-461b-9d28-c898f127934c)
+
+
+What is the RegEx pattern for matching white space?
+
+![image](https://github.com/user-attachments/assets/13e51690-100a-4636-b8c4-c27c6e8a8198)
