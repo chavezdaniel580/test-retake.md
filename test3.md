@@ -8715,3 +8715,80 @@ Using the commands from the previous lab, search for flag0 in the sakila databas
 
 
 ﻿
+SQL Injection Overview
+Most modern web applications use some sort of database for permanent storage. SQL is one of the most popular database choices of developers. Using SQL, the applications create queries to read and write information in the database. 
+
+﻿
+
+In addition, most web applications implement user input as part of the SQL queries. SQL is often constructed as a string in the underlying language and passed to the database. If developers are not careful with user input, users might be able to modify the query structure and change the intended behavior of the queries using the SQL query syntax. This can result in a SQL Injection (SQLi). 
+
+﻿
+
+An SQLi is a vulnerability that allows an attacker to use custom user input to manipulate SQL statements passed to the SQL database. This manipulation might compromise the server and allow unauthorized access to files or enable other attacks.
+
+﻿![image](https://github.com/user-attachments/assets/37850908-9318-4707-9ec3-2e61d1d766d9)
+
+
+ 
+The query to return data from this table that matches the admin string is as follows:
+SELECT * FROM users WHERE uname = 'admin';
+
+
+
+The above query returns the following:
+1,admin,Admin2022!!,y,admin 
+
+
+
+If a web application were created to show a full name (fname) for a user-provided user, the web application would use the following command:
+
+input = read_data_from_user()
+SELECT fname FROM users WHERE uname = '$input';
+
+
+
+The user would input data into a web form that would be passed to the input variable. The SELECT statement would run and return the appropriate fname that matched the input uname. For example, if the user input will, it would return will o'brien.
+
+
+An attacker could manipulate the input by adding a single quotation mark ('), which would close the string in the SELECT statement and cause an error. The syntax for the attacker's statement is as follows:
+SELECT fname FROM users WHERE uname = ''';
+
+
+
+If the SQL server were not properly configured, it might or might not respond with an error to the attacker. If an attacker were able to see an error response, the attacker might then attempt to dump all the data within the SQL database. This could be done using one of the methods in Table 15.3-7 to complete an SQLi:
+
+
+![image](https://github.com/user-attachments/assets/2389a9dd-4a89-4372-aac2-11000c32186e)
+
+
+An attacker could also attempt to gather other information by combining queries with the SQL UNION operator. Because the UNION operator could be used only with queries of the same column count, attackers could use the SELECT statement to figure out how many columns are in the table.  
+
+
+Attackers can sequentially request the SELECT statement to be ordered by a different column using the user input of *' order by 2 ;--. This sorts the returned data by the second column. If the query returns an error, there is only one column. If data is returned, there are at least two columns. An attacker then repeats this statement and increases the column count each time until an error returns. 
+
+
+The following scenario is an example of how an attacker could dump the contents of the passwords saved in the user’s table. 
+
+
+First, an attacker issues a command to return all the table names in the database, as follows:
+' UNION SELECT * FROM information_schema.tables; – 
+
+
+
+This returns the table named users. Next, the attacker returns all the column names, as follows:
+' UNION SELECT * FROM information_schema.columns WHERE table_name='users';--
+
+
+
+This returns uid, uname, pass, admin, fname in the example. Now that the attacker has an idea of the table structure, it is possible for the attacker to dump the passwords saved in the table one column at a time using the following command:
+' UNION SELECT pass FROM users ; –
+
+
+
+If, during a hunt, an analyst discovers any traffic associated with an SQL server containing the keyword SELECT followed by information_schema, information_schema.columns, or UNION SELECT, then the traffic is worth investigating. 
+
+
+![image](https://github.com/user-attachments/assets/4ecdfa27-9e79-4a16-8f0d-c22e22805d7d)
+
+
+![image](https://github.com/user-attachments/assets/af905a2c-2a7f-4cd2-b511-39fcd5d93b19)
