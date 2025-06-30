@@ -7357,3 +7357,501 @@ cat ~/Documents/IOCs.txt | xargs -i egrep -i {} *.txt
 ![image](https://github.com/user-attachments/assets/bbb2b4b0-a13b-42ff-8c4a-1e5f9d406aeb)
 
 
+Compound Commands
+A compound is a command executed in a subshell environment, current shell environment, or group, or evaluated as an arithmetic expression or conditional expression — or it may be a series of commands executed within several flow control constructs. Commands can be executed in the foreground (sequentially) and in the background (asynchronously). Multiple commands are separated by a semicolon, and any command that has the ampersand (&) associated with it is executed asynchronously while the next command is started before waiting for the background command to finish. Table 15.1-1 describes the format for some compound command constructs. Additional explanations follow later in this lesson.
+
+![image](https://github.com/user-attachments/assets/5f0a3b31-d6d2-4560-bf78-6c8e7bf32a1b)
+
+
+Quoting
+Quoting is used to remove the special meaning of certain characters or words to the shell. This disables any special treatment those characters or words may have and forces the shell to treat reserved words or characters as the actual character needed and not use them for things like parameter expansion. The following meta-characters must be quoted to prevent them from separating words:
+
+﻿
+
+| & ; ( ) < > ! space tab﻿
+
+﻿
+
+Bash includes three types of quoting: escape character, single quotes, and double quotes. The escape character, a non-quoted backslash (\), preserves the literal value of the next character. Quoting characters in single quotes (') preserves the literal value of each character within the quotes. A single quote may not occur between single quotes, even when preceded by a backslash. Quoting characters with double quotes (") preserves the literal value of each character, with the exception of $, ', \, and, when history expansion is enabled, !. The backslash retains its special meaning only when followed by $, ', ", \, or <new line>.
+
+
+Flow Control
+The ability of Bash and other scripting languages to perform the same operation on multiple objects, perform loops, and branch execution paths is one of the most powerful aspects of scripting. The concept of flow control and conditional execution is present in all programming languages. The syntax is usually what differs between each language or environment. Bash uses the constructs in Table 15.1-2 for controlling flow for which commands are executed under specific conditions.
+
+﻿![image](https://github.com/user-attachments/assets/2a71ddab-87c2-4b1c-a9fb-7adb97a7b466)
+
+Statements
+case Statements
+﻿
+
+case statements allow for complex conditional statements and branches of execution to be tested in a way that does not require multiple if statements.
+
+case word in
+    pattern1)
+        statements
+    ;;
+    pattern2)
+        statements
+    ;;
+    *)
+        statements
+    ;;
+esac
+﻿
+
+if Statements
+﻿
+if list1; then list2; [ elif list3; then list4; ] … [else list5; ] fi
+﻿
+
+Conditional statements using if are one of the most common ways to control the execution of a script and perform specific actions based on a condition. The if conditional performs a test and then executes a list of commands. Additional tests may be performed if the previous test was non-zero, or false, using the elif construct, which can be thought of as else if. There is also a last case that is executed if all previous tests in the if block return false using the else construct. 
+
+Conditionals
+Conditional expressions are used in commands that require a predefined condition to be satisfied. When the condition is satisfied, the procedure executes. Table 15.1-3 provides the syntax used to define a conditional statement using conditional expressions: 
+
+﻿![image](https://github.com/user-attachments/assets/d99dce23-5c67-4609-98be-9b30dc05c128)
+
+ 
+
+The key difference between the conditional operators is the number of conditions that must be true to execute the command. With the && operator, all expressions used in the statement must be true. With the || operator, only one expression used in the statement must be true. 
+
+![image](https://github.com/user-attachments/assets/c80f4c48-5ddc-434b-8eeb-458c53f17350)
+
+![image](https://github.com/user-attachments/assets/2a4b989f-c0b5-4876-a7ba-fd8512b0a36a)
+
+![image](https://github.com/user-attachments/assets/e85c175f-3ec1-4928-89ce-3a4529565378)
+
+Functions
+Bash functions allow users to group pieces of code, or code blocks, for reuse and efficient code design. Bash functions can be named and saved for later use within scripts. To declare a function, the following syntax is used:
+
+<function name> () {
+<commands>
+}
+﻿
+
+Functions can also be defined using one line of code:
+
+
+<function name> () { <commands>; }
+﻿
+
+The following is an example of the function Host1:
+
+
+Host1() {
+echo "cda-wks1"
+}
+﻿
+
+When the Host1 function is called upon, the following output is returned:
+
+echo $(Host1)
+
+cda-wks1
+
+
+Arrays
+An array is a defined variable that contains multiple values. The user may define any variable as an array, with no limit to the number of values contained within it. An array variable is zero based, meaning that the first item in the array is indexed with the number 0. The following syntax is used when defining an array:
+
+
+variable_name=(value1 value2 value3) 
+﻿
+
+The following is an example of the variable SCAN:
+
+
+SCAN="tcp 127.0.0.1 32"
+
+ Dictionaries
+Dictionaries allow users to define a collection of keys and values. Dictionary objects are defined with the following syntax:
+
+
+dictionary_name=(
+  [key_1]="value"
+  [key_2]="value"
+  [key_3]="value"
+)
+﻿
+
+Below is an example of the dictionary Host1: 
+
+
+Host1=(
+  [Name]="cda-wks1"
+  [OS]="win10"
+  [BitVersion]="x64"
+)
+﻿
+
+To return a specific value from the dictionary, the following syntax is used:
+
+
+echo ${dictionary_name[key]}
+﻿
+
+The following syntax returns the key Name from the Host1 dictionary:
+
+
+echo ${Host1[Name]}
+﻿
+
+The following output is returned:
+
+
+cda-wks1
+
+Scripting Practice
+Develop the Script
+﻿
+
+Create a script to read log files in the /var/log/ directory in search of a particular predefined string over a specific timeframe. If the string is found, append that log entry into a file on the desktop. 
+
+﻿![image](https://github.com/user-attachments/assets/2b502332-757e-48e8-8b6f-4be1a2819ad1)
+
+ Execute the Script
+
+
+Access and execute the newly developed script to query the /var/log directory in search of strings of text.
+
+
+Workflow
+
+
+1. In a new session, open Terminal. 
+
+
+2. Access root privileges by running the following command:
+
+[trainee@lin-hunt-cen ~]$ sudo su
+
+
+
+When prompted, enter the password for the trainee account:
+
+CyberTraining1!
+
+
+
+3. To execute the log_script, run the following command:
+
+[root@lin-hunt-cen trainee]# bash ./log_script
+
+
+
+After the command is executed, the following input request appears within the terminal:
+
+Enter String:
+
+
+
+4. Enter the following string, and select Enter:
+
+Enter String: root
+
+
+
+The script executes, looking for all occurrences of the string root within the /var/log directory. The results are displayed in the current terminal session. The script looks for any string that the user defines. To search for another string, the script can be executed again with the desired string. 
+
+
+The results of executing the script are similar to Figure 15.1-3 (but may differ slightly):
+
+![image](https://github.com/user-attachments/assets/39963d56-be48-4603-97a8-2b9272bfac9b)
+
+Bash Scripts and Crontab
+Within the Linux OS, the crontab allows users to schedule commands and processes to execute on a set interval. Crontab includes five fields, shown in Table 15.1-4:
+
+﻿![image](https://github.com/user-attachments/assets/bb6d84de-8252-4ff7-a4a8-2daeeeeb37ed)
+
+ All crontab fields are included in the syntax for scheduling a command. The crontab syntax is ordered as shown below:
+
+
+MIN HOUR DOM MON DOW
+
+
+A crontab field contains an asterisk (*), which represents all possible values in the specific field. 
+
+
+Table 15.1-5 provides examples of scheduled commands within crontab:
+
+![image](https://github.com/user-attachments/assets/6518e4fe-5e20-4abd-a7d6-51c68261da25)
+
+![image](https://github.com/user-attachments/assets/0227dd05-df7a-4ee5-a71a-0c4b181cb624)
+
+Knowledge Check Explained
+The following syntax schedules a command to execute every day at midnight (12 a.m.):
+
+
+0 0 * * *
+﻿
+
+The 0 value in both the MIN and HOUR fields indicates the command is executed at 00:00, midnight. 
+
+﻿
+
+The * value in the DOM MON DOW fields indicates that the command is executed on all possible values in each field. This means the command executes every day of the month, every month, and every day of the week.
+
+Crontab Practice
+Create an Optimal Bash Script for Crontab
+﻿
+
+Create a Bash script that queries the /var/log directory and can be executed on a scheduled basis.  
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the VM lin-hunt-cent using the following credentials:
+
+
+Username: trainee
+Password: CyberTraining1! 
+﻿
+
+2. Open Terminal.
+
+﻿
+
+3. Access root privileges by entering the following command:
+
+
+[trainee@lin-hunt-cen ~]$ sudo su
+﻿
+
+When prompted, enter the password for the trainee account:
+
+
+CyberTraining1!
+﻿
+
+4. To create a new script, enter the following command:
+
+
+[root@lin-hunt-cen ~]# vi log_script_2
+﻿
+
+The log_script Bash script developed during the previous section of this lesson required user input to query the /var/log directory. A script that requires user input is a quick and dynamic method to query based on different strings that may change frequently. To use crontab, the script requires modification, removing the required user input for script execution. If it is not removed, when the script executes, it waits for input and crontab does not complete the execution. For this lesson, a new script, log_script_2, is developed and used. 
+
+﻿
+
+5. Enter i to put Vi in insert-text mode. To start the script, enter the following code on line 1:
+
+
+#!/bin/sh
+﻿
+
+6. Enter the following on line 2:
+
+
+grep -ir root /var/log >> /home/trainee/Desktop/detections.txt
+﻿
+
+The grep command searches for the word root in /var/log. The -i following the grep command keeps the search case insensitive. 
+
+﻿
+
+The >> operator takes the results of the grep command and outputs it in a file, detections.txt, located on the path /home/trainee/Desktop. The >> operator appends the document; if the document contains text, it adds text to the document.  
+
+﻿
+
+11. Select esc, and enter :wq! to exit and save the crontab. 
+
+﻿
+
+12. Enter the following command to run the script:
+
+
+[root@lin-hunt-cen ~]# bash log_script_2
+﻿
+
+13. Enter the following command to view the output in detections.txt:
+
+
+[root@lin-hunt-cen ~]# vi /home/trainee/Desktop/detections.txt
+﻿
+
+Schedule a Bash Script
+﻿
+
+Access the crontab to implement scheduling automation for a Bash script. 
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the VM lin-hunt-cent using the following credentials:
+
+
+Username: trainee
+Password: CyberTraining1! 
+﻿
+
+2. Open Terminal.
+
+﻿
+
+3. Access root privileges by entering the following command:
+
+
+[trainee@lin-hunt-cen ~]$ sudo su
+﻿
+
+When prompted, enter the password for the trainee account:
+
+
+CyberTraining1!
+﻿
+
+4. Enter the following command:
+
+
+[root@lin-hunt-cen ~]$ sudo crontab -l
+﻿
+
+The following output is returned:
+
+
+no crontab for root
+﻿
+
+Crontab is accessed by the crontab operator.  crontab -l lists all crontab scheduled tasks on the machine. The output confirms that there are no current inputs within crontab.
+
+﻿
+
+5. Enter the following command:
+
+
+[root@lin-hunt-cen ~]$ systemctl status crond.service
+﻿
+
+The command confirms the status of the crond.service. The crond.service is the service associated with the crontab scheduled tasks. The output confirms the crond.service is active (running). 
+
+﻿
+
+If the cron.service is not running, the following command is used to start the service:
+
+
+[root@lin-hunt-cen ~]$ systemctl start crond.service
+﻿
+
+
+6. Enter the following command:
+
+
+[root@lin-hunt-cen ~]$ sudo crontab -e
+﻿
+
+crontab -e is the command used to define scheduled tasks.
+
+﻿
+
+
+7. Select i to access edit mode.
+
+﻿
+
+
+8. On the top line of the window, enter the following command, with spaces between each asterisk (*):
+
+
+5 * * * * ~/log_script_2
+﻿
+
+The command schedules the log_script_2 to execute every 5 minutes. 
+
+﻿
+
+NOTE: Each asterisk (*) represents a different time category, in the following order:
+
+﻿
+
+1. Minute (from 0 to 59)
+
+2. Hour (from 0 to 23)
+
+3. Day of month (from 1 to 31)
+
+4. Month (from 1 to 12)
+
+5. Day of week (from 0 to 6, where 0 = Sunday)
+
+﻿
+
+9. Select esc, and enter :wq! to exit and save the crontab. 
+
+![image](https://github.com/user-attachments/assets/2a216246-b26a-4903-9eb2-007bfb82ebcd)
+
+![image](https://github.com/user-attachments/assets/683ed54c-472a-4521-8d78-54773eb99916)
+
+Schedule and Use Bash Scripting
+Read the following scenario. Then use the skills and information regarding Bash scripts and the crontab to execute a script and schedule it to run automatically. Use the knowledge gained in the scenario and throughout the lesson to answer the questions that follow. 
+
+﻿
+
+Scenario 
+﻿
+
+A Cyber Protection Team (CPT) has been tasked with investigating account activity across a wide range of log files. Use the scripts developed in the previous lab to query directories.
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the VM lin-hunt-cent using the following credentials:
+
+
+Username: trainee
+Password: CyberTraining1! 
+﻿
+
+2. Open a new Terminal session.
+
+﻿
+
+3. Access root privileges by entering the following command:
+
+
+[trainee@lin-hunt-cen ~]$ sudo su
+﻿
+
+When prompted, enter the password for the trainee account:
+
+
+CyberTraining1!
+﻿
+
+4. Query the /var/log directory using the log_script for the term sudo.
+
+﻿
+
+5. When done, exit the script by pressing CTRL-C.
+
+   ############use script from earlier, looking for the term sudo################
+
+   ![image](https://github.com/user-attachments/assets/51b6e199-b0b3-4365-ac5e-b642985a26c7)
+
+
+Logs with Sudo
+Using the log_script, sudo is contained in logs with the paths /var/log/audit/audit.log and 
+/var/log/secure.
+
+﻿
+
+Both the audit.log and secure log collect and monitor data related to permissions and user accounts. Any use of sudo on the host is collected and appears in a query of the logs. 
+
+
+Modify a Script
+sudo is a command that allows the user to run an elevated prompt, giving the necessary permissions to change and modify host systems and processes. Uses of the sudo command should be reviewed for any unexpected or unusual activity. 
+
+﻿
+
+Workflow
+﻿
+
+Modify the log_script_2 to search for the term sudo within the /var/log directory, and output the script results into a document titled detections_sudo.txt, located in the /home/trainee/Desktop folder.
+
+![image](https://github.com/user-attachments/assets/c2be34ec-db32-4c9c-80cc-c51bb129db82)
+
+
