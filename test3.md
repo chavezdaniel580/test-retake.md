@@ -8267,3 +8267,451 @@ Other, more complex regular expressions can be used to match anything that is ne
 What is the RegEx pattern for matching white space?
 
 ![image](https://github.com/user-attachments/assets/13e51690-100a-4636-b8c4-c27c6e8a8198)
+
+
+Understanding Relational Databases
+A relational database uses structure to quickly identify and access data. The data within an RDBMS is stored in database objects called tables. A table is a collection of related data entries and consists of multiple columns and rows. A table is the most common form of data storage in a relational database. Tables can be linked based on common data from each table. This allows users to retrieve an entirely new table from data in one or more tables with a single query. This also allows businesses to understand the relationships between the data within the tables. 
+
+﻿
+
+Every table is broken down into smaller entities called fields. The field within a table is a column designed to hold specific data about every record in the table. A record is the individual, specific entry that exists within a table. A record is a row within a table. Table 15.3-1 is an example of a table that contains fields and records:
+
+
+![image](https://github.com/user-attachments/assets/a13c671e-70ca-44c8-993e-f93a3aedd434)
+
+
+In the above example, Order Number, Name, and Amount Due are all fields, whereas 1, Steve, $56 represents one record.
+
+
+A NULL value in a table is a value that is blank. A field with a NULL value is a field with no value; the field was left blank during record creation.  A NULL value is different from a zero value or a field that contains spaces. 
+
+
+SQL constraints are the rules that are enforced for the data in a table. Constraints are used to limit the type of data that can go into a table. This ensures that the data in the table is accurate and true. If a violation occurs between a constraint and the data action, the action is aborted.
+ 
+Constraints may be either column level or table level. Column level applies only to one column, whereas table-level constraints apply to the entire table. 
+
+
+The following are some of the most commonly used constraints:
+
+NOT NULL: Ensures that a column cannot have a NULL value.
+UNIQUE: Ensures that all values in a column are different.
+PRIMARY KEY: A combination of a NOT NULL value and a UNIQUE value. Uniquely identifies each row in a table.
+FOREIGN KEY: Prevents actions that would destroy links between tables.
+CHECK: Ensures that the values in a column satisfy a specific condition.
+DEFAULT: Sets a default value for a column if no value is specified.
+CREATE INDEX: Is used to create and retrieve data from the database quickly.
+
+An RDBMS also has data integrity that exists within each database. The following are the categories of each type of data integrity:
+
+Entity integrity: Ensures that no duplicate rows exist in a table.
+Domain integrity: Enforces valid entries for a given column by restricting the type, format, or range of values.
+Referential integrity: Ensures that rows used by other records cannot be deleted.
+User-defined integrity: Enforces some specific business rules that do not fall into the entity, domain, or referential integrity types. 
+
+Comparison of Relational and Non-Relational Databases
+
+
+Non-relational databases also exist and can be used to store data. However, non-relational databases do not have tables or rows. Instead, non-relational databases use a storage model based on the specific requirements of the data being stored. 
+
+
+Four main types of non-relational databases exist:
+Document data stores
+Column-oriented databases
+Key-value stores
+Graph databases
+
+These four types of non-relational databases may be combined, depending on the data being stored.
+
+
+Non-relational databases are often used for the following reasons:
+Non-relational databases can store large amounts of data with little structure.
+Based on business requirements, non-relational databases can provide flexibility and scalability to change.
+Non-relational databases are document oriented and can capture all types of data, including unstructured data. 
+
+Relational databases work with structured data and use constraints to maintain a high level of data integrity. These databases also have indexing capabilities that allow for faster data queries. Relational databases are more secure than non-relational databases and add multiple levels of data integrity, which non-relational databases cannot do. Relational databases allow the ability to write complex SQL queries and are optimal for applications that have heavy-duty transactions. 
+
+
+Some commonly used relational databases are MySQL, Oracle, SQLite, PostgreSQL, and Microsoft SQL Server. Non-relational database examples are MongoDB, BigTable, Redis, RavenDB, Cassandra, and CouchDB. 
+
+![image](https://github.com/user-attachments/assets/12ac3068-a600-4546-97e7-e0a75b8d9cf2)
+
+SQL Syntax
+The SQL syntax often reads like a natural language. For example, an SQL statement or command begins with a verb that describes the action, such as SELECT, INSERT, UPDATE, or DELETE. Following the verb, the subject and conditions that can be evaluated as true, false, or unknown are provided. 
+
+﻿
+
+Every SQL statement ends with a semicolon (;) to signal that the statement has ended. SQL is also case insensitive: writing SELECT or select has the same meaning in SQL. (This lesson uses all-uppercase command verbs — for instance, SELECT — for clarity.) When working with MySQL, the table names are case sensitive. 
+
+Interaction Commands
+To interact with a database in SQL, users must enter queries with a specific syntax to perform commands on the database. 
+
+﻿
+
+The USE command is appropriate when a user wants to access a specific database among multiple SQL databases. The syntax is as follows:
+
+USE database_name;
+﻿
+
+The COMMIT command saves all modifications made in the current transaction since the last commit. If a user inserts multiple records into a table, using the COMMIT statement saves any changes made. The syntax is as follows:
+
+COMMIT;
+﻿
+
+The ROLLBACK command reverses any changes done during the current transaction. The command reverts all modifications to the point at which the last COMMIT command was run. The syntax for this command is as follows:
+
+ROLLBACK;
+﻿
+
+The SHOW command is a special query for viewing the information schema of any records stored in a database. This command can show databases, tables, columns, and many administration-level records. Examples of the SHOW command syntax are as follows:
+
+SHOW DATABASES; displays all existing databases on an SQL server.
+SHOW TABLES; displays all tables within a database.
+SHOW COLUMNS FROM tablename; displays the columns of a table.
+SHOW ERRORS; displays any database errors.
+﻿
+
+Definition Commands
+Two different CREATE commands may be used in SQL: CREATE DATABASE and CREATE TABLE.
+
+﻿
+
+CREATE DATABASE is used to create a new database within SQL. The syntax is as follows:
+
+CREATE DATABASE database_name;
+﻿
+
+Each database name should be unique within the RDBMS. Administrative privileges are needed to create a new database. 
+
+﻿
+
+SQL databases require tables, comprising multiple rows and columns, to store data. The CREATE TABLE command is used to create such a table. A table name, column names, type of data to be stored, and size of the data must be provided during table creation. The syntax of the CREATE TABLE command is as follows:   
+
+
+CREATE TABLE table_name
+(
+column1 data_type(size),
+column2 data_type(size),
+column3 data_type(size),
+....
+);
+﻿
+
+Each syntax element is described as follows:
+
+table_name:  Name of the table.
+column1, column 2, column 3, etc.: Names of the table columns.
+data_type: Type of data to be stored in the particular column (for example, int for integer data).
+size: Size of the data to be stored in a particular column. For example, if, for a given column, the data_type is specified as int and size as 10, then this column can store an integer number of a maximum of 10 digits.
+
+The DROP TABLE command removes a table definition and all the data, indexes, triggers, constraints, and permissions for that table. Once a table is deleted, all the information that was in that table is also deleted. The syntax for this command is as follows:
+
+DROP TABLE table_name;
+﻿
+
+The ALTER TABLE command adds, deletes, or modifies columns in an already existing table. This command can also be used to remove constraints on an existing table. The ALTER TABLE command has a variety of uses:
+
+ALTER TABLE table_name ADD column_name datatype; adds a new column to an existing table.
+ALTER TABLE table_name DROP COLUMN column_name; drops a column in an existing table. 
+ALTER TABLE table_name MODIFY COLUMN column_name datatype; changes the DATA TYPE of a column in a table.
+ALTER TABLE table_name MODIFY column_name datatype NOT NULL; adds a NOT NULL constraint to a column in a table.
+ALTER TABLE table_name
+ DROP CONSTRAINT MyUniqueConstraint; deletes a constraint from a table.
+
+The CREATE USER statement adds a user to the current database. The syntax is as follows:
+
+CREATE USER username FOR LOGIN login_name;
+﻿
+
+After the user is created, the username (login_name) and password are added. The syntax is as follows:
+
+CREATE LOGIN login_name WITH PASSWORD= 'password';
+﻿
+
+Each variation of SQL databases has a slightly different syntax to create a user. For example, the below command is used to create a user with MySQL:  
+
+
+CREATE USER 'trainee'@'localhost' IDENTIFIED BY 'CyberTraining1!';
+
+Manipulation Commands
+The SELECT command fetches data from a table, and the table returns the data in the form of a result table. Result tables are known as result sets. The syntax for the SELECT command is as follows:
+
+SELECT column1, column2, column3 FROM table_name;
+﻿
+
+It is also possible to return all the fields available in the table using the following command:
+
+SELECT * FROM table_name;  
+﻿
+
+The INSERT command adds new rows of data to a table within the database. The INSERT command can be used in two ways. An example of the syntax used for the first way is as follows:
+
+
+INSERT INTO Customer_Data (Order Number, Name, Amount Due)
+VALUES (5, Cameron, $35);
+﻿
+
+In the above example, Customer_Data is the table, and Order Number, Name, and Amount Due are the names of the columns in the table into which data is inserted. The corresponding values are the data that is inserted into each of the columns. 
+
+﻿
+
+If a case exists in which values are being added to every column in a table, the columns do not have to be specified. However, the order of the values must be the same order as the columns in the table. An example of the syntax for this second way of using the INSERT command is as follows:
+
+
+INSERT INTO Customer_Data VALUES (5, Cameron, $35);
+ 
+
+The UPDATE query can modify existing records in a table. To update a specific row and field, WHERE and SET must be used to specify the row and condition to be updated. The syntax for the UPDATE query is as follows:
+
+
+UPDATE table_name
+SET column1 = value1, column2 = value2
+WHERE [condition];
+﻿
+
+An example of the UPDATE query is as follows:
+
+
+UPDATE Customer_Data
+SET Amount Due = $0
+WHERE [Order Number] = 5;
+﻿
+
+The above example updates the Amount Due column to $0 for the Order Number 5.
+
+﻿
+
+The DELETE query deletes the existing records from a table. The WHERE clause can be used with the DELETE query to delete a specific row. If no row is specified, all records in the table are deleted. The syntax for this query is as follows: 
+
+
+DELETE FROM table_name
+WHERE [condition];
+
+
+ Control Commands
+The GRANT command grants permissions on database objects to specific users or roles. Table owners often give other users access to data with the GRANT command. The general syntax for this command is as follows:
+
+
+GRANT <some permission> ON <some object> TO <some user, login, or group>
+﻿
+
+As an example, the below command gives all permissions to the databases within the SQL server to the user trainee: 
+
+
+GRANT ALL ON *.* TO trainee@localhost;  
+﻿
+
+The REVOKE command revokes the privileges or roles of an account. The syntax is as follows: 
+
+
+REVOKE
+privilege1, privilege2, privilege3
+ON [object_type] priv_level
+TO user_or_role1, user_or_role2, user_or_role3
+﻿
+
+The following command revokes all privileges for a user:
+
+REVOKE ALL [PRIVILEGES], GRANT OPTION
+   FROM user_or_role [, user_or_role] 
+
+ Control Commands
+The GRANT command grants permissions on database objects to specific users or roles. Table owners often give other users access to data with the GRANT command. The general syntax for this command is as follows:
+
+
+GRANT <some permission> ON <some object> TO <some user, login, or group>
+﻿
+
+As an example, the below command gives all permissions to the databases within the SQL server to the user trainee: 
+
+
+GRANT ALL ON *.* TO trainee@localhost;  
+﻿
+
+The REVOKE command revokes the privileges or roles of an account. The syntax is as follows: 
+
+
+REVOKE
+privilege1, privilege2, privilege3
+ON [object_type] priv_level
+TO user_or_role1, user_or_role2, user_or_role3
+﻿
+
+The following command revokes all privileges for a user:
+
+REVOKE ALL [PRIVILEGES], GRANT OPTION
+   FROM user_or_role [, user_or_role] 
+
+
+   Clauses
+The DISTINCT clause is used in conjunction with the SELECT command to eliminate any duplicate records and to fetch only the unique records. If a situation exists in which there are multiple duplicate records in a table, the DISTINCT clause can be used to fetch only the unique records and not the duplicates. The syntax for this clause is as follows:
+
+
+SELECT DISTINCT column1, column2
+FROM table_name
+WHERE [condition]
+﻿
+
+The WHERE clause can specify a condition while fetching the data from a table or tables. If the given condition is satisfied, the clause returns a specific value from the table. The WHERE clause filters through the records in a table and fetches only the records that are necessary. The clause is used with multiple SQL commands, such as SELECT, UPDATE, and DELETE. The syntax for the WHERE clause is as follows:
+
+WHERE [condition]
+﻿
+
+An example of using the WHERE clause is as follows:
+
+
+UPDATE Customer_Data
+SET Amount Due = $0
+WHERE [Order Number] = 5; 
+﻿
+
+The LIKE clause can compare a value to similar values using wildcards. This clause is used with the SELECT command and the WHERE clause. Two wildcards are used with the LIKE clause:  the percent (%) symbol  and the underscore (_) symbol. The % symbol represents zero, one, or multiple characters, and the _ symbol represents a single number or character. The following examples illustrate the syntax for the LIKE clause.
+
+﻿
+
+The command below finds any values that start with the given value (in this case, '200'):
+
+SELECT * FROM table_name
+WHERE column LIKE '200%';
+﻿
+
+The command below finds any values that end with a given value (in this case, '3'): 
+
+SELECT * FROM table_name
+WHERE column LIKE '%3';
+﻿
+
+The command below finds any values that begin with 40 and have three characters in length: 
+
+
+SELECT * FROM table_name
+WHERE column LIKE '40_';
+﻿
+
+The command below finds any values that start with a 2 and end with a 3:
+
+SELECT * FROM table_name
+WHERE column LIKE '2_3';
+﻿
+
+The ORDER BY clause can sort the data in ascending or descending order, based on one or more columns. Some databases sort the query results in ascending order by default. The syntax for this clause is as follows:
+
+
+SELECT column-list
+FROM table_name
+[WHERE condition]
+[ORDER BY column1, column2, column3] [ASC | DESC];
+﻿
+
+An example of using this clause to sort the records of the previously mentioned customer_data table in ascending order by name is as follows:
+
+
+SELECT * FROM CUSTOMER_DATA
+ORDER BY NAME
+ 
+
+The GROUP BY clause is used in conjunction with the SELECT command to arrange identical data into groups. The GROUP BY clause can be used with the ORDER BY clause to sort the data in a specific order. The GROUP BY clause must come before the ORDER BY clause if the ORDER BY clause is included in the full command. However, if a WHERE clause exists in the command, the GROUP BY clause comes after the WHERE but before the ORDER BY clause. The full syntax of the GROUP BY clause used with the ORDER BY clause is as follows:
+
+
+SELECT column1, column2
+FROM table_name
+WHERE [ conditions ]
+GROUP BY column1, column2
+ORDER BY column1, column2
+﻿
+
+The COUNT clause returns the number of records returned by a SELECT command. The syntax for this clause is as follows:
+
+
+SELECT COUNT([DISTINCT] <column_name>)
+FROM <table_name>
+
+
+ Operators
+An SQL operator is a word or character that performs an operation. An SQL operator is similar to an expression in other languages. Operators specify conditions in an SQL command and serve as conjunctions for multiple conditions in a command. Operators are often used in conjunction with the WHERE clause. The main types of operators are arithmetic, logical, and comparison operators. 
+
+﻿
+
+Arithmetic operators perform various mathematical operations on the data stored in a table. The syntax used for these operators is as follows:
+
+
+Select <expression1> operator <expression2> 
+﻿
+
+Example syntax for an arithmetic operator is as follows:
+
+
+SELECT 10 + 2
+![image](https://github.com/user-attachments/assets/ef181dab-b342-48ce-85f3-de07652ac23e)
+
+Comparison operators compare one value to another value or one expression to another expression. The syntax for these operators is as follows:
+SELECT column FROM table_name WHERE condition1 Relational Operator condition2;
+
+
+
+Example syntax for a comparison operator is as follows:
+
+SELECT FName, salary FROM finance where salary =5000;
+
+
+
+Table 15.3-3 describes SQL comparison operators:
+![image](https://github.com/user-attachments/assets/95f7faed-2628-4aac-ad08-3e92efd312a7)
+
+
+
+
+Logical operators perform true or false operations. They provide a true or false value based on the provided values and the operator that is used. The syntax for the logical operator is as follows:
+
+SELECT col name  * | expr [logical operator] [col name | * | expr..] FROM tablename
+WHERE <expr> [ logical operator |
+arithmetic operator | ...] <expressions>;
+
+
+
+An example of a logical operator is as follows:
+
+SELECT fid,FName,address,salary
+FROM finance
+WHERE FName = 'Leslia' AND  salary = 2500;
+
+
+![image](https://github.com/user-attachments/assets/75e06e2e-ddce-4294-a577-332b6e1dcbf0)
+
+The UNION operator combines the result set of two or more SELECT statements. Every SELECT statement within UNION must have the same number of columns, and they must also have similar data types. The columns in every SELECT statement must also be in the same order. The syntax for the UNION operator is as follows:
+
+SELECT column_name(s) FROM table1
+UNION
+SELECT column_name(s) FROM table2;
+
+
+
+![image](https://github.com/user-attachments/assets/2720088a-cf34-4099-9cde-cd7bf21b017d)
+
+Using the commands from the previous lab, search for flag0 in the sakila database. In which district is the "flag0" address?
+
+
+
+
+
+![image](https://github.com/user-attachments/assets/dec3a886-2ab0-4fa5-88d6-857860b7c956)
+
+
+
+![image](https://github.com/user-attachments/assets/9ccf57cc-6137-4fe9-9159-c3e7617ea0a3)
+
+
+![image](https://github.com/user-attachments/assets/7ff9092a-c6e0-45d1-8d6b-6e2db732422e)
+
+
+![image](https://github.com/user-attachments/assets/28523caa-a738-442f-a093-654dc8f7fe98)
+
+
+
+![image](https://github.com/user-attachments/assets/a958056d-d409-4944-99c9-7e58db7bafd5)
+
+
+![image](https://github.com/user-attachments/assets/c2aa42b9-d119-403c-b3ee-7314403c1335)
+
+
+
+﻿
