@@ -8795,7 +8795,27 @@ If, during a hunt, an analyst discovers any traffic associated with an SQL serve
 
 1 search with file explorer 11,1
 
+![image](https://github.com/user-attachments/assets/0f6da1a3-3756-4a19-8fa4-3741f2f4139e)
+
+![image](https://github.com/user-attachments/assets/f92b6280-2e6e-4654-a949-4b1670459f12)
+
+![image](https://github.com/user-attachments/assets/2689cd9e-a2f8-4fb5-9b1e-3bd464536451)
+
+
+![image](https://github.com/user-attachments/assets/1e96af0f-34d1-4154-ae66-c4ad06a461d3)
+
+
+
 2 looking with active directory get-aduser idenity etc 11.2
+
+![image](https://github.com/user-attachments/assets/18dffefe-0223-42bd-9ea4-47c4d56d3dfa)
+
+![image](https://github.com/user-attachments/assets/7b1487db-cb73-4712-aee5-d67102f7955c)
+
+![image](https://github.com/user-attachments/assets/db60a4cb-0daa-4445-8887-b4429ddecfc6)
+
+
+
 
 3 4 open script and run command let instead of trying to import 11.3 11.5
 
