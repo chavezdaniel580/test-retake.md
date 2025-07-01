@@ -8864,6 +8864,12 @@ If, during a hunt, an analyst discovers any traffic associated with an SQL serve
 
 12 interacting with the interacting python will tell use exactly what to run and get info from results 13.1
 
+![image](https://github.com/user-attachments/assets/3df565f1-30df-4fac-a28e-3e240b40631d)
+
+
+![image](https://github.com/user-attachments/assets/a4ffa33f-0ef0-4fc1-a69e-1a79f897d470)
+
+
 13 open python folder and make changes to the script base on what the question is asking 13.2
 
 14 in nuggets folders python help script make modification baseed on what is being asked will run agaisnt checker script but if all else go in script to get the file to find the awnsers13.3
