@@ -8795,6 +8795,8 @@ If, during a hunt, an analyst discovers any traffic associated with an SQL serve
 
 1 search with file explorer 11,1
 
+search for string in file explorer
+
 ![image](https://github.com/user-attachments/assets/0f6da1a3-3756-4a19-8fa4-3741f2f4139e)
 
 ![image](https://github.com/user-attachments/assets/f92b6280-2e6e-4654-a949-4b1670459f12)
@@ -8865,7 +8867,7 @@ new-itemproperty -path hkcu\software\microsoft\...+
 8 run copmmand and tell about it 12.2
 papitas
 
-9 base64 decode 12.3
+9 base64 decode 12.3 (base64decode.org)
 frombase64
 strip null values
 iex(iwr
@@ -8875,7 +8877,7 @@ systeminfo
 
 11 use wmi go accross the wire with one off commands to get back results win32_ process win32_service win32_bios win32_...... 12.4
 
-Get-wmiobject -classname win32_service -property
+Get-wmiobject win32_service -cn dc01 -filter "Name='DNS'"
 
 12 interacting with the interacting python will tell use exactly what to run and get info from results 13.1
 
