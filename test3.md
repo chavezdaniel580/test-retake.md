@@ -8807,6 +8807,7 @@ If, during a hunt, an analyst discovers any traffic associated with an SQL serve
 
 
 2 looking with active directory get-aduser idenity etc 11.2
+get-aduser -identity bob.bonsion -properties *
 
 ![image](https://github.com/user-attachments/assets/18dffefe-0223-42bd-9ea4-47c4d56d3dfa)
 
@@ -8830,12 +8831,16 @@ If, during a hunt, an analyst discovers any traffic associated with an SQL serve
 
 
 3 4 open script and run command let instead of trying to import 11.3 11.5
+get-aduser -identity polly.vasquez
+get-aduser -identity polly.vasquez -properties passwordneverexpires
 
 ![image](https://github.com/user-attachments/assets/a965cf81-2d36-4a52-bd16-809ab117542f)
 
 ![image](https://github.com/user-attachments/assets/40d9e737-8733-4a7d-b59e-50e74b4ebe63)
 
 ![image](https://github.com/user-attachments/assets/a268014c-0c96-4173-ad75-2f2e5c6d4821)
+
+4 Get-Hotfix
 
 ![image](https://github.com/user-attachments/assets/f8b8670d-9450-431a-8105-f759d0d1e322)
 
@@ -8852,15 +8857,25 @@ If, during a hunt, an analyst discovers any traffic associated with an SQL serve
 
 6 important registry keys core 4
 
+look in script for persistence
+new-itemproperty -path hkcu\software\microsoft\...+
+
 7 use kibana 12.1
 
 8 run copmmand and tell about it 12.2
+papitas
 
 9 base64 decode 12.3
+frombase64
+strip null values
+iex(iwr
 
 10 use curl commands 12.3
+systeminfo
 
 11 use wmi go accross the wire with one off commands to get back results win32_ process win32_service win32_bios win32_...... 12.4
+
+Get-wmiobject -classname win32_service -property
 
 12 interacting with the interacting python will tell use exactly what to run and get info from results 13.1
 
@@ -8871,23 +8886,66 @@ If, during a hunt, an analyst discovers any traffic associated with an SQL serve
 
 
 13 open python folder and make changes to the script base on what the question is asking 13.2
+How many IP addresses have a byte count over 1024?
+make changes to script change > 2000 to > 1024
+
 
 14 in nuggets folders python help script make modification baseed on what is being asked will run agaisnt checker script but if all else go in script to get the file to find the awnsers13.3
+What characters return after executing python3 check_script.py?
+
+take checker script and (with open ('this, 'rb')' run it in bas64 decoder, on desktop
+find line that they are looking for.
 
 15 jupiter with small regex and remeber should go in the qoutes r'changeme'13.4
 
+launch as normal user not admin
+re.findall(r'^'North'
+
 16 string parsing analyize host logs or os data do small script modifications and do this tell about it 13.5
+
+
 
 17 make new script is built out just need to plug in variables 14.1
 
+
+
 18 apts and ttp ioc checker ioc 14.2 14.3
 
+
 19 build tool to get remote artifacts look for changes me run and tell the results directorys or the registry lopok for commands in files 14.2
+Access the scripts folder on the desktop. Modify the script scriptA.py so that information from the system is read into output.txt. Run the script, and examine the output.
+How many IPs does the script find?
+input systeminfo or ipconfig into changeme
 
 20 look at if and else statments for bash open file and add some in formation or create new line to make the scriptr fucntion properly make it a specififc string answer is not the result but what you put into the script 15.1
+Access the bash script file example.sh, located on the desktop. Add a line to the script so that it returns "String is not empty" when the variable is set to hello, according to the line below, where the bold value is replaced by the variable value. 
+
+string=[VALUE]
+string="hello"
+
+Question:
+
+What line was added to the script?
+
 
 21 crontabs setting up 15.1
 
+something.py to execute every Wednesday and Sunday at 5:25 a.m
+25 5 * * 0,3 ~/something.py
+
 22 perl experssions look for / and =~ to find what you wann search for15.2
 
+string error
+/changeme/
+/error/
+cat log_file.txt | grep "error" | wc
+or go into log_file and search
+
 23 sql and logging into sql server tells data base and table to use and dont foprget ; on the end 15.3
+Open the command prompt, and access the MySQL database dvwa by entering the following command: 
+mysql -u root
+use dvwa (this selects database)
+SELECT * FROM users;
+user_id | first_name | last_name | user | password | avatar | last_login | failed_login
+
+
