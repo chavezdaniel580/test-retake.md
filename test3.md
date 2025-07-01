@@ -8814,10 +8814,32 @@ If, during a hunt, an analyst discovers any traffic associated with an SQL serve
 
 ![image](https://github.com/user-attachments/assets/db60a4cb-0daa-4445-8887-b4429ddecfc6)
 
+![image](https://github.com/user-attachments/assets/9a41d8df-ab1f-4633-9d2f-a1257f6a841a)
+
+![image](https://github.com/user-attachments/assets/3aa1ef95-f50e-449e-9e35-2d8317725d38)
+
+![image](https://github.com/user-attachments/assets/341c9a78-6a47-4666-aa25-ac68e866d484)
+
+![image](https://github.com/user-attachments/assets/447e31fb-d25d-42bc-9692-954ac5dbac4c)
+
+
+
+
+
 
 
 
 3 4 open script and run command let instead of trying to import 11.3 11.5
+
+![image](https://github.com/user-attachments/assets/a965cf81-2d36-4a52-bd16-809ab117542f)
+
+![image](https://github.com/user-attachments/assets/40d9e737-8733-4a7d-b59e-50e74b4ebe63)
+
+![image](https://github.com/user-attachments/assets/a268014c-0c96-4173-ad75-2f2e5c6d4821)
+
+![image](https://github.com/user-attachments/assets/f8b8670d-9450-431a-8105-f759d0d1e322)
+
+
 
 5 invoke-attomictest look at results m12,1
 
