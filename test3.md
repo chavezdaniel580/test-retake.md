@@ -8839,6 +8839,13 @@ If, during a hunt, an analyst discovers any traffic associated with an SQL serve
 
 ![image](https://github.com/user-attachments/assets/f8b8670d-9450-431a-8105-f759d0d1e322)
 
+![image](https://github.com/user-attachments/assets/6fccf3ce-016b-4942-98cb-8a1d36c1bb07)
+
+![image](https://github.com/user-attachments/assets/a0394863-3778-47de-824f-7a62594771af)
+
+![image](https://github.com/user-attachments/assets/e25e9459-3525-49fb-9e3f-d9ab5e2f59e6)
+
+
 
 
 5 invoke-attomictest look at results m12,1
