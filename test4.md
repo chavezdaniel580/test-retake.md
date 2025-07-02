@@ -1108,10 +1108,196 @@ The boot code section of the local disk image from the previous lab and the infe
 
 ﻿![image](https://github.com/user-attachments/assets/40c9c933-7377-4c93-afb7-0474abf856fc)
 
+Timeline Overview
+A timeline is a list of events that occurred on a system and the times that they occurred. During a forensic examination, a timeline can be the most valuable tool available to an analyst due to the number of files involved and their organization within the forensic image. A forensic image may comprise thousands of files. In addition, Operating Systems (OS) do not store data in a structure well organized by date; instead, folders and files are nested within other folders. A timeline is helpful when a particular date or time is known or suspected to be associated with malicious activity, as it can filter an entire forensic image to just a few events based on the time range of interest. This greatly reduces the time required for analysis. For example, if 2022-01-01 12:00:00 is the determined date of suspicious activity, a timeline can show all files and events that were created, modified, or deleted at that time across the entire forensic image. Such a focus helps the analyst more efficiently determine the actions of the malicious actor.
+
+﻿
+
+Timeline Types
+﻿
+
+Two types of timelines are available during a forensic investigation:
+
+Forensic timeline: A file that contains all dates and actions that occurred within an entire forensic image.
+Analysis timeline: The cumulative result of analysis; it includes each important finding, to be used in a forensic report or to illustrate the process of events that occurred. 
+﻿Table 17.3-1 provides an example of an analysis timeline:
+﻿
+
+﻿![image](https://github.com/user-attachments/assets/ce1f50f5-a6d4-49a8-90f8-5337dfd69902)
+
+ Tools for Creating Timelines
+Manually creating a timeline can be quite time consuming, but tools are available that create timelines automatically with supplied parameters. Examples of such tools are Autopsy, KAPE, and Plaso. Plaso is the industry standard for creating forensic timelines, and, in fact, Autopsy and KAPE both require a Plaso plug-in that enables them to automatically create a timeline.
+
+﻿
+
+Autopsy
+﻿
+
+The forensic tool Autopsy is available for both Windows and Linux, but its functions differ between the two OSs. The Windows version of Autopsy creates a timeline as part of its ingestion and analysis whenever a forensic image is added into the tool; the Linux version does not. 
 
 ﻿
 
 ﻿
+
+KAPE
+﻿
+
+The forensic tool KAPE runs only on Windows. It can create a timeline from a Windows host in fewer than 5 minutes when it is focused only on the Master File Table (MFT), registry files, and event logs.
+
+﻿
+
+﻿
+
+Plaso
+﻿
+
+As stated earlier, Plaso, formerly called log2timeline, is the industry standard for creating timelines of forensic images. Plaso supports analysis of Windows, Linux, macOS, Android, and iOS forensic images. Plaso can parse many files that typically require additional tools to be read. For example, Plaso can read Windows Event Logs, registry files, databases, volume shadow copies, and MFTs. Plaso reads all these files; extracts the metadata of files, dates, and times of events that have occurred; places the output into a .plaso file; and creates a Comma-Separated Values (CSV) file. Plaso is installed on the SIFT Workstation, a collection of incident response and forensic tools, by default. 
+Table 17.3-2 provides descriptions of Plaso’s three main command-line tools, pinfo.py, psteal.py, and psort.py:
+
+﻿![image](https://github.com/user-attachments/assets/eb57f407-00bb-4080-92ce-fb2ed33bd7c2)
+
+
+
+The following command creates a timeline from Plaso:
+psteal.py --source image.raw -o dynamic -w timeline.csv
+
+
+
+The .plaso file is a Structured Query Language (SQL) database that contains more details than the resulting CSV file and, like the CSV file, can be loaded into other tools, including Timesketch, Splunk, Elastic, or any queryable tool, for analysis. However, because the .plaso file is generally larger than the CSV file and may require an hour or more to be indexed (depending on its size), the recommendation is to ingest the CSV file instead. 
+
+
+Even though CSV files are typically smaller than their corresponding .plaso files, they are often too large to be opened by spreadsheet-processing software. For example, Microsoft Excel can read only about the first 20,000 lines of a 3-Gigabyte (GB) CSV timeline file. Timesketch is the most common tool used for timeline analysis, as it is built strictly for this purpose. Other solutions are to use Eric Zimmerman’s EZViewer tool or Timeline Explorer in Windows or to use the command line to grep through and filter the file in Linux.
+
+
+Timesketch
+
+
+Timesketch has seven main parameters on which data can be filtered: Datetime (UTC), message, display_name, parser, source, timestamp_desc, and Timeline name.
+![image](https://github.com/user-attachments/assets/8e8d3a56-553f-4a27-adf1-e6d770497518)
+
+Time Zones
+
+
+By default, Plaso generates a timeline in Coordinated Universal Time (UTC), not in the time zone that was in use in the forensic image. The local time zone of the forensic image must be known before beginning analysis. When running Plaso, it is possible to specify in the command which time zone to output the results in. The following examples specify that the timeline’s CSV file should be written in the Eastern time zone.
+
+
+To create the timeline with the time zone specified, run the following command: 
+psteal.py --source image.raw --output-time_zone EST5EDT -o dynamic -w timeline.csv
+
+
+
+When reading from a .plaso file in an already created timeline and to convert the timeline to a different time zone and write to a new CSV file, run the following command:
+psort.py --output-time_zone EST5EDT timeline.plaso -w timeline.csv
+
+
+
+Adding Efficiency
+
+
+If only a few files or artifacts are of interest in a forensic image, Plaso can be provided with those filenames instead of the whole forensic image, resulting in a much smaller .plaso file and, therefore, more rapid processing times. If, instead, the entire forensic image must have a timeline generated for it but a select date range is known to contain items of interest, the timeline can be minimized for faster analysis.
+
+
+A timeline can be filtered by the following command. The UTC time must be specified, even if the .plaso file is generated with a different time zone.
+psort.py -q filename.plaso "date > '2022-05-26 20:09:00' and date < '2022-05-26 20:18:00'" -w filtered.csv
+
+
+
+This command extracts only the dates between those specified to greatly reduce the physical size of the timeline and to contain only events in that range. 
+
+Timeline Event Types
+Timelines gather multiple files and event information. A timeline can include such actions as the following:
+
+System events
+System reboots
+Crashes
+Log rotations
+Service restarts
+Software installs
+Network connections
+System configuration modifications
+User activity events
+Logon/logoff
+Web browsing
+File creation/deletion/modification times
+Recent files
+﻿
+![image](https://github.com/user-attachments/assets/d0a78b86-00ec-4cc0-ac0d-67b04bd012aa)
+
+Create and Filter a Timeline
+In the following lab series, create a forensic timeline using the provided Security.evtx file, filter the timeline, and view the results. A single Windows Event Log is used for time efficiency. The log focuses on 2022-05-26 16:09:00 through 2022-05-26 16:18:00 EST.
+
+﻿
+
+Complete the steps in the following workflow to create the timeline and filter it using a spreadsheet-processing application and the command-line tool grep. 
+
+2. Open a Terminal window, and run the following command to change to the directory where the Security.evtx file is located:
+cd /home/trainee/Desktop/Lab1
+
+![image](https://github.com/user-attachments/assets/d255ae79-6d69-43dd-ad5a-0824ed46be4b)
+
+
+
+3. Run the following command to create a timeline from the Security.evtx file. This requires approximately 6 minutes.
+psteal.py --source Security.evtx --output_time_zone EST5EDT -o dynamic -w security.csv
+
+The result is a .plaso file:
+
+![image](https://github.com/user-attachments/assets/c2b17be4-eb1d-434c-9298-6b8e930f2860)
+
+NOTE: The .plaso file is named according to the date and time the psteal.py command was run. Thus, the .plaso filename in Figure 17.3-2 is not the same as the filename generated during this workflow. 
+
+4. Run the following command to verify creation of the new files and their sizes:
+ls -alh
+
+![image](https://github.com/user-attachments/assets/3efae42e-3810-4ca1-9b79-89f0608a2a3d)
+
+
+
+Because the .plaso file is a database generated by Plaso that includes all the timeline information, it is much larger than the Security.evtx file. The security.csv file is even larger than the .plaso file, which is uncommon, but for ease of reading the contents, the best timeline file to use is the CSV file.
+
+
+As stated earlier, using a spreadsheet application for timeline analysis of a CSV file can be difficult. To understand this more fully, open the CSV file in LibreOffice Calc, and attempt a search.
+
+
+5. Run the following command to view the contents of the security.csv file in LibreOffice Calc. Ignore any errors in terminal and when LibreOffice Calc opens, select OK.
+
+libreoffice.calc security.csv
+
+![image](https://github.com/user-attachments/assets/7dacb75c-3b48-4810-b80a-3929d0b52020)
+
+6. The security.csv file can be edited, sorted, and modified in LibreOffice Calc. Perform a search for 4625 (failed login attempts), and try to read the events linked to the results. Reading the events is challenging, as the rows are long, and the search term is found in other fields beyond the message field. 
+
+
+7. Close the file, and return to the Terminal. 
+
+
+8. Run the following commands to view the date/time range of events in the security.csv file:
+head -n 2 security.csv
+tail -n 2 security.csv
+
+![image](https://github.com/user-attachments/assets/658498e9-ac69-492f-936f-23ca780a868b)
+
+9. The results of the previous command show that the date range in this timeline is 2022-03-27 through the day the timeline is created. (Figure 17.3-5 shows a different end date, as its timeline was created on 2022-07-05.)
+
+
+10. Run the following command to create a smaller timeline that includes only the window of time during which the malicious activity occurred: 
+psort.py -q (plaso file date)-Security.evtx.plaso "date > '2022-05-26 20:09:00' and date < '2022-05-26 20:18:00'" -w filteredsecurity.csv --output_time_zone EST5EDT
+
+
+
+NOTE: The EST time window is 16:09 through 16:18, but, by default, Plaso ignores that the .plaso file was output in the EST timezone and reads it back in as UTC. If the times of 16:09 and 16:18 are used, no data is exported.
+
+
+
+
+
+
+
+
+
+
+
+
 
 ﻿
 
