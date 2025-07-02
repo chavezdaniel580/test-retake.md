@@ -882,8 +882,238 @@ $R513JPG.evtx (Microsoft-Windows-WMI-Activity%4Operational.evtx) and event ID 58
 ![image](https://github.com/user-attachments/assets/927a1ecf-b3a9-4e7a-91e2-eeeb4935c45f)
 
 
+![image](https://github.com/user-attachments/assets/b2ddb98e-3c69-4407-b547-ef77f87decab)
 
 
+Searching Through Slack Space
+This second lab focuses on using Autopsy’s keyword search tool to determine where in a forensic image the already identified slack space is located so that it can later on be exported.
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the ubuntu20 VM with the following credentials, if necessary.
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Open a terminal and change directory to the trainee desktop:
+
+cd ~/Desktop
+﻿
+
+3. Enter the following command to view all items in slack space using blkls:
+
+blkls -s suspicious-mod.dd.sda1
+﻿
+
+Part of the output from step 3 will be used in step 5, below. 
+
+﻿
+
+4. Return to the Autopsy window that was opened in the previous lab and select Keyword Search at the top.
+
+
+﻿
+
+5. In the search field, enter any set of characters from the output in step 3, for example "h.i.d.d.e.n," then select Search.
+
+﻿
+
+6. Select Ascii and review the result in the right pane, as indicated in the image below:
+
+
+![image](https://github.com/user-attachments/assets/c0a3c937-1c2c-479f-b3a7-ad1bb5e601f1)
+
+![image](https://github.com/user-attachments/assets/48734f34-0127-48d5-86e5-e98d10945854)
+
+![image](https://github.com/user-attachments/assets/583f9b2d-2e7d-49e7-b8fa-4bc567410aa0)
+
+
+Exporting Slack Space Content
+This lab demonstrates how to export data that has been identified as residing in slack space.
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the ubuntu20 VM with the following credentials, if necessary.
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Return to the Autopsy window that was opened in the previous lab and select File Analysis from the menu at the top.
+
+﻿
+
+3. Open the item that has slack space by selecting 12 on the far right under the Meta column.
+
+﻿
+
+4. Scroll to the bottom and select 2049.
+
+﻿
+
+5. Select Export Contents and make a note of the filename, as shown in the image below:
+![image](https://github.com/user-attachments/assets/e51703d9-0d52-40f5-80f3-6a3f7bcec077)
+
+6. In a terminal window, read the file that was just downloaded to see that the contents of slack space were exported successfully:
+cat /home/trainee/Downloads/vol1-Fragment2049.raw
+
+
+
+############CDAH-M17L2-Bootkits#############
+
+MBR Fundamentals
+The Boot Process
+﻿
+
+Figure 17.2-1 illustrates the generic boot process. This process starts with the Basic Input/Output System (BIOS) loading the MBR during the PC boot. The master boot code locates the active partition of the drive. This partition is known as either the Volume Boot Record (VBR) or the first stage bootloader. The active partition then activates the second stage bootloader and runs the respective bootloader for the installed Operating System (OS) kernel. 
+Common bootloaders for the various operating systems are listed in Table 17.2-1, below:
+
+![image](https://github.com/user-attachments/assets/28afa7ab-d699-4b12-8e12-5aa5d93a2477)
+
+Unified Extensible Firmware Interface (UEFI)
+
+
+This lesson focuses on the traditional BIOS/MBR boot process described above. However, another option, UEFI, offers better security in modern systems, so it is worth introducing briefly. 
+
+
+UEFI is a modern mechanism for preventing unauthorized code from executing prior to the boot process. The primary component is the GUID Partition Table (GPT), which replaces the MBR in the boot process. The GPT is responsible for validating the firmware prior to executing the bootloader. If a bootkit is successful in bypassing the firmware validation, the security mechanisms provided by UEFI are rendered useless.
+
+
+Even with UEFI available, modern computers still support the traditional boot process. The rest of this lesson focuses on the older MBR format for the traditional process. 
+
+
+The MBR Layout
+
+
+The MBR is the section of the hard disk that contains the location of the bootloader for the primary OS. Figure 17.2-2, below, illustrates the layout of the MBR, which comprises the following sections:
+Master Boot Code (MBC): Contains the first 446 bytes of the MBR (starting with 0). This section locates the OS bootloader within the disk partition table. 
+Disk Partition Table: Contains four partitions that each contain 16 bytes, for a total of 64 bytes in the table. Each functioning partition table ends with 0x55AA.
+Signature: Contains the "magic number" that indicates that the MBR checksum is valid. This must provide a value of 0x55AA. Any other value indicates the MBR may be corrupt, infected by malware, or unbootable.
+
+![image](https://github.com/user-attachments/assets/9fa63afa-7b83-4694-8b38-75612064eeff)
+
+Partition Table Analysis
+
+
+The partition table starts at byte offset 446 (0x1BE) and continues until byte offset 510 (0x1FE). The partition table entry contains information about the partition boot status, format, its physical location on the drive, and its size. Table 17.2-2, below, displays the byte values of the partition table entries.
+
+![image](https://github.com/user-attachments/assets/c5d7c3ca-8b02-4f9a-bac4-1eccd1f971ba)
+
+
+
+Methods of MBR Analysis
+
+
+The information presented above in Table 17.2-2 can be collected and analyzed using a variety of tools, both command line and graphical. On Linux, command line tools such as strings or xxd extract human-readable data from the forensic disk image to include the MBR. The human-readable output of these tools allows a trained analyst to conduct a visual inspection of the data. On Windows, graphical applications such as Autopsy or the Forensic Tool Kit (FTK) analyze a disk image and MBR. These tools provide the most effective methods, but any application that displays the contents of a forensic disk image is also sufficient.
+
+![image](https://github.com/user-attachments/assets/0db654c6-551d-4728-8378-da6ba5b6ee98)
+
+Analyzing Local Disk MBR
+Bootkits
+﻿
+
+A bootkit is a bootable type of malware that modifies the standard boot process. The common goal for most bootkits is to bypass OS signature validation so that other malware can be installed without bringing attention to the user. Bootkits work below the operating system layer by infecting the Master Boot Record (MBR) or Globally Unique Identifier Partition Table (GPT). Installation typically involves overwriting the portion of the boot code responsible for executing the OS bootloader.
+
+﻿
+
+Bootkits are a type of rootkit. A rootkit is any malware that modifies a running OS. An example of a rootkit modification is hiding network connections and processes. Rootkits may also create hidden directories and entire file systems. Detecting a bootkit is significantly more difficult than detecting a rootkit infection. As an example, when performing dynamic analysis of a bootkit, the PC may not boot at all. Static analysis allows analysts to view the MBR using tools such as FTK Imager on Windows, or by using the Linux utility dd to carve out the MBR for inspection.
+
+﻿
+
+The MITRE Adversarial Tactics, Techniques, and Common Knowledge (ATT&CK®) framework identifies bootkits as a pre-OS boot technique with technique ID T1542.003. 
+
+﻿
+
+Analyze a Local Disk MBR
+﻿
+
+Load disk images for MBR analysis and pull out various information about the MBR. Observe features of an uninfected MBR.
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the Virtual Machine (VM) win-hunt with the following credentials:
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Start the application FTK Imager by selecting it from the Windows Start menu.
+
+﻿
+
+3. Load the local disk image by selecting Add All Attached Devices in the File menu.
+
+﻿
+
+FTK Imager loads the physical drive and any logical drives that it detects. 
+
+﻿
+
+4. Load the bottom right pane with the hex dump of the disk image selected by selecting the drive \\.\PHYSICALDRIVE0 from the Evidence Tree pane.
+
+﻿
+
+Figure 17.2-4, below, displays the ASCII hex dump of the MBR.
+
+![image](https://github.com/user-attachments/assets/fa4739d2-a51a-4f5a-8dff-6ae5e1a45cba)
+
+Analyze Disk Image MBR
+In most cases, an analyst conducting a forensic investigation may uncover a bootkit unintentionally, while analyzing an image with another type of malware, such as ransomware. While it is difficult to definitively claim there is a bootkit in the following lab, it is still worthwhile to identify the differences between the forensic disk image and a clean MBR. For bootkit detections, the more experience an analyst has with viewing MBRs, the more familiar they will be with identifying entries that are out of the ordinary.
+
+﻿
+
+﻿
+
+Analyze the MBR of a Disk Image
+﻿
+
+Load a forensic disk image that contains a bootkit. Compare features of the bootkit-infected MBR with the clean MBR from the previous lab. Continue working in the VM win-hunt to complete the following lab. 
+
+﻿
+
+Workflow
+﻿
+
+1. Open a second instance of FTK Imager from the Windows Start menu.﻿﻿
+
+﻿
+
+2. Add the image bootkit.bin as an evidence item by navigating to File and selecting Add Evidence Item…﻿
+
+﻿
+
+3. In the window Select Source, select Image File, then select Next. 
+
+﻿
+
+4. On the page Select File, select Browse, then select the file bootkit.bin on the desktop at the path C:\Users|trainee\Desktop\bootkit.bin﻿
+
+﻿
+
+5. Load the bootkit image into the Evidence Tree by selecting Finish.
+
+﻿
+
+The boot code section of the local disk image from the previous lab and the infected disk image from this lab have different sizes. The boot code section of the local disk image stops at offset 0x1BD with no padding. Although the infected disk image also stops at offset 0x1BD, it has 58 bytes of 0x00 padding to ensure that the MBR checksum remains valid. Figure 17.2-5, below, displays the values of offset 0x1FE and 0x1FF.
+
+﻿![image](https://github.com/user-attachments/assets/40c9c933-7377-4c93-afb7-0474abf856fc)
+
+
+﻿
+
+﻿
+
+﻿
 
 
 
