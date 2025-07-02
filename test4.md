@@ -574,6 +574,316 @@ Using the above workflows, answer the following questions.
 
 ![image](https://github.com/user-attachments/assets/0b0d241f-48b9-44ad-919d-99bf093b4be2)
 
+Reviewing Windows Event Logs
+Accessing Event Logs
+﻿
+
+Windows event logs are stored on the same partition as the Windows installation drive. By default, Windows is usually installed on the C:\ drive and the full path to the event logs is C:\Windows\System32\winevt\Logs. Figure 16.3-1 is a view of the directory where the event logs are stored.
+
+![image](https://github.com/user-attachments/assets/aa18d0a7-0f5a-4d8b-b99c-7b211c886386)
+
+
+Extracting Logs
+Windows event logs stored within a forensic image are still in the same directory as listed above, but it takes a few more steps to access them. A forensic image is mounted either through OSFMount or within the Forensic Toolkit (FTK). Both of these tools are free and access the forensic image in a read-only state. FTK can also view the file system of the image without mounting the image, which is useful when looking for deleted files. TFTK provides access to locations that the Windows Operating System (OS) hides by default, which OSFMount does not. For example, the Master File Table (MFT) file $MFT is not visible during a mount, but FTK shows the file. Also, OSFMount does not show files that have been deleted like FTK.
+
+﻿
+
+NOTE: Trainees are not expected to perform the following Mount or FTK Methods. These are performed in the labs later in the lesson.
+
+﻿
+
+Mount Method
+﻿
+
+OSFMount requires the path to the forensic image to be able to access the files within it.
+
+﻿
+
+1. Select Mount new, browse to the forensic image, and select Next.
+
+﻿![image](https://github.com/user-attachments/assets/cd08360f-2d4a-4c63-8215-388feaebf6b9)
+
+ 
+
+2. Select the Windows partition. The Windows partition is typically the largest. In this case, it is Partition #1 and is 58.91GB in size.
+![image](https://github.com/user-attachments/assets/97201a56-e4ba-46ac-a348-a255bc2f2f06)
+
+3. Do not make any changes and select Next.
+
+
+NOTE: OSFMount skips Step 3; the steps go from Step 2 straight to Step 4.
+
+![image](https://github.com/user-attachments/assets/95347602-a365-453d-b296-958dc61654f8)
+
+
+
+4. Select Mount. OSFMount shows the drive letter assigned to the forensic image. Afterward, browse the log directory F:\Windows\System32\winevt\Logs with Windows Explorer to access the event logs. Copy the files of interest out of the image and stored on the local disk.
+
+![image](https://github.com/user-attachments/assets/bbc3036f-7583-4231-b2c5-351f3a958b74)
+
+FTK Method
+
+
+1. Open AccessData FTK Imager. User Access Control (UAC) appears as this application is being run with administrative privileges. Select Yes.
+
+
+2. Select Add Evidence > Image File > Next.
+![image](https://github.com/user-attachments/assets/e9a913bb-e02c-421f-91bb-07b1682a6776)
+
+3. Enter the source path to the forensic image.
+![image](https://github.com/user-attachments/assets/463f167d-92ae-4a4a-8da1-907baae97c87)
+
+
+
+4. Expand the forensic image by selecting the plus sign (+) next to the image name. Continue expanding until Windows\System32\winevt\Logs is displayed.
+![image](https://github.com/user-attachments/assets/2acaa1a1-17b1-4495-b1e8-cce97e13bf22)
+
+![image](https://github.com/user-attachments/assets/0fcbc83c-799a-413f-abc5-2f33e712c200)
+
+5. Select the log files of interest, right-click and select Export Files, and save the files on the local disk.
+
+6. ![image](https://github.com/user-attachments/assets/0e52da49-d288-456c-b5e2-0160131b168e)
+
+
+Tools
+The Windows event logs have been extracted from a system and need to be analyzed. Windows event logs are stored in a binary format and require specific tools for them to be read. Prior to Windows Vista, event logs had the file extension .evt. Every version of Windows from Vista to Windows 11 uses the .evtx format. Occasionally Windows Event Viewer requests converting older EVT-formatted event logs to EVTX when analyzing the older format on a current version of Windows. If necessary, the older EVT format can be converted to EVTX using the built-in wevtutil utility. Sample syntax is as follows:
+
+wevtutil export-log <sourcelogfile>.evt <targetlogfile>.evtx /lf 
+﻿
+
+The following tools are the most commonly used in the industry and are publicly available for free:
+
+Windows Event Viewer
+F-Secure’s Chainsaw
+Eric Zimmerman’s EvtxECmd
+William Ballenthin’s Python modules evtxtract and python-evtx
+﻿
+
+Windows Event Viewer
+﻿
+
+The Windows Event Viewer is the default viewer that ships with all versions of Windows. It allows for filtering by event ID, searching for text within the event logs, sorting, and cleanly displaying all information with column headings. The drawback is that it only allows for one event log to be viewed at a time and does not have any additional logic to assist with finding suspicious activity.
+
+﻿
+![image](https://github.com/user-attachments/assets/aa052203-9940-4b50-a94e-7cb56161290d)
+
+Chainsaw
+
+
+Chainsaw was created by the Finnish cyber security company F-Secure. Chainsaw has built-in logic with mapping files written in YAML that can quickly extract items that match custom rules and display them to the analyst. Chainsaw saves cyber defenders hours by analyzing all available event logs at once and generates a report. Chainsaw also dumps all events pertaining to a specific event ID if that is preferred.
+
+
+Syntax
+
+
+Search all event logs for activity that matches rules:
+chainsaw.exe hunt C:\windows\System32\winevt\Logs -r sigma_rules/ -m mapping_files/sigma-mapping.yml --lateral-all --ignore-errors
+
+
+
+Dump all logon events:
+chainsaw.exe search C:\windows\System32\winevt\Logs\ -e 4624 –output 4624_events.txt
+
+![image](https://github.com/user-attachments/assets/fb128a93-dad8-47e8-8cc3-cab4451da070)
+
+EvtxECmd
+
+
+EVTX Explorer (EvtxECmd) was written by Eric Zimmerman at Kroll who also wrote Kroll Artifact Parser and Extractor (KAPE), which is a widely used forensic toolkit. EvtxECmd processes a large number of event logs at once. It has a list of indicators, similar to Chainsaw, that it looks for and writes the most significant events into a spreadsheet for an analyst to review.
+
+
+Syntax
+EvtxECmd.exe -f C:\Windows\System32\winevt\Logs\ --csv "C:\Users\Trainee\Desktop" --csvf MyOutputFile.csv
+
+![image](https://github.com/user-attachments/assets/abc853d9-7d64-4793-a09f-e8dddb7b4614)
+
+![image](https://github.com/user-attachments/assets/3ffea018-6890-405a-bf58-7090eea30cba)
+
+Python Modules
+
+
+Willi Ballenthin from Mandiant wrote two Python tools to extract Windows event logs. The module python-evtx is a module that can be imported into Python scripts to convert the binary format that event logs are stored in and output the logs into Extensible Markup Language (XML) or text. Ballenthin also wrote a tool called EvtXtract that carves event logs from a forensic image based on the header of event log files.
+
+
+Syntax for Evtxtract
+"C:\Program Files\Python310\Scripts\evtxtract.exe" E:\winserv.001 > E:\eventlogs\evtx.xml
+
+
+
+The python-evtx module requires a script to be written that uses the module before parsing the logs. This is used if there is a need to parse a large number of logs and if only a select few fields need to be exported from a log. This module allows for customization but overall requires the most setup when compared to the other options available.
+
+Event IDs
+This lesson has covered how to extract event logs and access their contents, but to make sense of them, event IDs need to be understood to filter event logs for specific events. There are hundreds of events in each event log file. Microsoft attempts to categorize activity and place it into its own file to limit file sizes and make it easier to find events. Note that some events are in multiple event log files. For example, when a new process is created on the system, the Security event log records it as event ID 4688, whereas Sysmon records it as event ID 1. Table 16.3-1 is a short list of the most common event IDs and logs.
+
+![image](https://github.com/user-attachments/assets/3f27c3c4-60e1-4a85-ac27-766507f26cd1)
+
+
+
+Deleted Logs
+Attackers commonly delete, clear, or overwrite event logs in an attempt to cover their tracks. Depending on the method used by the attacker to perform these actions, it may be possible to recover the deleted event logs. Within FTK, any non-securely deleted file is prefaced with a red X icon before its filename. Armed with this knowledge, it is possible to browse through a forensic image and to look for event logs in the C:\Windows\System32\winevt\Logs directory and the C:\$Recycle.Bin directory to look for deleted files. Once found, right-click on the file of interest, select Export File, and save the file to the local disk. The event log can then be opened by any of the tools previously mentioned.
+
+﻿
+
+The $Recycle.Bin directory contains files that were deleted but were not overwritten. To access this location in FTK, the path is [root]/$Recycle.Bin and the Security Identifier (SID) of the user account that deleted the files. In this case, it is the Administrator account shown here as:
+
+S-1-5-21-3227957547-616921804-3487276839-500
+﻿
+
+Within the specific SID directory, there are many deleted event logs present. The names of the files have been changed, but by selecting one of the files and looking at the hex view below the file, it can be seen that the $R513JPG.evtx file is actually the Microsoft-Windows-WMI-Activity%40Operational.evtx event log.
+
+![image](https://github.com/user-attachments/assets/337a5ec9-93b8-4204-8574-7e243cef4df8)
+
+Accessing Windows Event Logs
+Scenario
+﻿
+
+There is potentially Malicious Cyberspace Activity (MCA) on a Windows server within the network. Events in Elasticsearch correlate to the time of the activity. The server has been taken offline and the associated forensic image has been collected for analysis. The time of the suspicious activity begins on May 26, 2022 @ 16:08:00 and ends on May 26, 2022 @ 16:18:00.
+
+﻿
+
+6. Query for the hostname of the device being analyzed to filter the logs:
+agent.name:dc01
+
+
+
+7. Change the view filter to only see the Windows event logs. In the search box, enter the following:
+event.module
+
+
+8. Hover the mouse over the right corner of the Popular box and select Add field as a column. 
+
+9. In the Search field names box, search for the following filters and add them as columns:
+event.providerwinlog.channelwinlog.event_id
+
+![image](https://github.com/user-attachments/assets/8aaaf397-ec97-4226-aa45-4c90fc8c7927)
+
+NOTE: The winlog.event_id shows a warning icon, which is not a concern. The lab works properly regardless.
+
+
+It is time to correlate what is available in Elastic to what is in the forensic image. 
+
+
+10. Minimize Chrome and open AccessData FTK Imager. User Access Control (UAC) appears as this application is being run with administrative privileges. Select Yes.
+
+
+11. Add the forensic image E:\winserv.001 into FTK Imager.
+
+
+![image](https://github.com/user-attachments/assets/2844c037-249e-4ef9-bd76-cc030183ef39)
+
+![image](https://github.com/user-attachments/assets/d80ad22d-71af-4d8e-8a17-3774f1b6e767)
+
+12. Expand winserv.001 to Partition 2/Windows [NTFS]/[root]/Windows/System32/winevt/Logs.
+
+![image](https://github.com/user-attachments/assets/87b1a72c-606d-4b0c-aac4-1329e1e7dac9)
+
+![image](https://github.com/user-attachments/assets/c9f579a0-a864-4b1d-9275-8fd7c5390562)
+
+
+
+
+13. Locate the following logs in the Logs directory as they were present in Elastic:
+System
+Security
+Microsoft-Windows-Sysmon%4Operational.evtx
+Microsoft-Windows-WMI-Activity%4Operational
+Microsoft-Windows-TaskScheduler%4Operational
+Microsoft-Windows-PowerShell%4Operational
+
+Notice that those specific event logs are not present in the forensic image. This shows a potential Indicator of Compromise (IOC); the attacker attempted to cover their tracks. It also shows the importance of sending logs to Elastic before they are cleared locally.
+
+
+Recovering Deleted Event Logs
+This lab is focused on recovering the five event logs that were identified as deleted in the previous lab. It also covers analyzing those event logs to understand the activity that took place on the forensic image that is being investigated.
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the win-hunt VM using the following credentials: 
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Load the winserv.001 image located on the E:\ drive into FTK Imager.
+
+﻿
+
+The administrator account is the focus. His SID is S-1-5-21-3227957547-616921804-3487276839-500. All deleted event logs end up in that user account Recycle Bin.
+
+﻿
+
+3. Expand the directory tree down to winserv.001/Partition 2/Windows [NTFS]/[root]/$Recycle.Bin/S-1-5-21-3227957547-616921804-3487276839-500. 
+
+﻿
+
+4. Extract the six files listed below by holding CTRL and selecting each.
+
+$RJWWJQK.evtx 131,076 (Security)
+
+$R513JPG.evtx 1,028   (WMI-Activity)
+
+$RYT30BW.evtx 8,260  (Task Scheduler)
+
+$RA714GE.evtx 5,188   (Sysmon)
+
+$RQXN6M8.evtx 15,364  (Powershell)
+
+$R2DJFWL.evtx 14,404  (System)
+
+﻿
+
+The original filenames can be found within FTK by selecting the filename and viewing the hex content in the viewer below the filename.
+
+![image](https://github.com/user-attachments/assets/bdfb1578-32e8-4dec-9ef9-7c3a434d1780)
+
+7. Select Action > Open Saved Log and add each exported log.
+﻿
+![image](https://github.com/user-attachments/assets/bb1327d9-c963-4853-8124-cd84938e6487)
+
+
+
+NOTE: While outside the lab scope, it is worth noting that during an investigation of the event logs, an external tool such as Chainsaw or EvtxECmd is typically used rather than trying to open and search each event log individually.
+
+
+8. Select $RJWWJQK.evtx. Select Action > Filter Current Log. In the new window, select Logged and Custom Range. In both the From and To drop-down menus, select Events On and choose the dates and times as shown in Figure 16.3-28.
+
+![image](https://github.com/user-attachments/assets/de955a0b-9d08-4832-82b4-f8ca9a8dc861)
+
+
+﻿9. Open the log $RJWWJQK.evtx (Security.evtx), which shows users that recently attempted to log in to the system. Searching for the recent users on the system is the first thread to pull to know where to look next for additional details. Look for suspicious activity such as a few sequential failed logins followed by a successful one. The successful login provides a timestamp used as a reference point for the events that took place afterward. The event IDs for this type of activity are 4624 and 4625.
+
+
+NOTE: Ignore the logins from the user trainee as this account is not associated with malicious behavior.
+
+
+10. Select Action > Filter Current Log. There is a textbox that contains <All Event IDs>. Replace the text with the following and select OK to close the window:
+4624,4625
+
+
+
+11. Locate the two events where the usernames defaultuser and bob have failed logins followed by a successful login by the administrator account. This is typical of a password spraying attempt followed by the actor eventually finding a successful username/password combination. Focus on the time range of May 26, 2022 from 16:09:21 to 16:17:30.
+
+
+The next step focuses on investigating suspicious activity that occurred once the actor obtained access to the host.
+
+
+12. Investigate the following logs and event IDs:
+    
+$R2DJFWL.evtx log (System.evtx) and event ID 7045: Indicates a new service was created.
+$RA714GE.evtx (Sysmon.evtx) and event ID 11: Indicates a new file being created.
+$RYT30BW.evtx (Microsoft-Windows-TaskScheduler%4Operational.evtx) and event ID 129: Indicates a new task being created/registered.
+$RQXN6M8.evtx (Microsoft-Windows-PowerShell%4Operational.evtx) and event ID 24577: Indicates that a PowerShell script was executed from within the Integrated Scripting Engine (ISE) editor.
+$R513JPG.evtx (Microsoft-Windows-WMI-Activity%4Operational.evtx) and event ID 5861: Indicates recent WMI subscriptions.
+
+
+![image](https://github.com/user-attachments/assets/927a1ecf-b3a9-4e7a-91e2-eeeb4935c45f)
+
+
+
+
 
 
 
