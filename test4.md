@@ -1679,12 +1679,232 @@ The memory dump is located within the t.mem file in the directory.
 ![image](https://github.com/user-attachments/assets/7af23472-70e9-47e5-bb80-6657ef9824b5)
 
 
+Analyze a Memory Acquisition with Volatility
+In the following workflow, perform forensic memory analysis using Volatility to discover IOCs.
+
+﻿
+
+Workflow
+﻿
+
+1. Log in to the Virtual Machine (VM) sift using the following credentials:
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Open Terminal.
+
+﻿
+
+3. Navigate to the acquisitions folder by entering the following command:
+
+cd acquisitions/
+﻿
+
+The acquisitions folder contains a memory acquisition file named cridex.vmem. To investigate this memory acquisition with Volatility, it is first necessary to identify which Operating System (OS) profile to use. Volatility needs this information to interpret the format of data in a memory acquisition. By not specifying a profile (or specifying an incorrect profile for the OS associated with the memory acquisition), Volatility would be unable to properly analyze the file. 
+
+﻿
+
+4. Enter the following command to identify the appropriate OS to use:
+
+
+vol.py -f cridex.vmem imageinfo
+﻿
+
+Part of the output identifies the profile to use, as follows:
+
+
+Suggested Profile(s) : WinXPSP2x86, WinXPSP3x86 (Instantiated with WinXPSP2x86)
+
+![image](https://github.com/user-attachments/assets/750c7c91-caf6-457e-9e9a-db8cf48bf38e)
+
+In this case, WinXPSP2x86 is the profile necessary for the successful execution of the program, indicating that the system from which this memory acquisition was taken had a 32-bit Windows XP OS with Service Pack (SP) 2.
+
+
+An important first step in memory acquisition analysis is the enumeration of running processes. Volatility can list the processes it can identify as being live in memory, allowing the analyst to observe the relationships between processes (parent and child processes, for example) as well as any odd process names that might be suspicious. 
+
+
+5. Enter the following command to acquire the process list:
+
+vol.py -f cridex.vmem --profile WinXPSP2x86 pslist
 
 
 
+Several processes are listed in the output of the above command. The process named reader_sl.exe is of interest. If this executable is legitimate, it is likely a process known as SpeedLauncher associated with Adobe Acrobat. This could be a legitimate process, but it is worth noting that the parent process for reader_sl.exe is explorer.exe. This suggests that a user process resulted in the execution of reader_sl.exe. This situation is worth investigating further.
+
+
+If malware is within this memory acquisition, a possibility exists that the malware has made a network connection to a remote system for Command-and-Control (C2) functionality. Active Transmission Control Protocol (TCP) network connections can be observed through the connscan Volatility plug-in. 
+
+
+6. Enter the following command to invoke the connscan plug-in:
+
+vol.py -f cridex.vmem --profile WinXPSP2x86 connscan
+
+The results of the above command show that the local address for the system this memory acquisition was taken from is 172.16.112.128. There are two active connections in memory to the external addresses 41.168.5.140 and 125.19.103.198, with both communicating over port 8080 and with a Process Identifier (PID) of 1484 — the same PID as the explorer process that is the parent process of reader_sl.exe. This could be an indicator of malware running in memory communicating with an external malicious host.
+
+
+Given the previous indicators of a possible malware infection, Volatility’s yarascan plug-in can be used to identify known patterns of malware behavior. If yarascan returns matching behavior, this can increase confidence that a process in memory is malicious. 
+
+
+7. Enter the following command to invoke the yarascan plug-in:
+
+vol.py -f cridex.vmem --profile WinXPSP2x86 yarascan -y malware_rules.yar -p 1484 | sort | uniq
+
+The above command tells Volatility to scan the memory acquisition with YARA, comparing patterns of behavior with signatures found in the file malware_rules.yar. The specification of PID 1484 focuses the YARA analysis on the explorer process identified previously. The results are piped to sort and uniq, which makes the output more readable. Examination of the output reveals the following:
+
+Owner: Process explorer.exe Pid 1484
+Rule: FVEY_ShadowBrokers_Jan17_Screen_Strings
 
 
 
+This output states that a behavior pattern found within the activities in memory for PID 1484 matches a YARA rule for malicious behavior.
+
+
+Because YARA identified malicious behavior in the explorer process with PID 1484, further analysis of which other processes associated with PID 1484 can be performed through the pstree plug-in.
+
+
+8. Enter the following command to invoke the pstree plug-in:
+
+vol.py -f cridex.vmem --profile WinXPSP2x86 pstree | grep 1484
+
+
+
+The output of the above command shows that the only child process of PID 1484 is PID 1640: reader_sl.exe. 
+
+
+Volatility allows for the extraction of an executable from a memory acquisition, such as reader_sl.exe. Because the PID for this executable is known, the following command can be used:
+
+vol.py -f cridex.vmem --profile WinXPSP2x86 procdump -p 1640 –-dump-dir .
+
+
+
+9. Run the command above.
+
+
+The above command extracts reader_sl.exe to the current directory with the file name executable.1640.exe. This file may then be analyzed separately in a dynamic analysis sandbox, or the file hash value may be searched for within a known malware information repository, such as VirusTotal. This lab does not include this process, but the result is that reader_sl.exe is identified as a malware trojan.
+
+
+Additionally, the addressable memory of the reader_sl.exe process can be extracted for further analysis using the following command:
+
+vol.py -f cridex.vmem --profile WinXPSP2x86 memdump -p 1640 --dump-dir .
+
+
+
+10. Run the command above.
+
+
+The above command results in the creation of 1640.dmp, which can be further analyzed through strings to gather additional information:
+
+strings 1640.dmp
+
+
+
+This results in a significant amount of information and is difficult to parse without knowing what to look for. However, the external IP addresses 41.168.5.140 and 125.19.103.198 were previously identified through the connscan plug-in. A search for 125.19.103.198 in the memory dump for the process yields no results, but the following command provides interesting information:
+
+strings 1640.dmp | grep “41.168.5.140” -C 5
+
+
+
+11. Run the command above.
+
+
+The above command results in the following:
+
+POST /zb/v_01_a/in/ HTTP/1.1
+Accept: */*
+User-Agent: Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)
+Host: 41.168.5.140:8080
+Content-Length: 229
+Connection: Keep-Alive
+Cache-Control: no-cache
+
+
+
+The above results show that the reader_sl.exe process communicates out to 41.168.5.140 over port 8080. This matches the communication observed through connscan and is an IOC.
+
+
+With knowledge that reader_sl.exe is malicious and communicates with an external IP, further investigation is worthwhile to determine if the malware is employing any persistence techniques. By doing so, additional IOCs can be found for identifying malicious artifacts on other systems. Volatility’s filescan plug-in searches the memory acquisition for references to file objects located on a system. In this case, interesting information can be gathered by focusing on executable files.
+
+
+12. Run the following command to gather information about executable files:
+
+vol.py -f cridex.vmem --profile WinXPSP2x86 filescan | grep exe
+
+
+
+The following result from the above command is particularly interesting:
+
+0x00000000024abd80  1  0 R--rw- \Device\HarddiskVolume1\Documents and Settings\Robert\Application Data\KB00207877.exe
+
+
+
+This KB00207877.exe file in the result stands out because it is located in a user’s directory and uses Microsoft’s Knowledge Base (KB) naming scheme for an executable usually reserved for software patches. This is an odd location for the file to exist, warranting further investigation.
+
+
+13. To determine if a relationship exists between KB00207877.exe and the malicious reader_sl.exe, analyze the strings in the 1640.dmp file by running the following command:
+
+strings 1640.dmp | grep "KB00207877.exe"
+
+
+
+The results of the above command show that references to KB00207877.exe exist in the memory of the reader_sl.exe process. This means that a connection, and a further IOC, does exist.
+
+
+14. Run the following command to extract KB00207877.exe from the memory acquisition for further analysis using the dumpfiles plug-in:
+
+vol.py -f cridex.vmem --profile WinXPSP2x86 dumpfiles --dump-dir . -Q 0x00000000024abd80
+
+
+
+The -Q 0x00000000024abd80 specifies the memory offset that points to the KB00207877.exe file, as shown in the filescan output. As with reader_sl.exe, this file can also be identified as a malware trojan through further analysis. Given the naming convention used by the malware to hide itself as a benign program, it may be assumed that KB00207877.exe is used for persistent execution on a victim computer.
+
+
+One common persistence technique used by malware is to abuse the Windows registry so that a malicious executable is run every time the Windows OS starts up. Volatility is capable of inspecting the Windows registry in a memory acquisition through the printkey plug-in.
+
+
+15. Run the following command to invoke the printkey plug-in:
+
+vol.py -f cridex.vmem --profile=WinXPSP2x86 printkey -K "Software\Microsoft\Windows\CurrentVersion\Run"
+
+
+
+The above command results in a definitive reference to the malicious KB00207877.exe, as shown below:
+
+Registry: \Device\HarddiskVolume1\Documents and Settings\Robert\NTUSER.DAT
+Key name: Run (S)
+Last updated: 2012-07-22 02:31:51 UTC+0000
+
+Subkeys: 
+
+Values:
+REG_SZ        KB00207877.exe  : (S) "C:\Documents and Settings\Robert\Application Data\KB00207877.exe"
+
+
+
+The above results lead to the conclusion that KB00207877.exe is used to persistently execute malicious code on the infected system through a startup registry key.
+
+
+The following summarizes the forensic analysis of the memory acquisition through Volatility:
+The imageinfo plug-in was used to identify the necessary Windows OS profile to use for analysis of the acquisition.
+pslist was used to identify the processes running in memory.
+connscan was used to enumerate active network connections.
+yarascan was used to fingerprint known malicious activity.
+pstree was used to observe the relationships between parent and child processes.
+procdump extracted the malicious reader_sl.exe file from memory.
+memdump extracted the addressable memory used by reader_sl.exe.
+The strings command was used to identify that reader_sl.exe was responsible for communication channels out to external IP addresses identified through connscan.
+An additional malicious executable was discovered using filescan.
+KB00207877.exe was extracted from memory using dumpfiles.
+KB00207877.exe was identified as the persistence mechanism used by the malware through examination of the Windows registry startup key through printkey.
+
+This resulted in the identification of malware within the memory acquisition as well as several forensic artifacts for use in further analysis across other systems in the network.
+
+![image](https://github.com/user-attachments/assets/e3645ca8-c89f-478f-ae84-d443525fcd3f)
+
+![image](https://github.com/user-attachments/assets/d21c7a68-3916-4a3f-9f79-26387bd27809)
+
+pslist
 
 
 ﻿
