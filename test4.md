@@ -1288,6 +1288,273 @@ psort.py -q (plaso file date)-Security.evtx.plaso "date > '2022-05-26 20:09:00' 
 NOTE: The EST time window is 16:09 through 16:18, but, by default, Plaso ignores that the .plaso file was output in the EST timezone and reads it back in as UTC. If the times of 16:09 and 16:18 are used, no data is exported.
 
 
+11. Run the following command to filter the log for failed and successful logins during the new time window:
+
+cat filteredsecurity.csv |egrep -v "'trainee'|ANONYMOUS|DC01\\$"|egrep "4624|4625"
+
+4624 is successful logon
+![image](https://github.com/user-attachments/assets/d930c394-2c8e-43dc-84b1-195c28d9a071)
+
+![image](https://github.com/user-attachments/assets/4566d016-1944-41a8-b368-4d1cab84676b)
+
+Six events are found: four for failed logins and two for successful logins. In this timeline view, it is difficult to determine why the same user had two failures when they attempted to log in only once. The reason is that Plaso shows both when the security log was last modified and when it was created. Another filter would need to be added to the grep to remove the creation logs.
+
+
+As stated earlier, the tool Timesketch is built strictly for timeline analysis. Complete the steps in the following workflow to filter a timeline and view the results using Timesketch.
+
+Workflow 
+
+
+1. Open a Terminal, and run the following commands. Enter the trainee password CyberTraining1! when prompted.
+
+cd /home/trainee/Desktop/
+
+
+sudo ./StartTimesketch.sh
+
+Locate Log Discrepancies via a Timeline
+Read the scenario for the following lab, and use the information gained to determine the actions that the malicious actor took. Keep a running log in LibCalc to track the timeline. Then create an analysis timeline showing those events. 
+﻿﻿
+
+﻿
+
+Scenario: A malicious actor obtained access to a Windows server, established two methods of persistence on the host, and attempted to cover their tracks. The time range of this activity is 2022-05-26 16:09:00 to 2022-05-26 16:18:00 EST. 
+
+﻿
+
+Complete the steps in the following workflow to verify that needed logs for analysis are captured.
+
+﻿
+
+Workflow
+﻿
+
+
+1. Log in to the VM win-hunt using the following credentials: 
+
+Username: trainee
+Password: CyberTraining1!
+﻿
+
+2. Open FTK® Imager to begin the forensic examination. User Access Control (UAC) appears, as this application is being run with administrative privileges. Select Yes to open FTK Imager.
+
+﻿
+
+3. Add the forensic image E:\winserv.001 into FTK Imager: 
+
+
+![image](https://github.com/user-attachments/assets/8d48ef73-339c-4eb8-956d-767df8a10372)
+
+![image](https://github.com/user-attachments/assets/e7756519-9d4b-4d93-b72d-118f1b4a7b2b)
+
+4. Expand winserv.001 to Partition 2/Windows [NTFS]/[root]/Windows/System32/winevt/Logs:
+
+![image](https://github.com/user-attachments/assets/10127643-082f-422e-8b79-57bb0c557904)
+
+![image](https://github.com/user-attachments/assets/81406c2a-50a8-43eb-83f1-4aaf9d962655)
+
+5. Search for the following logs in the Logs directory:
+System
+Security
+Microsoft-Windows-Sysmon%4Operational.evtx
+Microsoft-Windows-WMI-Activity%4Operational
+Microsoft-Windows-TaskScheduler%4Operational
+Microsoft-Windows-PowerShell%4Operational
+
+
+The above event logs are not present in the forensic image. This indicates that the attacker potentially attempted to cover their tracks; it also shows the importance of sending logs to Elastic before they can be cleared locally. 
+
+
+NOTE: Alternatively, this log data can be extracted by obtaining a timeline from the forensic image.
+
+
+Before creating the timeline, the logs in Elastic should be verified to ensure that the above logs have been captured and are available for analysis even though they are not present in the forensic image. 
+
+
+6. Open Chrome, and select the Discover - Elastic bookmark.
+
+
+
+7. Select Advanced, and on the page stating Your connection is not private, select the link to Proceed to 199.63.64.92 (unsafe).
+
+
+NOTE: The message Your connection is not private appears because the Security Onion certificate is not installed in the browser; it is not a security concern. 
+
+
+8. Log in to Elastic using the following credentials:
+
+Username: trainee@jdmss.lan
+Password: CyberTraining1!
+
+
+
+9. Set the Kibana filter dates as May 26, 2022 @ 16:08:00.000 to May 26, 2022 @ 16:18:00.000.
+
+
+10. Query for the hostname of the device being analyzed to filter the logs, using agent.name:dc01.
+
+
+11. Change the view filter to see only the Windows Event Logs. In the search box, enter event.module. Select the plus (+) icon to the right of event.module to add the field as a column. 
+
+12. Search for the fields event.provider, winlog.channel, and winlog.event_id, and add them as available columns.
+
+
+NOTE: The winlog.event_id shows a warning icon, but the lab works properly, regardless.
+
+13. Search for the sysmon events using the query event.module:"sysmon" to confirm they are available in Elastic.
+
+
+Logs were cleared from the forensic image but are present in Elastic. If, in this scenario, logs were not being sent to Elastic, all these events would appear not to be available for analysis. Also, Elastic is capturing only Windows Event Logs, not others. This is where the creation of a timeline of the forensic image is needed.
+
+
+Complete the steps in the following workflow to create a timeline of the forensic image.
+
+
+![image](https://github.com/user-attachments/assets/9d0c23d1-ab5b-4a30-bfd0-144474f7916d)
+
+Workflow
+
+
+1. Log in to the VM ubuntu20 using the following credentials:
+Username: trainee
+Password: CyberTraining1!
+
+
+
+2. Open a Terminal, and run the following command to go to the Lab2 folder on the desktop:
+
+cd ~/Desktop/Lab2
+
+
+
+A complete timeline for a Windows server is located in the Lab2 folder. The timeline file is large and would require significant time to investigate. 
+
+
+3. Run the following command to generate a smaller timeline that includes only the window of time during which the malicious activity occurred. The timeline generation requires about 15 minutes to complete.
+
+psort.py -q 20220701T160413-winserv.001.plaso "date > '2022-05-26 20:09:00' and date < '2022-05-26 20:18:00'" -w filtered.csv --output_time_zone EST5EDT
+
+Workflow
+
+
+1. Log in to the VM ubuntu20 using the following credentials:
+Username: trainee
+Password: CyberTraining1!
+
+
+
+2. Open a Terminal, and run the following command to go to the Lab2 folder on the desktop:
+
+cd ~/Desktop/Lab2
+
+
+
+A complete timeline for a Windows server is located in the Lab2 folder. The timeline file is large and would require significant time to investigate. 
+
+
+3. Run the following command to generate a smaller timeline that includes only the window of time during which the malicious activity occurred. The timeline generation requires about 15 minutes to complete.
+
+psort.py -q 20220701T160413-winserv.001.plaso "date > '2022-05-26 20:09:00' and date < '2022-05-26 20:18:00'" -w filtered.csv --output_time_zone EST5EDT
+
+
+
+
+4. Open Firefox, browse to localhost, and select Logout in Timesketch. (This is necessary to avoid a Cross-Site Request Forgery [CSRF] token error, which may occur when Timesketch remains dormant for several minutes.)
+
+http://localhost
+
+
+
+
+5. Log in to Timesketch using the following credentials:
+Username: trainee
+Password: CyberTraining1!
+
+
+
+6. Select New Investigation, and name it filtered date range.
+
+
+7. Upload the filtered.csv file from /home/trainee/Desktop/Lab2/ into Timesketch.
+
+
+8. Once indexing is complete, select Begin to explore your data and enable the filters Datetime, message, display_name, parser, source, and timestamp_desc.
+
+
+9. Begin analyzing the events in Timesketch (in the VM ubuntu20) and Elastic (in the VM win-hunt) to identify eight events that indicate malicious behavior. To scope the search, the events contain the following:
+Logins/failures
+Scheduled tasks
+Windows Management Instrumentation (WMI)
+Services
+Remote access
+A malicious binary
+
+
+These events cannot be found in the forensic image and rely on Elastic or the timeline to discover them. As a reminder, Elastic contains only Windows Event Logs, and Timesketch has information, such as file table information, registry events, and web history, that Elastic does not.
+
+
+10. Create an analysis timeline that outlines the events discovered in chronological order.
+
+
+Use this lab to answer the following question.
+
+
+
+4. Open Firefox, browse to localhost, and select Logout in Timesketch. (This is necessary to avoid a Cross-Site Request Forgery [CSRF] token error, which may occur when Timesketch remains dormant for several minutes.)
+
+http://localhost
+
+
+
+
+5. Log in to Timesketch using the following credentials:
+Username: trainee
+Password: CyberTraining1!
+
+
+
+6. Select New Investigation, and name it filtered date range.
+
+
+7. Upload the filtered.csv file from /home/trainee/Desktop/Lab2/ into Timesketch.
+
+
+8. Once indexing is complete, select Begin to explore your data and enable the filters Datetime, message, display_name, parser, source, and timestamp_desc.
+
+![image](https://github.com/user-attachments/assets/09869aeb-efd8-448d-a45f-0cf593b38cb4)
+
+![image](https://github.com/user-attachments/assets/6d128bd8-0ca6-4044-a8d5-c9bf2031418c)
+
+
+9. Begin analyzing the events in Timesketch (in the VM ubuntu20) and Elastic (in the VM win-hunt) to identify eight events that indicate malicious behavior. To scope the search, the events contain the following:
+Logins/failures
+Scheduled tasks
+Windows Management Instrumentation (WMI)
+Services
+Remote access
+A malicious binary
+
+
+These events cannot be found in the forensic image and rely on Elastic or the timeline to discover them. As a reminder, Elastic contains only Windows Event Logs, and Timesketch has information, such as file table information, registry events, and web history, that Elastic does not.
+
+
+10. Create an analysis timeline that outlines the events discovered in chronological order.
+
+
+Use this lab to answer the following question.
+
+![image](https://github.com/user-attachments/assets/461b561e-18d0-46d1-9400-18ef8d43eec3)
+
+![image](https://github.com/user-attachments/assets/702fdf04-0323-4323-89c5-ce856035bea5)
+
+![image](https://github.com/user-attachments/assets/95b2aa73-c049-4fcc-8a4b-c40e630d0ca8)
+
+![image](https://github.com/user-attachments/assets/937d1d9b-fc33-48f1-a655-2e5ad31b514e)
+
+![image](https://github.com/user-attachments/assets/62c8a6b5-ae3f-4e7f-a055-214fd4885e8f)
+
+
+
 
 
 
