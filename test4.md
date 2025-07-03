@@ -1554,8 +1554,129 @@ Use this lab to answer the following question.
 ![image](https://github.com/user-attachments/assets/62c8a6b5-ae3f-4e7f-a055-214fd4885e8f)
 
 
+2. Select the FTK Imager icon on the taskbar:
+
+3. Select Yes when the prompt Do you want to allow this app to make changes to your device? appears.
 
 
+4. Within FTK Imager, select File, and select Capture Memory…. 
+
+
+NOTE: A Capture Memory icon is also located on the toolbar:
+
+5. Within the Memory Capture dialog box, under Destination Path, select Browse.
+
+
+6. Create a new folder on the path E:/Evidence, and name the folder Memory Dump.
+
+
+NOTE: In the field, RAM data is typically dumped into a separate drive on the host. In this host, the E: drive is used for evidence collection. During an investigation, it is imperative to record the time, date, and description of the device when the memory dump is collected. 
+
+
+7. In the Destination filename input field, enter memdump1.mem.
+
+
+8. Select Capture Memory.
+
+
+FTK Imager captures a memory dump of the host’s RAM. The memory dump requires up to 5 minutes to complete. 
+
+
+9. When the memory dump is complete, select Close. 
+
+
+10. Navigate to the newly created folder on the path E:/Evidence. The folder contains the memdump1.mem file. The .mem file type contains the RAM data at the time and date the memory dump was collected. The size of the .mem file varies, based on the data collected from the host’s RAM. However, the file size commonly reaches gigabytes (GB). 
+
+
+Complete the steps in the following workflow to access LiME and collect a memory dump for a Linux host.
+
+Workflow
+
+
+1. Log in to the VM it-maint-0 using the following credentials:
+
+Username: trainee
+Password: CyberTraining1! 
+
+
+
+2. Open Terminal.
+
+
+3. Navigate to the directory /opt/LiME to access LiME.
+
+
+4. Enter the following command to view the contents of the folder:
+
+ls
+
+
+
+5. Navigate to the /opt/LiME/src folder.
+
+
+
+The src folder contains multiple files, one of which is the makefile. The makefile is the assembly instructions for creating a kernel module. The kernel module, a .ko file, is loaded to extract the memory dump from the Linux host. 
+
+
+6. To create the kernel module, enter the following command within the src folder:
+
+sudo make
+
+
+
+When prompted, enter the password for the trainee account:
+
+CyberTraining1!
+
+
+
+The make command returns a large amount of output. The bottom of the output contains the newly created kernel module, lime-5.13.0-39-generic.ko.
+
+
+7. To load the newly created kernel module, enter the following command:
+
+sudo insmod ./lime-5.13.0-39-generic.ko "path=/opt/LiME/t.mem format=lime"
+
+
+
+
+The Linux OS allows users to load kernels. The insmod command in Linux systems is used to insert modules into the kernel. 
+
+
+The command above loads ./lime-5.13.0-39-generic.ko to execute the memory dump. The results of the memory dump are in a newly created .mem file located on the path /opt/LiME/t.mem. The format of the memory dump is LiME.
+
+
+8. To verify that the kernel loaded properly, execute the following command:
+lsmod | grep lime
+
+
+
+The output is as follows:
+lime      16384 0 
+
+
+
+The file size — 16,384 megabytes (MB) — is the same size as the RAM of the host, indicating that the kernel was loaded properly. 
+
+
+9. To verify that the memory dump was executed correctly, run the following command to view the opt/LiME directory:
+ls /opt/LiME
+
+ 
+The memory dump is located within the t.mem file in the directory. 
+
+![image](https://github.com/user-attachments/assets/0c99b13d-02d8-4741-9e4e-a167f70aa7b5)
+
+![image](https://github.com/user-attachments/assets/47331bc7-800a-4f73-bc25-eeafb01833bd)
+
+![image](https://github.com/user-attachments/assets/10ebe48b-1c16-4061-a130-07d69c79fef8)
+
+![image](https://github.com/user-attachments/assets/a65b07fa-37b6-428c-88d2-07187a5ad4f9)
+
+![image](https://github.com/user-attachments/assets/dae47fab-3f6e-4c90-92a0-d1f30f59170f)
+
+![image](https://github.com/user-attachments/assets/7af23472-70e9-47e5-bb80-6657ef9824b5)
 
 
 
