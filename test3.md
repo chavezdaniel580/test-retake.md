@@ -8964,7 +8964,11 @@ string error
 /changeme/
 /error/
 perl scriptB.pl
+
+
 or
+
+
 cat log_file.txt | grep "error" | wc (log_file.txt is referenced in perl script)
 or go into log_file and search
 
