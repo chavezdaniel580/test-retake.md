@@ -1908,10 +1908,15 @@ pslist
 
 
 ﻿
+C:\>dir /a /b /s "c:\*updateCheck.exe"
 
 
+![image](https://github.com/user-attachments/assets/8faf5197-4ce8-4d1c-bd2e-9c4cb4f85cd3)
 
 
+reg query HKU /f "updatecheck" /s
+
+![image](https://github.com/user-attachments/assets/ce4cb3a9-6d67-4506-9eb0-99fbe7d3a599)
 
 
 
