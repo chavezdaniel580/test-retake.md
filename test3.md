@@ -8835,6 +8835,7 @@ get-aduser -identity bob.bonsion -properties *
 3 4 open script and run command let instead of trying to import 11.3 11.5
 get-aduser -identity polly.vasquez
 get-aduser -identity polly.vasquez -properties passwordneverexpires
+get-aduser  laurie.estes -Properties doesnotrequirepreauth 
 
 ![image](https://github.com/user-attachments/assets/a965cf81-2d36-4a52-bd16-809ab117542f)
 
@@ -8843,6 +8844,8 @@ get-aduser -identity polly.vasquez -properties passwordneverexpires
 ![image](https://github.com/user-attachments/assets/a268014c-0c96-4173-ad75-2f2e5c6d4821)
 
 4 Get-Hotfix
+get-GPO -ALL -Domain "energy.lan" (command in the script that needs to be run)
+
 
 ![image](https://github.com/user-attachments/assets/f8b8670d-9450-431a-8105-f759d0d1e322)
 
@@ -8864,7 +8867,7 @@ new-itemproperty -path hkcu\software\microsoft\...+
 
 7 use kibana 12.1
 
-8 run copmmand and tell about it 12.2
+8 run commmand and tell about it 12.2
 papitas
 
 9 base64 decode 12.3 (base64decode.org)
@@ -8872,12 +8875,14 @@ frombase64
 strip null values
 iex(iwr
 
-10 use curl commands 12.3
-systeminfo
+10 use curl commands 12.3 (DOESNT WORK DONT WORRY ABOUT IT)
+systeminfo 
+
 
 11 use wmi go accross the wire with one off commands to get back results win32_ process win32_service win32_bios win32_...... 12.4
 
 Get-wmiobject win32_service -cn dc01 -filter "Name='DNS'"
+Get-wmiobject win32_process -cn bp-wkstn-9 -filter "name = 'lsm.exe'"
 
 12 interacting with the interacting python will tell use exactly what to run and get info from results 13.1
 
@@ -8890,20 +8895,32 @@ Get-wmiobject win32_service -cn dc01 -filter "Name='DNS'"
 13 open python folder and make changes to the script base on what the question is asking 13.2
 How many IP addresses have a byte count over 1024?
 make changes to script change > 2000 to > 1024
-
+< 600 (less than 600)
 
 14 in nuggets folders python help script make modification baseed on what is being asked will run agaisnt checker script but if all else go in script to get the file to find the awnsers13.3
 What characters return after executing python3 check_script.py?
 
+bedroom.width = 10
+python3 check_script.py
+
+or
+
+open check_script
+go to script it references and decode base64
+
 take checker script and (with open ('this, 'rb')' run it in bas64 decoder, on desktop
 find line that they are looking for.
 
-15 jupiter with small regex and remeber should go in the qoutes r'changeme'13.4
+15. jupiter with small regex and remeber should go in the qoutes r'changeme'13.4
 
 launch as normal user not admin
 re.findall(r'^'North'
 
-16 string parsing analyize host logs or os data do small script modifications and do this tell about it 13.5
+16. string parsing analyize host logs or os data do small script modifications and do this tell about it 13.5
+
+nano analyze_kern
+do what it tells you (easy)
+run script
 
 
 
@@ -8912,6 +8929,11 @@ re.findall(r'^'North'
 
 
 18 apts and ttp ioc checker ioc 14.2 14.3
+
+create files for both, copy and paste it.
+(do last)
+
+
 
 
 19 build tool to get remote artifacts look for changes me run and tell the results directorys or the registry lopok for commands in files 14.2
@@ -8928,7 +8950,8 @@ string="hello"
 Question:
 
 What line was added to the script?
-
+string = 
+echo "string is " $string
 
 21 crontabs setting up 15.1
 
@@ -8940,7 +8963,9 @@ something.py to execute every Wednesday and Sunday at 5:25 a.m
 string error
 /changeme/
 /error/
-cat log_file.txt | grep "error" | wc
+perl scriptB.pl
+or
+cat log_file.txt | grep "error" | wc (log_file.txt is referenced in perl script)
 or go into log_file and search
 
 23 sql and logging into sql server tells data base and table to use and dont foprget ; on the end 15.3
