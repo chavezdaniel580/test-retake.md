@@ -1920,3 +1920,53 @@ reg query HKU /f "updatecheck" /s
 
 
 
+The host win-hunt is responsible for the logs.
+
+
+10. Open a command prompt window, and examine the listening ports with the following command:
+netstat -anotp tcp | findstr LISTEN
+
+
+
+11. Inspect the list for unusual listening ports. Make a note of the far right column, which provides the Process ID (PID) associated with the listening port. For any suspicious ports, execute the following command to view the process associated with that ID:
+tasklist | findstr <PROCESSID>
+
+<img width="820" height="356" alt="image" src="https://github.com/user-attachments/assets/eb1c557b-acc2-471f-8fe5-a850af3b33bb" />
+
+
+2. Show event logs related to scheduled jobs by using the following search filter:
+(event.code:"4701" or event.code:"4702" or event.code:"4703")
+
+SCHEDULED TASK EVENT CODES
+
+
+3. Finally, filter out all of the scheduled tasks related to Microsoft Windows by appending the following to the search filter:
+ and (NOT "\Microsoft\*")
+
+
+
+The full Kibana query should now read:
+(event.code:"4701" or event.code:"4702" or event.code:"4703") and (NOT "\Microsoft\*")
+
+<img width="1562" height="671" alt="image" src="https://github.com/user-attachments/assets/aa365d68-4d03-48f0-8c61-537534673335" />
+
+
+2. Show event logs related to the Microsoft firewall by using the following search filter:
+event.code:"2004" or event.code:"2006"
+
+
+
+
+Event code 2004 is related to the creation of a new firewall rule, and event 2006 is related to the deletion of a firewall rule.
+
+
+The message field contains information related to the firewall rule. Included in the information are the rule name, rule direction, and protocol. The port number is included not here but, instead, in the winlog.event_data.LocalPorts field.
+
+
+<img width="1768" height="633" alt="image" src="https://github.com/user-attachments/assets/6f1777a7-d4ca-4739-a9de-e0b5b095a56e" />
+
+<img width="555" height="291" alt="image" src="https://github.com/user-attachments/assets/8a4d4c5d-34bd-4675-9835-a708cbba789a" />
+
+
+
+
