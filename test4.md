@@ -1968,5 +1968,34 @@ The message field contains information related to the firewall rule. Included in
 <img width="555" height="291" alt="image" src="https://github.com/user-attachments/assets/8a4d4c5d-34bd-4675-9835-a708cbba789a" />
 
 
+*##################CDAH-M23L1-Malware Characteristics and Behavior################
+
+<img width="1667" height="714" alt="image" src="https://github.com/user-attachments/assets/1fdbed5c-dacb-44fc-8038-0b2f190541b2" />
+
+<img width="1668" height="839" alt="image" src="https://github.com/user-attachments/assets/47dc3c4a-c4ce-4bdb-98f3-2829978ecb68" />
+
+8. Repeat the previous step to add the following two fields:
+event.provider
+message
+9. Discover recently executed programs by adding the following in the search field: 
+agent.name:bp-wkstn-1 and event.code:1
+
+
+
+10. Discover network connections and identify the programs that were executed and are associated with network activity by entering the following in the search field:
+agent.name:bp-wkstn-1 and event.code:3
+
+
+
+11. Discover files recently created by entering the following in the search field:
+agent.name:bp-wkstn-1 and event.code:11
+
+
+
+<img width="643" height="156" alt="image" src="https://github.com/user-attachments/assets/a0c2cc8c-a8ab-4993-8722-440cd4035e89" />
+
+
+
+
 
 
