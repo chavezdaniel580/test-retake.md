@@ -16,6 +16,9 @@ Phase 2: Specialize and Advance (Mid-Level to Senior Roles)
 CASP+ (CompTIA Advanced Security Practitioner)	Security Engineer, Architect	$110K+
 CISA (Certified Information Systems Auditor)	Auditor, Compliance Analyst	$112K+
 CCSP (Certified Cloud Security Professional)	Cloud Security Engineer	$110K+
+
+
+
 Phase 3: Leadership & Strategy (Senior to Executive Roles)
 CISSP (Certified Information Systems Security Professional)	$120,000+	Gold standard for senior security roles
 CISM (Certified Information Security Manager)	$115,000+	Focuses on governance and risk management
