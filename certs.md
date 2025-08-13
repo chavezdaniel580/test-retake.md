@@ -33,3 +33,16 @@ Google Cloud Security Engineer	GCP-focused Security Architect	$159K
 Microsoft Cybersecurity Architect Expert	Enterprise Architect	$140K+
 
 <img width="800" height="435" alt="image" src="https://github.com/user-attachments/assets/e67ce572-dadf-488a-995e-6cb6bfdf461e" />
+
+
+
+
+https://www.dcita.edu/#training-title -----DOD CYBER TRAINING
+
+
+https://esi.microsoft.com/ ----------once you get to your command you can start these, with ur email.
+
+
+navy community college
+
+
